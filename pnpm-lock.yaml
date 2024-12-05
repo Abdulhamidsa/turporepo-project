@@ -18,15 +18,15 @@ importers:
         specifier: ^3.4.1
         version: 3.4.16
     devDependencies:
+      '@repo/typescript':
+        specifier: workspace:*
+        version: link:packages/typescript
       turbo:
         specifier: ^2.3.3
         version: 2.3.3
 
   apps/next-app:
     dependencies:
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       next:
         specifier: 15.0.3
         version: 15.0.3(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
@@ -37,6 +37,12 @@ importers:
         specifier: 19.0.0-rc-66855b96-20241106
         version: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
     devDependencies:
+      '@repo/typescript':
+        specifier: workspace:*
+        version: link:../../packages/typescript
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@types/node':
         specifier: ^20
         version: 20.17.9
@@ -64,9 +70,6 @@ importers:
 
   apps/vite-app:
     dependencies:
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -77,6 +80,12 @@ importers:
       '@eslint/js':
         specifier: ^9.15.0
         version: 9.16.0
+      '@repo/typescript':
+        specifier: workspace:*
+        version: link:../../packages/typescript
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.13
@@ -116,6 +125,8 @@ importers:
       vite:
         specifier: ^6.0.1
         version: 6.0.2(@types/node@20.17.9)(jiti@1.21.6)(yaml@2.6.1)
+
+  packages/typescript: {}
 
   packages/ui:
     dependencies:
