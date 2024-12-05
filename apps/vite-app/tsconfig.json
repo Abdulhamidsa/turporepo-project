@@ -5,6 +5,9 @@
     "moduleResolution": "bundler",
     "noEmit": true
   },
+  "paths": {
+    "@repo/ui/*": ["../../packages/ui/src/*"]
+  },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

@@ -7,14 +7,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "clean": "if exist dist rmdir /s /q dist",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@repo/ui": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@repo/ui": "workspace:*",
     "@repo/typescript": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@eslint/js": "^9.15.0",
