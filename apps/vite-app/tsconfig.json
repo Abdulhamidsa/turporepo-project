@@ -3,11 +3,12 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "moduleResolution": "bundler",
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@repo/ui/*": ["../../packages/ui/src/*"]
+    }
   },
-  "paths": {
-    "@repo/ui/*": ["../../packages/ui/src/*"]
-  },
+
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
