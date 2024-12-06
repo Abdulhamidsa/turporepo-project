@@ -1,6 +1,6 @@
-import express, { Request, Response } from "express";
+import express, { type Request, type Response } from "express";
 import dotenv from "dotenv";
-import exampleRouter from "./routes/example";
+import exampleRouter from "./routes/example.ts";
 
 dotenv.config();
 const app = express();
@@ -16,9 +16,4 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
   console.log("Available APIs:");
-  app._router.stack.forEach((middleware: any) => {
-    if (middleware.route) {
-      console.log(` - ${Object.keys(middleware.route.methods)[0].toUpperCase()} ${middleware.route.path}`);
-    }
-  });
 });
