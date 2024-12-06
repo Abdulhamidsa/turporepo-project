@@ -15,7 +15,6 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "react", "react-hooks", "jsx-a11y", "import"],
   rules: {
-    "react/react-in-jsx-scope": "off", // Not needed in React 17+
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-explicit-any": "warn",
     "import/order": ["error", { alphabetize: { order: "asc" } }],
