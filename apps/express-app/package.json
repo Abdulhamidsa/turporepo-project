@@ -1,6 +1,5 @@
 {
   "name": "cre8ify-backend",
-  "version": "1.0.0",
   "description": "Express app for Cre8ify",
   "main": "index.js",
   "type": "module",
@@ -8,11 +7,8 @@
     "start": "node dist/index.js",
     "dev": "nodemon",
     "clean": "rimraf dist",
-    "build": "pnpm run clean && tsc"
+    "build": "tsc"
   },
-  "keywords": [],
-  "author": "Abdulhamid Alsaati",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
