@@ -302,6 +302,9 @@ importers:
       postcss:
         specifier: catalog:tailwindcss
         version: 8.4.49
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
       tailwindcss:
         specifier: catalog:tailwindcss
         version: 3.4.16(ts-node@10.9.2(@types/node@20.17.9)(typescript@5.7.2))
