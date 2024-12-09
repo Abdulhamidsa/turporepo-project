@@ -1,9 +1,10 @@
 {
-  "extends": "@repo/typescript/tsconfig.base.json",
+  "extends": "../typescript/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
     "declaration": true,
+    "jsx": "react",
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "baseUrl": ".",
