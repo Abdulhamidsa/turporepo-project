@@ -86,6 +86,9 @@ importers:
 
   apps/express-app:
     dependencies:
+      '@repo/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
