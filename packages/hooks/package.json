@@ -10,7 +10,7 @@
     "react": "catalog:react18",
     "react-dom": "catalog:react18"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "@types/react": "catalog:react18"
+  }
 }
