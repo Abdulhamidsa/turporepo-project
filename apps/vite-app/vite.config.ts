@@ -9,8 +9,4 @@ export default defineConfig({
       "@repo/ui": path.resolve(__dirname, "../../packages/ui/src"),
     },
   },
-  base: "/",
-  build: {
-    outDir: "dist",
-  },
 });
