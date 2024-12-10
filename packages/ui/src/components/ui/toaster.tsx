@@ -2,9 +2,16 @@
 import { useToast } from "@repo/hooks/use-toast";
 import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@repo/ui/components/ui/toast";
 import React from "react";
+interface ToasterToast {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  [key: string]: any;
+}
 
 export function Toaster() {
-  const { toasts }: { toasts: Array<{ id: string; title?: string; description?: string; action?: React.ReactNode; [key: string]: any }> } = useToast();
+  const { toasts }: { toasts: ToasterToast[] } = useToast();
 
   return (
     <ToastProvider>

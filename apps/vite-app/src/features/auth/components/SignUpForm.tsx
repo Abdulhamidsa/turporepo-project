@@ -10,7 +10,6 @@ import { Countries } from "@repo/data/constansts/countries";
 import { Links } from "@repo/data/constansts/links";
 import { Professions } from "@repo/data/constansts/professions";
 import { Loader2 } from "lucide-react";
-import ReactSelect from "react-select";
 import { cn } from "@repo/ui/lib/utils";
 
 type FormData = {
@@ -26,11 +25,11 @@ type FormData = {
   links: { name: string; url: string }[];
 };
 
-export default function SignUpForm() {
-  const [isSignIn, setIsSignIn] = useState(false);
-  const toggleForm = () => {
-    setIsSignIn(!isSignIn);
-  };
+type SignupFormProps = {
+  setIsSignIn: (isSignIn: boolean) => void;
+};
+
+export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -233,13 +232,13 @@ export default function SignUpForm() {
             </Button>
           </div>
           <div className="mt-1 self-center text-center text-muted-foreground">
-            <p className="text-sm inline-block">{isSignIn ? "Don't have an account?" : "Already have an account?"}</p>
-            <Button variant="link" className="p-0 h-auto underline ml-2" onClick={toggleForm}>
-              {isSignIn ? "Sign up" : "Sign in"}
+            <p className="text-sm inline-block">{"Already have an account?"}</p>
+            <Button variant="link" className="p-0 h-auto underline ml-2" onClick={() => setIsSignIn(true)}>
+              {"Sign in"}
             </Button>
           </div>
         </CardFooter>
       </form>
     </Card>
   );
-}
+};
