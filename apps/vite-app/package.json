@@ -12,10 +12,14 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@repo/data": "workspace:*",
+    "@repo/hooks": "workspace:*",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
     "react-router-dom": "catalog:react18",
-    "lucide-react": "catalog:react18"
+    "lucide-react": "catalog:react18",
+    "react-select": "catalog:react18",
+    "react-hook-form": "catalog:react18"
   },
   "devDependencies": {
     "@repo/typescript": "workspace:*",
@@ -23,7 +27,6 @@
     "@eslint/js": "^9.15.0",
     "@types/react": "catalog:react18",
     "@types/react-dom": "catalog:react18",
-    "@types/react-router-dom": "catalog:react18",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "catalog:tailwindcss",
     "eslint-plugin-react-hooks": "^5.0.0",
