@@ -4,12 +4,15 @@ import { AppError } from "../../../common/errors/app.error.ts";
 import { IUserProfile } from "@repo/data/types/UserType.ts";
 export const getUserProfileService = async (userId: string): Promise<IUserProfile> => {
   try {
+    console.log(userId);
     const userInfo = await User.findById(userId).select("-_id -__v -active -updatedAt").lean();
-
     const userCredential = await Credential.findById(userId).select("-password -_id -__v").lean();
 
     if (!userInfo) {
       throw new AppError("User not found", 404);
+    }
+    if (userInfo) {
+      console.log(userInfo);
     }
     if (!userCredential) {
       throw new AppError("User credential not found", 404);

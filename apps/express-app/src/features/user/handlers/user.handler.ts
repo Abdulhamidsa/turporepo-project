@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import { getAllUsersService } from "../services/user.service.ts";
 import { getSuccessResponse } from "../../../common/utils/response.handler.ts";
-// import { getUserProfileService } from "../services/user.profile.service.ts";
+import { getUserProfileService } from "../services/user.profile.service.ts";
+import { editUserProfileService } from "../services/user.edit.service.ts";
 
-// Controller to handle fetching all users
+// handler to fetching all users
 export const handleFetchAllUsers: RequestHandler = async (req, res, next) => {
   try {
     const users = await getAllUsersService();
@@ -12,14 +13,27 @@ export const handleFetchAllUsers: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
-
-// export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
-//   const userId = req.params.userId;
-//   // const userId = req.locals.userId;
-//   try {
-//     const user = await getUserProfileService(userId);
-//     res.json(getSuccessResponse(user));
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+// fetch user profile
+export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userid;
+  try {
+    const user = await getUserProfileService(userId);
+    res.json(getSuccessResponse(user));
+  } catch (error) {
+    next(error);
+  }
+};
+// edit user profile
+export const handleEditUserProfile: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userId;
+  // const userId = req.locals.userId;
+  const data = req.body;
+  console.log(data);
+  try {
+    const user = await editUserProfileService(userId, data);
+    res.status(200).json(getSuccessResponse(user));
+    return;
+  } catch (error) {
+    next(error);
+  }
+};
