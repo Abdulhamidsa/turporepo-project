@@ -64,24 +64,24 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input className=" " placeholder="First Name" {...register("firstName", { required: "First name is required" })} />
-                {errors.firstName && <p className="text-sm text-destructive mt-1 text-error">{errors.firstName.message}</p>}
+                {errors.firstName && <p className="text-sm text-destructive mt-1">{errors.firstName.message}</p>}
               </div>
               <div>
                 <Input placeholder="Last Name" {...register("lastName", { required: "Last name is required" })} />
-                {errors.lastName && <p className="text-sm text-destructive mt-1 text-error">{errors.lastName.message}</p>}
+                {errors.lastName && <p className="text-sm text-destructive mt-1">{errors.lastName.message}</p>}
               </div>
             </div>
             <div>
               <Input placeholder="Username" {...register("username", { required: "Username is required" })} />
-              {errors.username && <p className="text-sm text-destructive mt-1 text-error ">{errors.username.message}</p>}
+              {errors.username && <p className="text-sm text-destructive mt-1 ">{errors.username.message}</p>}
             </div>
             <div>
               <Input type="email" placeholder="Email" {...register("email", { required: "Email is required" })} />
-              {errors.email && <p className="text-sm text-destructive mt-1 text-error">{errors.email.message}</p>}
+              {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
             </div>
             <div>
               <Input type="password" placeholder="Password" autoComplete="true" {...register("password", { required: "Password is required" })} />
-              {errors.password && <p className="text-sm text-destructive mt-1 text-error">{errors.password.message}</p>}
+              {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
             </div>
           </div>
         );
