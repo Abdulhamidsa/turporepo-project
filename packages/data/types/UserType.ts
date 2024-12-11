@@ -11,11 +11,13 @@ export type IUserProfile = {
   userCredential: IUserCredential;
 };
 export type IUserCredential = {
-  _id: string;
   email: string;
   password: string;
   role: string;
   createdAt: Date;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
 };
 export type IPersonalInfo = {
   firstName: string;
