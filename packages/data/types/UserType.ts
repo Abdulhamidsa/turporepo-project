@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import Links from "../constansts/links.ts";
 import Professions from "../constansts/professions.ts";
 
@@ -11,7 +11,7 @@ export type IUserProfile = {
   userCredential: IUserCredential;
 };
 export type IUserCredential = {
-  _id: mongoose.Types.ObjectId;
+  _id: string;
   email: string;
   password: string;
   role: string;

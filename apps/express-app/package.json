@@ -1,5 +1,5 @@
 {
-  "name": "cre8ify-backend",
+  "name": "express-app",
   "description": "Express app for Cre8ify",
   "main": "index.js",
   "type": "module",
