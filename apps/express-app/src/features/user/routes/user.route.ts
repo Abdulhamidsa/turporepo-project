@@ -1,9 +1,14 @@
 import { Router } from "express";
-import { handleFetchAllUsers } from "../handlers/user.handler.ts";
+import { handleFetchAllUsers, handleFetchUserProfile, handleEditUserProfile } from "../handlers/user.handler.ts";
 
 const router = Router();
 
 // fetch all users
 router.get("/", handleFetchAllUsers);
 
+// fetch user profile
+router.get("/:userid", handleFetchUserProfile);
+
+// edit user profile
+router.put("/:userId", handleEditUserProfile);
 export default router;
