@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import { rateLimit } from "express-rate-limit";
 import userRouter from "./features/user/routes/user.route.ts";
 import expressListRoutes from "express-list-routes";
+import projectRouter from "./features/project/routes/project.route.ts";
 const app = express();
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -31,6 +32,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 app.use("/api/example", exampleRouter);
 app.use("/api/users", userRouter);
+app.use("/api/projects", projectRouter);
 
 // Start function
 export const start = async (): Promise<void> => {
