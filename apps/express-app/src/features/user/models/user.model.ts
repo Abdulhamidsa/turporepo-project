@@ -1,79 +1,67 @@
-import { Schema, model, Document } from "mongoose";
-import professions from "@repo/data/constansts/professions.ts";
-import links from "@repo/data/constansts/links.ts";
-interface Link {
-  name: string;
-  url: string;
-}
-interface PersonalInfo {
-  username: string;
-  profilePicture?: string;
-  bio?: string;
-  profession?: keyof typeof professions; // Typed from preDefinedProfessions enum
-  country?: string;
-  links?: Link[];
-}
+import mongoose, { Schema, Model } from "mongoose";
+import Professions from "@repo/data/constansts/professions.ts";
+import { IPersonalInfo } from "@repo/data/types/UserType.ts";
+import { IUser } from "@repo/data/types/UserType.ts";
+import Links from "@repo/data/constansts/links.ts";
 
-// Define the main User document interface
-export interface UserDocument extends Document {
-  friendlyId: string;
-  personalInfo?: PersonalInfo;
-  userRole: string;
-  approved: boolean;
-  active: boolean;
-  profilePicture?: string;
-  deletedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// Personal Information Schema
-const userPersonalInfoSchema = new Schema<PersonalInfo>(
-  {
-    username: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    profilePicture: {
-      type: String,
-    },
-    bio: {
-      type: String,
-    },
-    profession: {
-      type: String,
-      enum: professions,
-    },
-    country: {
-      type: String,
-    },
-    links: [
-      {
-        name: {
-          type: String,
-          trim: true,
-          enum: links,
-        },
-        url: {
-          type: String,
-          trim: true,
-        },
-      },
-    ],
+const userPersonalInfoSchema: Schema<IPersonalInfo> = new Schema({
+  username: {
+    type: String,
+    unique: true,
+    required: true,
   },
-  { _id: false }
-); // Prevent _id creation for this subdocument
+  firstName: {
+    type: String,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    trim: true,
+  },
+  dateOfBirth: {
+    type: Date,
+  },
+  profilePicture: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
+  profession: {
+    type: String,
+    enum: Professions,
+  },
+  country: {
+    type: String,
+  },
+  links: [
+    {
+      name: {
+        type: String,
+        trim: true,
+        enum: Links,
+        required: true,
+      },
+      url: {
+        type: String,
+        trim: true,
+        required: true,
+      },
+    },
+  ],
+});
 
-// Main User Schema
-const UserSchema = new Schema<UserDocument>(
+const UserSchema: Schema<IUser> = new Schema(
   {
     friendlyId: {
       type: String,
       unique: true,
       required: true,
     },
-    personalInfo: userPersonalInfoSchema,
+    personalInfo: {
+      type: userPersonalInfoSchema,
+      required: true,
+    },
     userRole: {
       type: String,
       default: "user",
@@ -93,10 +81,6 @@ const UserSchema = new Schema<UserDocument>(
       type: Date,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
-
-// Export the User model
-export const User = model<UserDocument>("User", UserSchema);
+export const User: Model<IUser> = mongoose.model<IUser>("User", UserSchema);

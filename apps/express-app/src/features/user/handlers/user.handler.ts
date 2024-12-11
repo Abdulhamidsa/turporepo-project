@@ -1,17 +1,25 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "../models/user.model.ts"; // Import the Mongoose model
-import { UserDocument } from "../models/user.model.ts"; // Import the UserDocument type
+import { RequestHandler } from "express";
+import { getAllUsersService } from "../services/user.service.ts";
+import { getSuccessResponse } from "../../../common/utils/response.handler.ts";
+// import { getUserProfileService } from "../services/user.profile.service.ts";
 
-// Controller to fetch all users
-export const handleFetchAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+// Controller to handle fetching all users
+export const handleFetchAllUsers: RequestHandler = async (req, res, next) => {
   try {
-    // Fetch all users from MongoDB
-    const users: UserDocument[] = await User.find();
-
-    // Return success response
-    return res.status(200).json({ users });
+    const users = await getAllUsersService();
+    res.status(200).json(getSuccessResponse(users));
   } catch (error) {
     next(error);
-    return; // Explicitly return undefined
   }
 };
+
+// export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
+//   const userId = req.params.userId;
+//   // const userId = req.locals.userId;
+//   try {
+//     const user = await getUserProfileService(userId);
+//     res.json(getSuccessResponse(user));
+//   } catch (error) {
+//     next(error);
+//   }
+// };
