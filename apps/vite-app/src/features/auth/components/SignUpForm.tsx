@@ -7,8 +7,8 @@ import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select";
 import { Progress } from "@repo/ui/components/ui/progress";
 import { Countries } from "@repo/data/constansts/countries";
-import { Links } from "@repo/data/constansts/links";
-import { Professions } from "@repo/data/constansts/professions";
+import Links from "@repo/data/constansts/links";
+import Professions from "@repo/data/constansts/professions";
 import { Loader2 } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
 
