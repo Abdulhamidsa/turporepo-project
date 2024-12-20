@@ -7,9 +7,9 @@
     "jsx": "react",
     "declarationMap": true,
     "emitDeclarationOnly": true,
-    "baseUrl": ".",
     "paths": {
-      "@repo/ui/*": ["./src/*"]
+      "@repo/ui/*": ["./src/*"],
+      "@repo/lib/utils": ["./src/lib/utils"]
     }
   },
   "include": ["src"],
