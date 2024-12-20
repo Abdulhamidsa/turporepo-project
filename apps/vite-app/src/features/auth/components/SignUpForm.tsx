@@ -3,21 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@repo/ui/c
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select";
-import { Countries } from "@repo/data/constansts/countries";
 import Professions from "@repo/data/constansts/professions";
-
-type FormData = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  profession: string;
-  country: string;
-};
-
-type SignupFormProps = {
-  setIsSignIn: (isSignIn: boolean) => void;
-};
+import { FormData } from "@repo/data/types/FormTypes";
+import { SignupFormProps } from "@repo/data/types/FormTypes";
 
 export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
   const {
@@ -33,7 +21,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto rounded-xl bg-background p-4">
+    <Card className="w-full max-w-md mx-auto border-none bg-background p-4">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center text-white mb-4">Create an Account</CardTitle>
       </CardHeader>
@@ -57,18 +45,20 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
           />
           {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
 
+          {errors.profession && <p className="text-sm text-destructive">{errors.profession.message}</p>}
+
           <Controller
             name="profession"
             control={control}
             rules={{ required: "Profession is required" }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full text-white focus:ring">
                   <SelectValue placeholder="Select Profession" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className=" rounded-md">
                   {Professions.map((profession) => (
-                    <SelectItem key={profession} value={profession}>
+                    <SelectItem key={profession} value={profession} className=" hover:bg-white hover:text-black focus:bg-gray-800 text-white cursor-pointer">
                       {profession}
                     </SelectItem>
                   ))}
@@ -76,27 +66,27 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
               </Select>
             )}
           />
-          {errors.profession && <p className="text-sm text-destructive">{errors.profession.message}</p>}
 
-          <Controller
+          {/* <Controller
             name="country"
             control={control}
             rules={{ required: "Country is required" }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full border-gray-700 text-white bg-gray-900 focus:ring focus:ring-blue-500">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent forceMount disablePortal className="bg-background border border-gray-700 rounded-md">
                   {Countries.map((country) => (
-                    <SelectItem key={country} value={country}>
+                    <SelectItem key={country} value={country} className="hover:bg-gray-800 focus:bg-gray-800 text-white px-4 py-2 cursor-pointer">
                       {country}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             )}
-          />
+          /> */}
+
           {errors.country && <p className="text-sm text-destructive">{errors.country.message}</p>}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
@@ -104,7 +94,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
             Sign up
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            Already have an account?
             <Button variant="link" className="p-0 underline" onClick={() => setIsSignIn(true)}>
               Sign in
             </Button>
