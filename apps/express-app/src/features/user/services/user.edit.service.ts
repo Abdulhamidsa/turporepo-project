@@ -1,5 +1,5 @@
 import { User } from "../models/user.model.ts";
-import { IUser } from "@repo/data/types/UserType.ts";
+import { IUser } from "../../../common/types/user.types.ts";
 
 interface EditUserProfileData {
   profilePicture?: string;

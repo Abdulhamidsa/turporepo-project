@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.ts";
 import { AppError } from "../../../common/errors/app.error.ts";
-import { IUser } from "@repo/data/types/UserType.ts";
+import { IUser } from "../../../common/types/user.types.ts";
 
 // Service to fetch all users
 export const getAllUsersService = async (): Promise<IUser[]> => {
