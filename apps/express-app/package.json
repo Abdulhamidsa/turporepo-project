@@ -32,12 +32,12 @@
     "@types/express": "^5.0.0",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.9",
-    "@types/node": "catalog:node-types",
+    "@types/node": "^20.0.0",
     "nodemon": "^3.1.7",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "catalog:typescript"
+    "typescript": "^5.0.0"
   },
   "engines": {
     "pnpm": ">=8.0.0"
