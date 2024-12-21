@@ -6,9 +6,9 @@ import { Input } from "@repo/ui/components/ui/input";
 import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select";
 import { Progress } from "@repo/ui/components/ui/progress";
-import { Countries } from "@repo/data/constansts/countries";
-import Links from "@repo/data/constansts/links";
-import Professions from "@repo/data/constansts/professions";
+import { Countries } from "@repo/data/constants/countries";
+import Links from "@repo/data/constants/links";
+import Professions from "@repo/data/constants/professions";
 import { Loader2 } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
 

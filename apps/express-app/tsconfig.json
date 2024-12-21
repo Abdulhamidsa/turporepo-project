@@ -11,7 +11,8 @@
     "resolveJsonModule": true, // Allow importing JSON files
     "baseUrl": "./", // Set the base URL to the current directory
     "paths": {
-      "@utils/*": ["src/common/utils/*"] // Make sure path aliases are resolved
+      "@utils/*": ["src/common/utils/*"], // Make sure path aliases are resolved
+      "@repo/data/*": ["../../packages/data/*"] // Resolve @repo/data to the data package
     }
   },
   "include": ["src/**/*"], // Include all source files in the 'src' directory

@@ -1,8 +1,8 @@
 import mongoose, { Schema, Model } from "mongoose";
-import Professions from "@repo/data/constansts/professions.ts";
+import Professions from "@repo/data/constants/professions.ts";
 import { IPersonalInfo } from "@repo/data/types/UserType.ts";
 import { IUser } from "@repo/data/types/UserType.ts";
-import Links from "@repo/data/constansts/links.ts";
+import Links from "@repo/data/constants/links.ts";
 
 const userPersonalInfoSchema: Schema<IPersonalInfo> = new Schema({
   username: {
