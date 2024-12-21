@@ -8,4 +8,4 @@ cmd = "pnpm install --frozen-lockfile"
 cmd = "pnpm build"
 
 [phases.start]
-cmd = "pnpm start"
+cmd = "node apps/express-app/dist/index.js"
