@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import { getAllUsersService } from "../services/user.service.ts";
-import { getSuccessResponse } from "../../../common/utils/response.handler.ts";
-import { getUserProfileService } from "../services/user.profile.service.ts";
-import { editUserProfileService } from "../services/user.edit.service.ts";
+import { getAllUsersService } from "../services/user.service";
+import { getSuccessResponse } from "../../../common/utils/response.handler";
+import { getUserProfileService } from "../services/user.profile.service";
+import { editUserProfileService } from "../services/user.edit.service";
 
 // handler to fetching all users
 export const handleFetchAllUsers: RequestHandler = async (req, res, next) => {

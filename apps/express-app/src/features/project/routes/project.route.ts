@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { handleFetchAllProjects } from "../handlers/project.handler.ts";
+// import { Router } from "express";
+// import { handleFetchAllProjects } from "../handlers/project.handler";
 
-const router = Router();
+// const router = Router();
 
-// fetch all projects
-router.get("/:projectid", handleFetchAllProjects);
+// // fetch all projects
+// router.get("/:projectid", handleFetchAllProjects);
 
-export default router;
+// export default router;

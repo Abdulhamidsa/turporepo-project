@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { SECRETS } from "./config.ts";
-import { AppError } from "../errors/app.error.ts";
+import { SECRETS } from "./config";
+import { AppError } from "../errors/app.error";
 
 export const connectMongoDB = async (): Promise<void> => {
   try {

@@ -1,24 +1,10 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2020",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "target": "es6",
+    "module": "commonjs",
     "outDir": "./dist",
-    "paths": {
-      "@utils/*": ["src/common/utils/*"]
-    }
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true
+  }
 }

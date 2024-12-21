@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleFetchAllUsers, handleFetchUserProfile, handleEditUserProfile } from "../handlers/user.handler.ts";
+import { handleFetchAllUsers, handleFetchUserProfile, handleEditUserProfile } from "../handlers/user.handler";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
-import { User } from "../models/user.model.ts";
-import { Credential } from "../models/user.credential.model.ts";
-import { AppError } from "../../../common/errors/app.error.ts";
-import { IUserProfile } from "../../../common/types/user.types.ts";
+import { User } from "../models/user.model";
+import { Credential } from "../models/user.credential.model";
+import { AppError } from "../../../common/errors/app.error";
+import { IUserProfile } from "../../../common/types/user.types";
 export const getUserProfileService = async (userId: string): Promise<IUserProfile> => {
   try {
     console.log(userId);
