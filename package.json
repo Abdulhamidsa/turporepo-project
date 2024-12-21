@@ -7,11 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev --filter=express-app",
-    "build": "pnpm clean && turbo run build --filter=express-app",
-    "start": "pnpm --filter express-app start",
-    "lint": "turbo run lint --filter=express-app",
-    "clean": "turbo run clean --filter=express-app"
+    "dev": "turbo run dev",
+    "build": "pnpm clean && turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo run clean"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

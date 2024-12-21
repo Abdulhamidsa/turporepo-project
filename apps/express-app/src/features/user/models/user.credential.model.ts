@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { IUserCredential } from "@repo/data/types/UserType.ts";
+import { IUserCredential } from "../../../common/types/user.types.ts";
 const userCredentialSchema: Schema<IUserCredential> = new Schema({
   email: {
     type: String,
