@@ -1,15 +1,19 @@
 {
   "extends": "@repo/typescript/tsconfig.base.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2020",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "module": "NodeNext", // For modern ESM support in Node.js
+    "moduleResolution": "NodeNext", // Ensure ES module resolution
+    "target": "ES2020", // Set the target to modern JavaScript
+    "allowImportingTsExtensions": true, // Allow importing TypeScript extensions
+    "noEmit": true, // Ensure TypeScript emits .js files for Express to run
+    "outDir": "./dist", // Output the compiled files to the 'dist' directory
+    "esModuleInterop": true, // Enable CommonJS and ESM interoperability
+    "resolveJsonModule": true, // Allow importing JSON files
+    "baseUrl": "./", // Set the base URL to the current directory
     "paths": {
-      "@utils/*": ["src/common/utils/*"]
+      "@utils/*": ["src/common/utils/*"] // Make sure path aliases are resolved
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"], // Include all source files in the 'src' directory
+  "exclude": ["node_modules", "dist"] // Exclude node_modules and dist directories
 }
