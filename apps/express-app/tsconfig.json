@@ -1,6 +1,14 @@
 {
-  "extends": "@repo/typescript/tsconfig.base.json",
   "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2020",
