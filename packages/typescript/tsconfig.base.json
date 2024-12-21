@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
-    "noFallthroughCasesInSwitch": true
+    "strict": true,  // Enable all strict type-checking options
+    "baseUrl": ".",  // The base directory for non-relative imports
+    "esModuleInterop": true,  // Enable compatibility between CommonJS and ESM
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in file names
+    "skipLibCheck": true,  // Skip type checking of declaration files (can speed up compilation)
+    "resolveJsonModule": true,  // Allow importing JSON files as modules
+    "allowSyntheticDefaultImports": true,  // Allow default imports from non-default-exporting modules
+    "noUnusedLocals": true,  // Report errors on unused local variables
+    "noFallthroughCasesInSwitch": true  // Ensure no fallthrough in switch statements
   }
 }
