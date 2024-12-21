@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "clean": "if exist dist rmdir /s /q dist",
+    "clean": "rimraf dist",
     "preview": "vite preview"
   },
   "dependencies": {

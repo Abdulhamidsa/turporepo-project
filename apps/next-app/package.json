@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "if exist .next rmdir /s /q .next"
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -20,7 +20,7 @@
     "@repo/typescript": "workspace:*",
     "@types/react": "catalog:react18",
     "@types/react-dom": "catalog:react18",
-    "@types/node":"catalog:node-types",
+    "@types/node": "catalog:node-types",
     "eslint": "catalog:eslint",
     "postcss": "catalog:tailwindcss",
     "tailwindcss": "catalog:tailwindcss",
