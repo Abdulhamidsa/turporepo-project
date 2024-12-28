@@ -1,21 +1,9 @@
-import { Routes, Route } from "react-router-dom";
-import Auth from "./features/auth";
-import ProfilePage from "./features/user/[username]/page";
+import { useRoutes } from "react-router-dom";
+import { appRoutes } from "./routes";
+import DashboardLayout from "./layout/DashboardLayout";
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      <Route
-        path="/users/:username"
-        element={
-          <ProfilePage
-            params={{
-              username: "woddddsooww",
-            }}
-          />
-        }
-      />
-    </Routes>
-  );
+  const routing = useRoutes(appRoutes);
+
+  return <DashboardLayout>{routing}</DashboardLayout>;
 }
