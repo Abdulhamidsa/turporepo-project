@@ -3,8 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "jsx": "react-jsx",
     "declaration": true,
-    "jsx": "react",
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "baseUrl": ".",

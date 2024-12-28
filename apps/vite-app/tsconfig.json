@@ -14,6 +14,6 @@
     }
   },
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../packages/ui/src/components/about-me.tsx"],
   "exclude": ["node_modules"]
 }
