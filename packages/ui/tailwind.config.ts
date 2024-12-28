@@ -2,7 +2,10 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: "class",
-  content: ["./src/**/*.{ts,tsx}", "../../apps/**/src/**/*.{ts,tsx}"],
+  content: [
+    "./src/**/*.{ts,tsx}", // Matches files in the local `src` directory
+    "../../apps/*/src/**/*.{ts,tsx}", // Restrict to only one level of subdirectories in `apps`
+  ],
   theme: {
     extend: {
       colors: {
