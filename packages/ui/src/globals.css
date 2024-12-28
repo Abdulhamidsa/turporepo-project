@@ -4,67 +4,76 @@
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #0a0a0a;
-    --card: #ffffff;
-    --card-foreground: #0a0a0a;
-    --popover: #ffffff;
-    --popover-foreground: #0a0a0a;
-    --primary: #1a1a1a;
-    --primary-foreground: #fafafa;
-    --secondary: #f0f0f0;
-    --secondary-foreground: #1a1a1a;
-    --muted: #f0f0f0;
-    --muted-foreground: #767676;
-    --accent: #f0f0f0;
-    --accent-foreground: #1a1a1a;
-    --destructive: #d32f2f;
-    --destructive-foreground: #fafafa;
-    --border: #e6e6e6;
-    --input: #e6e6e6;
-    --ring: #1a1a1a;
-    --radius: 0.5rem;
-    --chart-1: #e53935;
-    --chart-2: #4caf50;
-    --chart-3: #2196f3;
-    --chart-4: #ffeb3b;
-    --chart-5: #ff9800;
-    --error: #e67e22; /* Add this line */
+    /* Base Colors - Light Mode */
+    --background: #fdfdfd; /* Soft white background */
+    --foreground: #202124; /* Almost black for sharp contrast */
+    --card: #ffffff; /* Pure white cards */
+    --card-foreground: #202124; /* Match foreground */
+    --popover: #ffffff; /* Matches card */
+    --popover-foreground: #202124;
+    --primary: #d93a3a; /* Elegant reddish accent */
+    --primary-foreground: #ffffff; /* White text on primary */
+    --secondary: #ffccd5; /* Light red-pink for secondary highlights */
+    --secondary-foreground: #202124;
+    --muted: #f2f2f2; /* Light gray for muted elements */
+    --muted-foreground: #666666; /* Medium gray for muted text */
+    --accent: #d93a3a; /* Matches primary */
+    --accent-foreground: #ffffff;
+    --destructive: #b22222; /* Deep red for destructive actions */
+    --destructive-foreground: #ffffff;
+    --border: #d9d9d9; /* Subtle gray for borders */
+    --input: #d9d9d9; /* Match borders */
+    --ring: #d93a3a; /* Matches accent for focus outlines */
+    --radius: 0.4rem; /* Slightly rounded corners */
   }
 
   .dark {
-    --background: #212121;
-    --foreground: #fafafa;
-    --card: #0a0a0a;
-    --card-foreground: #fafafa;
-    --popover: #0a0a0a;
-    --button: #b23a48;
-    --button-hover: #d14b5e;
-    --button-disabled: #9ca3af;
-    --popover-foreground: #fafafa;
-    --primary: #fafafa;
-    --primary-foreground: #1a1a1a;
-    --secondary: #262626;
-    --secondary-foreground: #fafafa;
-    --muted: #262626;
-    --muted-foreground: #a3a3a3;
-    --accent: #262626;
-    --accent-foreground: #fafafa;
-    --destructive: #8b0000;
-    --destructive-foreground: #fafafa;
-    --border: #262626;
-    --input: #404040;
-    --ring: #d9d9d9;
-    --chart-1: #1e90ff;
-    --chart-2: #00bfff;
-    --chart-3: #ff8c00;
-    --chart-4: #ba55d3;
-    --chart-5: #ff1493;
-    --error: #ff6b6b;
+    /* Base Colors - Dark Mode */
+    --background: #1b1c1e; /* Dark gray for subtle elegance */
+    --foreground: #e5e5e5; /* Soft white text */
+    --card: #242526; /* Darker gray for cards */
+    --card-foreground: #e5e5e5;
+    --popover: #242526;
+    --popover-foreground: #e5e5e5;
+    --primary: #ff4d4d; /* Bright reddish accent */
+    --primary-foreground: #ffffff; /* White text on primary */
+    --secondary: #4d2c2c; /* Muted red-pink for secondary elements */
+    --secondary-foreground: #e5e5e5;
+    --muted: #2e2f30; /* Dark gray for muted elements */
+    --muted-foreground: #9a9b9c; /* Softer muted text */
+    --accent: #ff4d4d; /* Matches primary */
+    --accent-foreground: #ffffff;
+    --destructive: #993333; /* Muted red for destructive actions */
+    --destructive-foreground: #ffffff;
+    --border: #2e2f30; /* Match muted */
+    --input: #2e2f30; /* Match muted */
+    --ring: #ff4d4d; /* Matches accent for focus outlines */
+    --radius: 0.4rem;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--muted);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 2px solid var(--muted);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary-foreground);
   }
 }
 
 @layer base {
+  /* Apply base styles */
   * {
     @apply border-border;
   }

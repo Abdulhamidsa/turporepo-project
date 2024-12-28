@@ -4,62 +4,68 @@
 
 @layer base {
   :root {
-    --background: #212121;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: #09090b;
-    --secondary: #4a90e2;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* Base Colors - Light Mode */
+    --background: #f8f9fa; /* Light elegant background */
+    --foreground: 0 0% 20%; /* Darker text for better readability */
+    --card: #ffffff; /* Pure white cards */
+    --card-foreground: 0 0% 20%; /* Match foreground */
+    --popover: #ffffff; /* Popover matches card */
+    --popover-foreground: 0 0% 20%;
+    --primary: 220 90% 55%; /* Elegant blue for primary */
+    --primary-foreground: #ffffff; /* White text on primary */
+    --secondary: 240 12% 60%; /* Soft neutral gray-blue */
+    --secondary-foreground: 0 0% 20%;
+    --muted: 0 0% 95%; /* Very light muted tone */
+    --muted-foreground: 0 0% 50%; /* Mid-tone muted text */
+    --accent: 10 90% 55%; /* Vibrant reddish-orange accent */
+    --accent-foreground: #ffffff; /* White text on accent */
+    --destructive: 0 72% 65%; /* Red for destructive actions */
+    --destructive-foreground: #ffffff;
+    --border: 0 0% 90%; /* Light borders */
+    --input: 0 0% 90%; /* Match borders */
+    --ring: 10 90% 55%; /* Match accent for focus outlines */
+    --radius: 0.5rem; /* Standard border radius */
+    /* Chart Colors */
+    --chart-1: 10 85% 55%; /* Match accent */
+    --chart-2: 34 77% 62%; /* Soft orange for variety */
+    --chart-3: 220 70% 50%; /* Deep blue */
+    --chart-4: 160 60% 45%; /* Greenish */
+    --chart-5: 280 65% 60%; /* Purplish */
   }
 
   .dark {
-    --background: #212121;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: red;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Base Colors - Dark Mode */
+    --background: #2a2b32; /* ChatGPT-inspired dark background */
+    --foreground: #e1e1e6; /* Light foreground text */
+    --card: #3b3d46; /* Darker gray for cards */
+    --card-foreground: #e1e1e6;
+    --popover: #3b3d46;
+    --popover-foreground: #e1e1e6;
+    --primary: 220 90% 60%; /* Bright blue for primary */
+    --primary-foreground: #ffffff; /* White text on primary */
+    --secondary: 220 10% 55%; /* Softer blue-gray for secondary */
+    --secondary-foreground: #e1e1e6;
+    --muted: #42434b; /* Muted gray */
+    --muted-foreground: #a1a1aa; /* Softer muted text */
+    --accent: 10 85% 50%; /* Subdued reddish-orange accent for dark mode */
+    --accent-foreground: #ffffff;
+    --destructive: 0 60% 50%; /* Muted red for destructive actions */
+    --destructive-foreground: #ffffff;
+    --border: #3b3d46; /* Match card */
+    --input: #3b3d46; /* Match card */
+    --ring: 10 85% 50%; /* Match accent for focus outlines */
+    --radius: 0.5rem;
+    /* Chart Colors */
+    --chart-1: 10 85% 50%; /* Match accent */
+    --chart-2: 34 77% 62%; /* Soft orange for variety */
+    --chart-3: 220 70% 50%; /* Deep blue */
+    --chart-4: 160 60% 45%; /* Greenish */
+    --chart-5: 280 65% 60%; /* Purplish */
   }
 }
 
 @layer base {
+  /* Apply base styles */
   * {
     @apply border-border;
   }
