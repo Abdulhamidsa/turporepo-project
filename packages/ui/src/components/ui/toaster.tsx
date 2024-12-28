@@ -1,17 +1,10 @@
 "use client";
+
 import { useToast } from "@repo/hooks/use-toast";
 import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@repo/ui/components/ui/toast";
-import React from "react";
-interface ToasterToast {
-  id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: React.ReactNode;
-  [key: string]: any;
-}
 
 export function Toaster() {
-  const { toasts }: { toasts: ToasterToast[] } = useToast();
+  const { toasts } = useToast();
 
   return (
     <ToastProvider>
