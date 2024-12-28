@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Card, CardContent } from "@repo/ui/components/ui/card";
 import { Button } from "@repo/ui/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog";
@@ -19,7 +18,7 @@ export function PublicProject({ project }: PublicProjectProps) {
       <DialogTrigger asChild>
         <Card className="cursor-pointer hover:shadow-lg transition-shadow">
           <CardContent className="p-0">
-            <Image src={project.image} alt={project.title} width={200} height={200} className="w-full h-40 object-cover" />
+            <img src={project.image} alt={project.title} width={200} height={200} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold">{project.title}</h3>
             </div>
@@ -31,7 +30,7 @@ export function PublicProject({ project }: PublicProjectProps) {
           <DialogTitle>{project.title}</DialogTitle>
           <DialogDescription>{project.description}</DialogDescription>
         </DialogHeader>
-        <Image src={project.image} alt={project.title} width={400} height={300} className="w-full h-64 object-cover mb-4" />
+        <img src={project.image} alt={project.title} width={400} height={300} className="w-full h-64 object-cover mb-4" />
         <div className="flex justify-between mt-4">
           <div className="flex space-x-2">
             <Button variant="outline" size="icon">
