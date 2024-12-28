@@ -50,26 +50,6 @@
     --ring: #ff4d4d; /* Matches accent for focus outlines */
     --radius: 0.4rem;
   }
-
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--muted);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 10px;
-    border: 2px solid var(--muted);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--primary-foreground);
-  }
 }
 
 @layer base {
