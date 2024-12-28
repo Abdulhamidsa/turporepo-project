@@ -1,87 +1,82 @@
-// import { Button } from "@repo/ui/components/ui/button";
-// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
-// import { Input } from "@repo/ui/components/ui/input";
-// // import { useAuth } from "@/context/AuthContext";
-// import { useToast } from "@repo/hooks/use-toast";
-// import { useState } from "react";
-// // import { useSignIn } from "@/hooks/useAuth";
-// // import { signInSchema } from "@repo/lib/schemas/signInSchema";
-// // import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm, SubmitHandler } from "react-hook-form";
-// import { z } from "zod";
+import { Button } from "@repo/ui/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
+import { Input } from "@repo/ui/components/ui/input";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useSignin } from "../../user/hooks/use.auth";
+import { signInResolver } from "@repo/zod";
+import { SignInFormData } from "@repo/data/types";
+import { useToast } from "@repo/hooks/use-toast";
+import { getErrorMessage } from "../../../utils/axiosConfige";
 
-// export type FormData = z.infer<typeof signInSchema>;
-// export default function SigninForm() {
-//   const { login } = useAuth();
-//   const { toast } = useToast();
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm<FormData>({ resolver: zodResolver(signInSchema) });
-//   const signIn = useSignIn();
+export default function SigninForm() {
+  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInFormData>({
+    resolver: signInResolver,
+  });
 
-//   const onSubmit: SubmitHandler<FormData> = async (data) => {
-//     setIsSubmitting(true);
-//     const response = await signIn({ email: data.email, password: data.password });
-//     if (response.result) {
-//       toast({
-//         title: "Success",
-//         variant: "default",
-//         description: response.message,
-//         duration: 1500,
-//       });
-//       setTimeout(() => {
-//         login();
-//       }, 1500);
-//     } else {
-//       toast({
-//         title: "Error",
-//         description: response.message,
-//         // variant: "destructive",
-//         duration: 2000,
-//       });
-//     }
-//     setIsSubmitting(false);
-//   };
+  const { signin, isSubmitting } = useSignin();
 
-//   return (
-//     <Card className="border-0 shadow-none w-full max-w-md mx-auto">
-//       <CardHeader>
-//         <CardTitle className="text-2xl font-bold text-center">Signin</CardTitle>
-//       </CardHeader>
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <CardContent className="space-y-4">
-//           <div className="space-y-2">
-//             <Input className="border-black/25" defaultValue="aboood@gmail.com" type="email" placeholder="Email" {...register("email")} aria-invalid={errors.email ? "true" : "false"} />
-//             {/* {errors.email && (
-//               <p className="text-sm text-red-500" role="alert">
-//                 {errors.email.message}
-//               </p>
-//             )} */}
-//           </div>
-//           <div className="space-y-2">
-//             <Input className="border-black/25" defaultValue="Aboood166" type="password" placeholder="Password" {...register("password")} aria-invalid={errors.password ? "true" : "false"} />
-//             {/* {errors.password && (
-//               <p className="text-sm text-red-500" role="alert">
-//                 {errors.password.message}
-//               </p>
-//             )} */}
-//           </div>
-//         </CardContent>
-//         <CardFooter>
-//           <Button type="submit" className="w-full" disabled={isSubmitting}>
-//             {isSubmitting ? "Signing In..." : "Login"}
-//           </Button>
-//         </CardFooter>
-//       </form>
-//     </Card>
-//   );
-// }
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
+    try {
+      await signin(data);
+      toast({
+        title: "Signin Successful",
+        description: "You have successfully signed in.",
+        variant: "success",
+      });
+    } catch (error) {
+      const errorMessage = getErrorMessage(error);
+      toast({
+        title: "Signin Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
+  };
 
-function SigninForm() {
-  return <div>SigninForm</div>;
+  return (
+    <Card className="border-0 shadow-none w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
+      </CardHeader>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Input className="border-black/25" type="email" placeholder="Email" {...register("email")} />
+            {errors.email && (
+              <p className="text-sm text-red-500" role="alert">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Input className="border-black/25" type="password" placeholder="Password" {...register("password")} />
+            {errors.password && (
+              <p className="text-sm text-red-500" role="alert">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? "Signing in..." : "Sign In"}
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => {
+              window.location.href = "/signup";
+            }}
+          >
+            Switch to Signup
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
+  );
 }
-
-export default SigninForm;
