@@ -26,12 +26,14 @@ const handleResponse = <T>(response: { data: ApiResponse<T> }): T => {
 // Helper to handle Axios errors
 const handleAxiosError = (error: unknown): never => {
   if (axios.isAxiosError(error)) {
+    console.error("Axios error details:", error.response?.data);
     const status = error.response?.status;
     if (error.response?.data?.message) {
       throw new Error(`[${status}] ${error.response.data.message}`);
     }
     throw new Error(`[${status}] Unexpected Axios error occurred.`);
   }
+  console.error("Non-Axios error:", error);
   throw new Error("An unexpected error occurred.");
 };
 

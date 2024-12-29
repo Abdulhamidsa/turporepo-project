@@ -30,6 +30,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
+      console.log("Submitting data:", data);
       await signup(data);
       toast({
         title: "Signup Successful",
@@ -38,13 +39,20 @@ export const SignupForm: React.FC<SignupFormProps> = ({ setIsSignIn }) => {
       });
     } catch (error) {
       const errorMessage = getErrorMessage(error);
+      console.error("Signup error:", error);
       toast({
         title: "Signup Failed",
         description: errorMessage,
         variant: "destructive",
       });
+      toast({
+        title: "Test Toast",
+        description: "This is a test message.",
+        variant: "success",
+      });
     }
   };
+
   return (
     <>
       <Card className="w-full max-w-md mx-auto rounded-xl bg-background p-2">

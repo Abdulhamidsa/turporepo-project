@@ -1,34 +1,37 @@
 import { RouteObject } from "react-router-dom";
 import Auth from "./features/auth";
 import ProfilePage from "./features/user/[username]/page";
-import AppLayout from "./layout/AppLayout";
 import HomePage from "./page";
 import Profile from "./features/user/components/profile";
+import DashboardLayout from "./layout/DashboardLayout";
 
 export const appRoutes: RouteObject[] = [
   {
+    path: "/auth",
+    element: <Auth />, // Auth Page (without dashboard)
+  },
+  {
     path: "/",
-    element: <AppLayout />,
+    element: <DashboardLayout />, // Dashboard Layout
     children: [
       {
-        path: "auth",
-        element: <Auth />,
+        path: "/",
+        element: <HomePage />, // Landing Page
       },
       {
         path: "users/:username",
         element: (
           <ProfilePage
             params={{
-              username: "woddddsooww",
+              username: "",
             }}
           />
         ),
       },
       {
-        path: "/",
-        element: <HomePage />,
+        path: "profile",
+        element: <Profile mongo_ref={""} />,
       },
-      { path: "/profile", element: <Profile /> },
     ],
   },
 ];

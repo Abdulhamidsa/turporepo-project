@@ -8,8 +8,8 @@ import { AlertCircle, CheckCircle } from "lucide-react";
 export default function ProfilePage({ mongo_ref }: { mongo_ref: string }) {
   const { userProfile, isLoading, error } = useUserProfile(mongo_ref);
   const [isEditable, setIsEditable] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [professions, setProfessions] = useState([]);
+  const [countries, setCountries] = useState<{ value: string; label: string }[]>([]);
+  const [professions, setProfessions] = useState<{ value: string; label: string }[]>([]);
 
   // Fetch countries and professions
   useEffect(() => {

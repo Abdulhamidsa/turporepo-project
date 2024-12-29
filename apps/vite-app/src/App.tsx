@@ -1,9 +1,9 @@
 import { useRoutes } from "react-router-dom";
 import { appRoutes } from "./routes";
-import DashboardLayout from "./layout/DashboardLayout";
+import AppLayout from "./layout/AppLayout";
 
 export default function App() {
   const routing = useRoutes(appRoutes);
 
-  return <DashboardLayout>{routing}</DashboardLayout>;
+  return <AppLayout>{routing}</AppLayout>;
 }
