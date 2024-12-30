@@ -3,17 +3,19 @@ import { useState } from "react";
 import { Home, User, Settings, LogOut, ChevronLeft, ChevronRight, Briefcase, MoreVertical } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/ui/popover";
+import { getErrorMessage, request } from "../utils/axiosConfige";
+import { getFriendlyId } from "../utils/axiosConfige"; // Or wherever your token decoding logic is
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const username = "currentUser"; // Replace with dynamic username
+  const friendlyId = getFriendlyId();
 
   const navigationItems = [
     { name: "Home", icon: Home, link: "/" },
     // { name: "Messages", icon: MessageSquare, link: "/messages" },
-    { name: "My Portfolio", icon: Briefcase, link: `/users/${username}` },
+    { name: "My Portfolio", icon: Briefcase, link: `/users/${friendlyId}` },
   ];
 
   const sidebarOnlyItems = [
@@ -22,11 +24,17 @@ export default function DashboardLayout() {
     { name: "Logout", icon: LogOut, action: () => handleLogout() },
   ];
 
-  const handleLogout = () => {
-    alert("Logged out successfully");
-    navigate("/auth");
+  const handleLogout = async () => {
+    try {
+      await request<undefined>("POST", "/internal/signout");
+      navigate("/auth");
+    } catch (error) {
+      // Handle errors using the `getErrorMessage` utility
+      const errorMessage = getErrorMessage(error);
+      alert(`Logout failed: ${errorMessage}`);
+      console.error("Error during logout:", errorMessage);
+    }
   };
-
   return (
     <div className="flex h-[100dvh] bg-background text-foreground">
       {/* Sidebar */}
