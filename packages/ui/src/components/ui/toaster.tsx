@@ -1,26 +1,38 @@
-"use client";
+import { Toaster, toast } from "react-hot-toast";
 
-import { useToast } from "@repo/hooks/use-toast";
-import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@repo/ui/components/ui/toast";
-
-export function Toaster() {
-  const { toasts } = useToast();
-
+export const ToastProvider = () => {
   return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && <ToastDescription>{description}</ToastDescription>}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        );
-      })}
-      <ToastViewport />
-    </ToastProvider>
+    <Toaster
+      position="bottom-right"
+      toastOptions={{
+        style: {
+          maxWidth: "60%",
+          minHeight: "10vh",
+          fontSize: "0.875rem",
+          padding: "8px 16px",
+          borderRadius: "8px",
+        },
+        success: {
+          style: {
+            background: "#d1e7dd",
+            color: "#0f5132",
+          },
+        },
+        error: {
+          style: {
+            background: "#f8d7da",
+            color: "#842029",
+          },
+        },
+      }}
+    />
   );
-}
+};
+
+export const showToast = (message: string, type: "success" | "error") => {
+  if (type === "success") {
+    toast.success(message);
+  } else if (type === "error") {
+    toast.error(message);
+  }
+};
