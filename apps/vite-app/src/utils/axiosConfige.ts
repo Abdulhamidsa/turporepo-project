@@ -1,5 +1,7 @@
 import axios from "axios";
 import { z, ZodSchema } from "zod";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:4000/api",
@@ -8,6 +10,56 @@ const axiosInstance = axios.create({
   },
   withCredentials: true,
 });
+
+// Utility to extract `friendlyId` from the token
+export const getFriendlyId = (): string | undefined => {
+  const token = Cookies.get("accessToken");
+  if (!token) {
+    console.error("accessToken is missing from cookies.");
+    return undefined;
+  }
+
+  try {
+    const payload = jwtDecode<{ friendlyId: string }>(token);
+    console.log("Decoded Token Payload:", payload); // Debug log
+    return payload.friendlyId;
+  } catch (error) {
+    console.error("Failed to decode token:", error);
+    return undefined;
+  }
+};
+
+// Request interceptor to optionally append `friendlyId` to URLs
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const friendlyId = getFriendlyId();
+
+    if (friendlyId && config.url && config.url.includes("$friendlyId")) {
+      config.url = config.url.replace("$friendlyId", friendlyId);
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor to handle unauthorized responses
+axiosInstance.interceptors.response.use(
+  (response) => {
+    // If the response is successful, return it
+    return response;
+  },
+  (error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      console.warn("Unauthorized: Redirecting to authentication.");
+      // Redirect to the login/auth page
+      window.location.href = "/auth"; // Adjust this to your auth page route
+    }
+    return Promise.reject(error); // Let the error propagate
+  }
+);
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -38,7 +90,6 @@ const handleAxiosError = (error: unknown): never => {
 };
 
 // Generic request handler
-
 export const request = async <T, P = undefined>(
   method: "GET" | "POST",
   url: string,
@@ -72,7 +123,6 @@ export const request = async <T, P = undefined>(
 };
 
 // Wrapper fetcher for SWR
-
 export const swrFetcher = async <T>(url: string, schema: z.ZodType<T>, defaultValue: T): Promise<T> => {
   try {
     const response = await request<T>("GET", url);
