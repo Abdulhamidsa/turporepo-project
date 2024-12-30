@@ -1,15 +1,16 @@
 import { Button } from "@repo/ui/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
 import { Input } from "@repo/ui/components/ui/input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useSignin } from "../../user/hooks/use.auth";
 import { signInResolver } from "@repo/zod";
 import { SignInFormData } from "@repo/data/types";
-import { useToast } from "@repo/hooks/use-toast";
 import { getErrorMessage } from "../../../utils/axiosConfige";
+import { showToast } from "@repo/ui/components/ui/toaster";
+import { AuthFormWrapper } from "./AuthFormWrapper";
+import { useNavigate } from "react-router-dom";
 
-export default function SigninForm() {
-  const { toast } = useToast();
+export default function SigninForm({ setIsSignIn }: { setIsSignIn: (value: boolean) => void }) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,60 +24,47 @@ export default function SigninForm() {
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
       await signin(data);
-      toast({
-        title: "Signin Successful",
-        description: "You have successfully signed in.",
-        variant: "success",
-      });
+      showToast("You have successfully signed in.", "success");
+      navigate("/");
     } catch (error) {
       const errorMessage = getErrorMessage(error);
-      toast({
-        title: "Signin Failed",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      showToast(errorMessage, "error");
     }
   };
 
   return (
-    <Card className="border-0 shadow-none w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
-      </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Input className="border-black/25" type="email" placeholder="Email" {...register("email")} />
-            {errors.email && (
-              <p className="text-sm text-red-500" role="alert">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Input className="border-black/25" type="password" placeholder="Password" {...register("password")} />
-            {errors.password && (
-              <p className="text-sm text-red-500" role="alert">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in..." : "Sign In"}
+    <AuthFormWrapper
+      title="Sign In"
+      footer={
+        <p className="text-sm text-muted-foreground">
+          Don't have an account?{" "}
+          <Button variant="link" onClick={() => setIsSignIn(false)}>
+            Sign Up
           </Button>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => {
-              window.location.href = "/signup";
-            }}
-          >
-            Switch to Signup
-          </Button>
-        </CardFooter>
+        </p>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <Input className="border-border" type="name" placeholder="Username" {...register("username", { required: "Username is required" })} />
+          {errors.username && (
+            <p className="text-sm text-destructive-foreground mt-1" role="alert">
+              {errors.username.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Input className="border-border" type="password" placeholder="Password" {...register("password", { required: "Password is required" })} />
+          {errors.password && (
+            <p className="text-sm text-destructive-foreground mt-1" role="alert">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Signing in..." : "Sign In"}
+        </Button>
       </form>
-    </Card>
+    </AuthFormWrapper>
   );
 }

@@ -4,11 +4,11 @@ import { getErrorMessage } from "../../../utils/axiosConfige"; // Adjust path as
 
 type SignupResponse = {
   id: string;
-  email: string;
+  username: string;
 };
 
 type SignupPayload = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -35,7 +35,7 @@ export const useSignup = () => {
 // signin hook
 
 type SigninPayload = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -43,7 +43,7 @@ type SigninResponse = {
   token: string;
   user: {
     id: string;
-    email: string;
+    username: string;
   };
 };
 
