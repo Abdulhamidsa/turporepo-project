@@ -2,10 +2,9 @@ import useSWR from "swr";
 import { swrFetcher } from "../../../utils/axiosConfige";
 import { userProfileSchema } from "@repo/zod/validation/user";
 
-export const useUserProfile = (mongo_ref: string) => {
+export const useUserProfile = (friendlyId: string | undefined) => {
   const defaultUserProfile = {
     _id: "",
-    mongo_ref: "",
     profileComplete: false,
     bio: null,
     age: null,
@@ -14,7 +13,10 @@ export const useUserProfile = (mongo_ref: string) => {
     createdAt: new Date().toISOString(),
   };
 
-  const { data, error, isLoading } = useSWR(`/internal/profile/${mongo_ref}`, (url) => swrFetcher(url, userProfileSchema, defaultUserProfile));
+  // Build URL dynamically using `friendlyId`
+  const url = friendlyId ? `/internal/profile/${friendlyId}` : null;
+
+  const { data, error, isLoading } = useSWR(url, (url) => swrFetcher(url, userProfileSchema, defaultUserProfile));
 
   return {
     userProfile: data,
