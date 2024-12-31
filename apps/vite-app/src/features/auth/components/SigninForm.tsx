@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useSignin } from "../../user/hooks/use.auth";
 import { signInResolver } from "@repo/zod";
 import { SignInFormData } from "@repo/data/types";
-import { getErrorMessage } from "../../../utils/axiosConfige";
+import { getErrorMessage } from "../../../../utils/axiosConfige";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 import { useNavigate } from "react-router-dom";
@@ -46,10 +46,10 @@ export default function SigninForm({ setIsSignIn }: { setIsSignIn: (value: boole
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Input className="border-border" type="name" placeholder="Username" {...register("username", { required: "Username is required" })} />
-          {errors.username && (
+          <Input className="border-border" type="email" placeholder="email" {...register("email", { required: "email is required" })} />
+          {errors.email && (
             <p className="text-sm text-destructive-foreground mt-1" role="alert">
-              {errors.username.message}
+              {errors.email.message}
             </p>
           )}
         </div>

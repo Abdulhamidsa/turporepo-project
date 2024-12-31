@@ -10,13 +10,13 @@ import { motion } from "framer-motion";
 import { Tooltip, TooltipProvider } from "@repo/ui/components/ui/tooltip";
 import { useUserProfile } from "../hooks/use.user.profile";
 import PageTransition from "../../../layout/animation/PageTransition";
-import { getFriendlyId } from "../../../utils/axiosConfige";
+// import { useUserData } from "../../../../context/UserContext";
 
 export default function ProfilePage({ params }: { params: { friendlyId: string } }) {
   const [isPublicView, setIsPublicView] = useState(false);
-  const friendlyId = getFriendlyId();
+  const userInfo = "ss";
 
-  const { userProfile, isLoading, error } = useUserProfile(friendlyId);
+  const { userProfile, isLoading, error } = useUserProfile(userInfo);
   const defaultProfile = {
     name: "Unknown User",
     coverImage: "/banner1.png",

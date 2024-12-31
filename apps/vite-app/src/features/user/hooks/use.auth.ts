@@ -1,6 +1,6 @@
 import useSWRMutation from "swr/mutation";
-import { request } from "../../../utils/axiosConfige";
-import { getErrorMessage } from "../../../utils/axiosConfige"; // Adjust path as needed
+import { request } from "../../../../utils/axiosConfige";
+import { getErrorMessage } from "../../../../utils/axiosConfige"; // Adjust path as needed
 
 type SignupResponse = {
   id: string;
@@ -35,15 +35,14 @@ export const useSignup = () => {
 // signin hook
 
 type SigninPayload = {
-  username: string;
+  email: string;
   password: string;
 };
 
 type SigninResponse = {
-  token: string;
-  user: {
-    id: string;
-    username: string;
+  success: string;
+  data: {
+    message: string;
   };
 };
 

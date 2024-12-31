@@ -1,99 +1,71 @@
-import { useState } from "react";
-import StatusUpdate from "./features/posts/StatusUpdate";
-import Feed from "./features/posts/Feed";
+import { useState, useEffect, useRef } from "react";
+import { Plus, FileText, FolderPlus } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
+import { motion } from "framer-motion";
+import AddProjectModal from "./features/projects/components/AddProjectModal";
+
+//  <Button onClick={() => setIsModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full shadow-lg transform transition duration-300 hover:scale-105">
+//     Add New Project
+//   </Button>{" "}
+//   <AddProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<"posts" | "projects">("posts");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const statuses = [
-    { id: 1, user: "Alice", content: "Just launched a new project!" },
-    { id: 2, user: "Bob", content: "Excited to share my portfolio update!" },
-    { id: 3, user: "Charlie", content: "Looking for collaborators on my open-source app." },
-  ];
+  const menuRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
-  const projects = [
-    { id: 1, title: "Project A", description: "An amazing project about AI." },
-    { id: 2, title: "Project B", description: "A portfolio website for professionals." },
-    { id: 3, title: "Project C", description: "A collaborative task management tool." },
-  ];
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      // Check if the click is outside both the menu and the popup
+      if (menuRef.current && !menuRef.current.contains(target) && popupRef.current && !popupRef.current.contains(target)) {
+        setMenuOpen(false);
+      }
+    };
 
-  // Filtered Data
-  const filteredStatuses = statuses.filter((status) => status.content.toLowerCase().includes(searchQuery.toLowerCase()));
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const filteredProjects = projects.filter((project) => project.title.toLowerCase().includes(searchQuery.toLowerCase()) || project.description.toLowerCase().includes(searchQuery.toLowerCase()));
+  const handleAddProjectClick = () => {
+    setMenuOpen(false); // Close the floating menu
+  };
 
   return (
     <div className="p-4">
-      {/* Tab Navigation */}
-      <div className="flex flex-col items-center space-y-4 mb-6">
-        {/* Tabs */}
-        <div className="flex space-x-8">
-          <button
-            className={`pb-2 text-sm font-medium transition-colors ${activeTab === "posts" ? "text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
-            onClick={() => {
-              setActiveTab("posts");
-              setSearchQuery(""); // Clear search when switching tabs
-            }}
-          >
-            Posts
-          </button>
-          <button
-            className={`pb-2 text-sm font-medium transition-colors ${activeTab === "projects" ? "text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
-            onClick={() => {
-              setActiveTab("projects");
-              setSearchQuery(""); // Clear search when switching tabs
-            }}
-          >
-            Projects
-          </button>
-        </div>
+      {/* Floating Button */}
+      <div className="fixed bottom-16 right-4 md:bottom-4 md:right-4">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="floating-button bg-primary text-primary-foreground p-4 rounded-full shadow-lg hover:bg-primary/90 transition-all">
+          <Plus className="h-6 w-6" />
+        </button>
 
-        {/* Search Input */}
-        {/* <div className="w-full max-w-md relative">
-          <input
-            type="text"
-            placeholder={`Search ${activeTab === "posts" ? "statuses" : "projects"}...`}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring focus:ring-primary"
-          />
-        </div> */}
+        {/* Animated Menu */}
+        {menuOpen && (
+          <motion.div
+            ref={menuRef}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="floating-menu absolute bottom-20 right-0 bg-card border border-border rounded-lg shadow-lg p-4 flex flex-col space-y-2"
+          >
+            <Button onClick={() => alert("Adding Post...")} variant="ghost" className="flex items-center space-x-2 hover:bg-muted/50">
+              <FileText className="h-5 w-5 text-primary" />
+              <span>Add Post</span>
+            </Button>
+            <Button onClick={() => setIsModalOpen(true)} variant="ghost" className="flex items-center space-x-2 hover:bg-muted/50">
+              <FolderPlus className="h-5 w-5 text-primary" />
+              <span>Add Project</span>
+            </Button>
+          </motion.div>
+        )}
+
+        <AddProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
-
-      {/* Dynamic Content */}
-      {activeTab === "posts" ? (
-        <div className="space-y-4">
-          {/* Post Button */}
-          {/* <div className="flex justify-center">
-            <Button onClick={() => alert("Posting...")} className="px-4 py-1 text-sm">
-              Post
-            </Button>
-          </div> */}
-          {/* Statuses */}
-          <StatusUpdate />
-          <Feed posts={filteredStatuses} />
-        </div>
-      ) : (
-        <div>
-          {/* Upload Project Button */}
-          <div className="flex justify-center mb-4">
-            <Button onClick={() => alert("Upload Project...")} className="px-4 py-1 text-sm">
-              Upload Project
-            </Button>
-          </div>
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredProjects.map((project) => (
-              <div key={project.id} className="p-4 bg-muted rounded-lg shadow">
-                <h3 className="text-md font-semibold">{project.title}</h3>
-                <p className="text-muted-foreground">{project.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

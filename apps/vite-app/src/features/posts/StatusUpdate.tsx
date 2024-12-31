@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@repo/ui/components/ui/dialog";
-import { Plus, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 export default function StatusUpdate() {
   const [status, setStatus] = useState("");
@@ -30,11 +30,6 @@ export default function StatusUpdate() {
           </Button>
         </div>
       </div>
-
-      {/* Floating Icon Button for Smaller Screens */}
-      <button onClick={() => alert("Adding new item...")} className="fixed bottom-16 right-4 md:bottom-4 md:right-4 bg-primary text-primary-foreground p-4 rounded-full shadow-lg hover:bg-primary/90">
-        <Plus className="h-6 w-6" />
-      </button>
 
       {/* Modal for Adding Status */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

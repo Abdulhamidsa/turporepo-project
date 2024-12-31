@@ -1,6 +1,6 @@
 // Signin form data
 export type SignInFormData = {
-  username: string;
+  email: string;
   password: string;
 };
 

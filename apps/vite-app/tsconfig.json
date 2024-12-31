@@ -14,6 +14,6 @@
     }
   },
 
-  "include": ["src/**/*", "../../packages/ui/src/components/about-me.tsx", "../../packages/ui/src/components/ui/toast.tsx", "../../packages/ui/src/components/toast.tsx"],
+  "include": ["src/**/*", "../../packages/ui/src/components/about-me.tsx", "../../packages/ui/src/components/ui/toast.tsx", "../../packages/ui/src/components/toast.tsx", "utils"],
   "exclude": ["node_modules"]
 }

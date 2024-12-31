@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { swrFetcher } from "../../../utils/axiosConfige";
+import { swrFetcher } from "../../../../utils/axiosConfige";
 import { userProfileSchema } from "@repo/zod/validation/user";
 
 export const useUserProfile = (friendlyId: string | undefined) => {
@@ -14,13 +14,32 @@ export const useUserProfile = (friendlyId: string | undefined) => {
   };
 
   // Build URL dynamically using `friendlyId`
-  const url = friendlyId ? `/internal/profile/${friendlyId}` : null;
+  const url = `/internal/profile/${friendlyId}`;
 
   const { data, error, isLoading } = useSWR(url, (url) => swrFetcher(url, userProfileSchema, defaultUserProfile));
-
   return {
     userProfile: data,
     isLoading,
+    error,
+  };
+};
+
+import { z } from "zod";
+
+// Define the schema for the expected user response
+const userSchema = z.object({
+  friendlyId: z.string(),
+  username: z.string(),
+});
+
+export const useUserAuth = () => {
+  const { data, error, isLoading } = useSWR("/internal/logged-user", (url) => swrFetcher(url, userSchema, null));
+  const isAuthenticated = !!data && !error;
+
+  return {
+    userAuth: data,
+    isLoading,
+    isAuthenticated,
     error,
   };
 };

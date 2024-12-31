@@ -1,4 +1,4 @@
-import SignupForm from "./components/SignupForm";
+import SignupForm from "./components/SignUpForm";
 import SigninForm from "./components/SigninForm";
 import { useState } from "react";
 import { Button } from "@repo/ui/components/ui/button";

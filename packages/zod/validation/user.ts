@@ -10,8 +10,18 @@ export const userProfileSchema = z.object({
   profession: z.string().nullable().optional(), // Allow `null` or omit entirely
   createdAt: z.string().default(new Date().toISOString()), // Default to the current date/time
 });
-
 export type UserProfile = z.infer<typeof userProfileSchema>;
-
 // Parse the default profile
 export const defaultUserProfile: UserProfile = userProfileSchema.parse({});
+
+/////////////////////////////7
+
+export const userAuthSchema = z.object({
+  username: z.string().min(3).optional(),
+  friendlyId: z.string().min(3).optional(),
+});
+
+export type UserAuth = z.infer<typeof userAuthSchema>;
+
+// Parse the default user auth
+export const defaultUserAuth: UserAuth = userAuthSchema.parse({});
