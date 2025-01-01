@@ -3,7 +3,7 @@ import { Input } from "@repo/ui/components/ui/input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useSignup } from "../../user/hooks/use.auth";
 import { SignUpFormData } from "@repo/data/types";
-import { getErrorMessage } from "../../../../utils/axiosConfige";
+import { getErrorMessage } from "../../../../api/errors";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 
