@@ -1,45 +1,38 @@
 import useSWR from "swr";
-import { swrFetcher } from "../../../../utils/axiosConfige";
+import { swrFetcher } from "../../../../api/swrFetcher";
 import { userProfileSchema } from "@repo/zod/validation/user";
+import { ProfileType } from "@repo/data/types/user";
+import { request } from "../../../../api/request";
 
-export const useUserProfile = (friendlyId: string | undefined) => {
-  const defaultUserProfile = {
+export const useUserProfile = () => {
+  const defaultUserProfile: ProfileType = {
     _id: "",
     profileComplete: false,
-    bio: null,
-    age: null,
-    country: null,
-    profession: null,
+    bio: "",
+    username: "",
+    age: 0,
+    country: "",
+    profession: "",
+    profilePicture: "https://example.com",
+    coverImage: "/placeholder.svg?height=200&width=800",
     createdAt: new Date().toISOString(),
   };
 
-  // Build URL dynamically using `friendlyId`
-  const url = `/internal/profile/${friendlyId}`;
+  const urlFetch = `/internal/profile/:userid`;
+  const urlEdit = `/internal/profile/`;
+  const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile));
 
-  const { data, error, isLoading } = useSWR(url, (url) => swrFetcher(url, userProfileSchema, defaultUserProfile));
-  return {
-    userProfile: data,
-    isLoading,
-    error,
+  const updateProfile = async (profile: ProfileType) => {
+    const updatedProfile = await request<ProfileType>("PUT", urlEdit, profile);
+    mutate(updatedProfile, false); // Update the local data without revalidation
+    return updatedProfile;
   };
-};
-
-import { z } from "zod";
-
-// Define the schema for the expected user response
-const userSchema = z.object({
-  friendlyId: z.string(),
-  username: z.string(),
-});
-
-export const useUserAuth = () => {
-  const { data, error, isLoading } = useSWR("/internal/logged-user", (url) => swrFetcher(url, userSchema, null));
-  const isAuthenticated = !!data && !error;
 
   return {
-    userAuth: data,
-    isLoading,
-    isAuthenticated,
+    userProfile: data || defaultUserProfile,
     error,
+    isLoading,
+    mutate,
+    updateProfile,
   };
 };
