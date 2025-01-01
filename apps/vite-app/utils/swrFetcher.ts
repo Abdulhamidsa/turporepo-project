@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { request } from "../utils/request";
+import { request } from "../api/request";
 
 export const swrFetcher = async <T>(url: string, schema: z.ZodType<T>, defaultValue: T): Promise<T> => {
   try {
