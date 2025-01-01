@@ -7,7 +7,8 @@ import { Label } from "@repo/ui/components/ui/label";
 import { Badge } from "@repo/ui/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
 import { X, Plus, ExternalLink } from "lucide-react";
-import { request, getErrorMessage } from "../../../../utils/axiosConfige";
+import { getErrorMessage } from "../../../../api/errors";
+import { request } from "../../../../api/request";
 import imageCompression from "browser-image-compression";
 
 interface AddProjectModalProps {
