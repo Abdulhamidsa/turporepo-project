@@ -1,71 +1,84 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import Select from "react-select";
 import { Button } from "@repo/ui/components/ui/button";
+import { Input } from "@repo/ui/components/ui/input";
 import { Textarea } from "@repo/ui/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
+import { Pen, Camera, Check } from "lucide-react";
 import { useUserProfile } from "../../user/hooks/use.user.profile";
-import { AlertCircle, CheckCircle } from "lucide-react";
+import { Countries } from "@repo/data/constants/countries";
+import { Professions } from "@repo/data/constants/professions";
 
-export default function ProfilePage({ mongo_ref }: { mongo_ref: string }) {
-  const { userProfile, isLoading, error } = useUserProfile(mongo_ref);
-  const [isEditable, setIsEditable] = useState(false);
-  const [countries, setCountries] = useState<{ value: string; label: string }[]>([]);
-  const [professions, setProfessions] = useState<{ value: string; label: string }[]>([]);
+export default function ProfileEdit({ friendlyId }: { friendlyId: string }) {
+  const { userProfile, isLoading, error, mutate } = useUserProfile(friendlyId);
 
-  // Fetch countries and professions
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [, setUnsavedChanges] = useState(false);
+  const [profile, setProfile] = useState({
+    username: "",
+    age: 0,
+    bio: "",
+    profilePicture: "https://example.com",
+    coverImage: "/placeholder.svg?height=200&width=800",
+    country: "",
+    profession: "",
+  });
+
   useEffect(() => {
-    const fetchDropdownData = async () => {
-      try {
-        const countriesResponse = await fetch("/api/countries");
-        const professionsResponse = await fetch("/api/professions");
-        const countriesData = await countriesResponse.json();
-        const professionsData = await professionsResponse.json();
-        setCountries(
-          countriesData.map((country: string) => ({
-            value: country.toLowerCase(),
-            label: country,
-          }))
-        );
-        setProfessions(
-          professionsData.map((profession: string) => ({
-            value: profession.toLowerCase(),
-            label: profession,
-          }))
-        );
-      } catch (err) {
-        console.error("Error fetching dropdown data:", err);
-      }
-    };
-    fetchDropdownData();
-  }, []);
+    if (userProfile) {
+      setProfile({
+        username: userProfile.username || "",
+        age: userProfile.age || 0,
+        bio: userProfile.bio || "",
+        profilePicture: userProfile.profilePicture || "https://example.com",
+        coverImage: userProfile.coverImage || "/placeholder.svg?height=200&width=800",
+        country: userProfile.country || "",
+        profession: userProfile.profession || "",
+      });
+    }
+  }, [userProfile]);
 
-  const handleEditToggle = () => {
-    setIsEditable(!isEditable);
+  const handleEdit = (field: string) => {
+    setUnsavedChanges(false);
+    setEditingField(field);
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setUnsavedChanges(true);
+    setProfile((prev) => ({
+      ...prev,
+      [field]: field === "age" ? parseInt(value, 10) || 0 : value,
+    }));
   };
 
   const handleSave = async () => {
+    setEditingField(null);
     try {
-      const response = await fetch("/internal/profile", {
+      const response = await fetch("http://localhost:4000/api/internal/profile", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          bio: userProfile?.bio || "",
-          age: userProfile?.age || null,
-          country: userProfile?.country || "",
-          profession: userProfile?.profession || "",
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+        credentials: "include",
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
-      }
-
+      if (!response.ok) throw new Error("Failed to update profile");
+      await mutate(); // Re-fetch updated profile
       alert("Profile updated successfully!");
-      setIsEditable(false);
     } catch (err) {
       console.error("Error updating profile:", err);
       alert("Failed to save changes.");
+    }
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, field: "profilePicture" | "coverImage") => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfile((prev) => ({ ...prev, [field]: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -80,90 +93,89 @@ export default function ProfilePage({ mongo_ref }: { mongo_ref: string }) {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen text-red-500">
-        <AlertCircle className="w-6 h-6 mr-2" />
         <p>Error: {error.message}</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-gray-100">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Profile</h1>
-          <Button onClick={handleEditToggle} variant="outline" className="text-gray-100 border-gray-600 hover:bg-gray-700">
-            {isEditable ? "Cancel" : "Edit"}
-          </Button>
-        </div>
-
-        {/* Profile Form */}
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-          {/* Bio */}
-          <div>
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-400">
-              Bio
+    <div className="container mx-auto p-4">
+      <Card className="w-full max-w-4xl mx-auto bg-card text-card-foreground">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="relative mb-8">
+            <img src={profile.coverImage} alt="Cover" className="w-full h-48 object-cover rounded-t-lg" />
+            <label htmlFor="cover-upload" className="absolute bottom-2 right-2 cursor-pointer">
+              <Camera className="h-6 w-6 text-white" />
+              <input id="cover-upload" type="file" className="hidden" onChange={(e) => handleImageUpload(e, "coverImage")} accept="image/*" />
             </label>
-            <Textarea
-              id="bio"
-              name="bio"
-              defaultValue={userProfile?.bio || ""}
-              readOnly={!isEditable}
-              placeholder="Write a short bio..."
-              className={`mt-1 w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg focus:ring-primary focus:ring-2 focus:border-primary ${isEditable ? "" : "cursor-not-allowed opacity-70"}`}
-            />
           </div>
-
-          {/* Age */}
-          <div>
-            <label htmlFor="age" className="block text-sm font-medium text-gray-400">
-              Age
-            </label>
-            <input
-              id="age"
-              name="age"
-              type="number"
-              defaultValue={userProfile?.age || ""}
-              readOnly={!isEditable}
-              className={`mt-1 w-full px-3 py-2 bg-gray-900 border border-gray-700 text-gray-100 rounded-lg focus:ring-primary focus:ring-2 focus:border-primary ${isEditable ? "" : "cursor-not-allowed opacity-70"}`}
-            />
-          </div>
-
-          {/* Country */}
-          <div>
-            <label htmlFor="country" className="block text-sm font-medium text-gray-400">
-              Country
-            </label>
-            {isEditable ? (
-              <Select id="country" name="country" options={countries} defaultValue={countries.find((c) => c.value === userProfile?.country) || null} className="react-select-container" classNamePrefix="react-select" placeholder="Select a country" />
-            ) : (
-              <p className="mt-1 text-gray-100">{userProfile?.country || "Not specified"}</p>
-            )}
-          </div>
-
-          {/* Profession */}
-          <div>
-            <label htmlFor="profession" className="block text-sm font-medium text-gray-400">
-              Profession
-            </label>
-            {isEditable ? (
-              <Select id="profession" name="profession" options={professions} defaultValue={professions.find((p) => p.value === userProfile?.profession) || null} className="react-select-container" classNamePrefix="react-select" placeholder="Select a profession" />
-            ) : (
-              <p className="mt-1 text-gray-100">{userProfile?.profession || "Not specified"}</p>
-            )}
-          </div>
-
-          {/* Save Button */}
-          {isEditable && (
-            <div className="flex justify-end">
-              <Button onClick={handleSave} className="bg-primary text-gray-100 hover:bg-primary/90 transition-all px-6 py-2 rounded-lg flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
+          <div className="flex items-center mb-6">
+            <div className="relative">
+              <img src={profile.profilePicture} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white -mt-12" />
+              <label htmlFor="profile-upload" className="absolute bottom-0 right-0 cursor-pointer">
+                <Camera className="h-5 w-5 text-gray-600" />
+                <input id="profile-upload" type="file" className="hidden" onChange={(e) => handleImageUpload(e, "profilePicture")} accept="image/*" />
+              </label>
             </div>
-          )}
-        </form>
-      </div>
+            <div className="ml-4">
+              <h2 className="text-2xl font-bold">{profile.username}</h2>
+              <p className="text-gray-600">{profile.profession}</p>
+            </div>
+          </div>
+          <div className="space-y-6">
+            {Object.entries(profile).map(([key, value]) => {
+              if (key === "profilePicture" || key === "coverImage") return null;
+              return (
+                <div key={key} className="flex items-center justify-between bg-muted rounded-lg p-3">
+                  <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                    {editingField === key ? (
+                      key === "bio" ? (
+                        <Textarea value={value} onChange={(e) => handleChange(key, e.target.value)} className="mt-1" />
+                      ) : key === "country" || key === "profession" ? (
+                        <Select onValueChange={(value) => handleChange(key, value)}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder={value} />
+                          </SelectTrigger>
+                          <SelectContent className="bg-card text-card-foreground max-h-60 overflow-y-auto z-50">
+                            {(key === "country" ? Countries : Professions).map((item) => (
+                              <SelectItem key={item.value} value={item.value} className="cursor-pointer hover:bg-muted hover:text-primary rounded px-2 py-1">
+                                {item.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input value={value} onChange={(e) => handleChange(key, e.target.value)} className="mt-1" />
+                      )
+                    ) : (
+                      <p className="mt-1">{value}</p>
+                    )}
+                  </div>
+                  {editingField === key && (
+                    <Button variant="ghost" size="icon" onClick={() => setEditingField(null)} className="text-primary">
+                      <Check className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {!editingField && (
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(key)}>
+                      <Pen className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={handleSave} className="w-full">
+            Save Changes
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
