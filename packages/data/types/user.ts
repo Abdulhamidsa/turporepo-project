@@ -4,17 +4,17 @@ import { userProfileSchema } from "../../zod/validation/user";
 export type UserProfile = z.infer<typeof userProfileSchema>;
 
 export type ProfileType = {
-  _id: string;
-  profileComplete: boolean;
-  username: string | null;
-  age: number | null;
-  bio: string | null;
-  profilePicture: string | null;
-  coverImage?: string | null;
-  country: string | null;
-  profession: string | null;
-  createdAt: string;
+  username?: string | null | undefined;
+  profileComplete?: boolean | undefined;
+  bio?: string | null | undefined;
+  birthYear?: number | null | undefined;
+  country?: string | null | undefined;
+  profession?: string | undefined;
+  profilePicture?: string | undefined;
+  coverImage?: string | undefined;
+  createdAt?: string | undefined;
 };
+
 export type ProfileEditProps = {
   friendlyId: string;
 };

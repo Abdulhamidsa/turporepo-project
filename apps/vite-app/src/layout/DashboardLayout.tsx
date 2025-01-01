@@ -9,6 +9,7 @@ import { Briefcase, Home, LogOut, Settings, User } from "lucide-react";
 
 const DashboardLayout: React.FC = () => {
   const { signOut, loggedUser } = useAuth();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigationItems = [
@@ -40,7 +41,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <div className="relative h-screen bg-background text-foreground">
       {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
+      <Sidebar isOpen={isSidebarOpen} userInfo={loggedUser} navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
 
       {/* Sidebar Toggle */}
       <SidebarToggle isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />

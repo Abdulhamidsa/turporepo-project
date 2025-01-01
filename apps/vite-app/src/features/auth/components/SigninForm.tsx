@@ -42,7 +42,7 @@ export default function SigninForm({ setIsSignIn }: { setIsSignIn: (value: boole
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Input value="a@b.com" className="border-border" type="email" placeholder="email" {...register("email", { required: "email is required" })} />
+          <Input value="a@cs.com" className="border-border" type="email" placeholder="email" {...register("email", { required: "email is required" })} />
           {errors.email && (
             <p className="text-sm text-destructive-foreground mt-1" role="alert">
               {errors.email.message}

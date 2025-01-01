@@ -11,6 +11,7 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SignUpFormData>();
 
@@ -26,6 +27,8 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
     }
   };
 
+  const password = watch("password");
+
   return (
     <AuthFormWrapper
       title="Create Your Account"
@@ -40,7 +43,15 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Input className="border-border" type="name" placeholder="Username" {...register("username", { required: "Username is required" })} />
+          <Input className="border-border" type="email" placeholder="Email" {...register("email", { required: "Email is required" })} />
+          {errors.email && (
+            <p className="text-sm text-destructive-foreground mt-1" role="alert">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Input className="border-border" type="text" placeholder="Username" {...register("username", { required: "Username is required" })} />
           {errors.username && (
             <p className="text-sm text-destructive-foreground mt-1" role="alert">
               {errors.username.message}
@@ -52,6 +63,22 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
           {errors.password && (
             <p className="text-sm text-destructive-foreground mt-1" role="alert">
               {errors.password.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Input
+            className="border-border"
+            type="password"
+            placeholder="Repeat Password"
+            {...register("confirmPassword", {
+              required: "Repeat Password is required",
+              validate: (value) => value === password || "Passwords do not match",
+            })}
+          />
+          {errors.confirmPassword && (
+            <p className="text-sm text-destructive-foreground mt-1" role="alert">
+              {errors.confirmPassword.message}
             </p>
           )}
         </div>
