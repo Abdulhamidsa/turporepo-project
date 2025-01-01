@@ -1,5 +1,3 @@
-// src/api/axiosClient.ts
-// import axios, { AxiosError } from "axios";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -9,16 +7,5 @@ const axiosInstance = axios.create({
   },
   withCredentials: true,
 });
-
-// Interceptor for 401
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   async (error: AxiosError) => {
-//     if (error.response?.status === 401) {
-//       window.location.href = "/login";
-//     }
-//     return Promise.reject(error);
-//   }
-// );
 
 export default axiosInstance;
