@@ -1,22 +1,19 @@
-// src/context/AuthContext.tsx
 import useSWR from "swr";
 import React, { createContext, useContext } from "react";
 import { request } from "../api/request";
 
-interface User {
+type User = {
   friendlyId: string;
   username: string;
-  // ...other user fields if needed
-}
+};
 
-interface AuthContextType {
+type AuthContextType = {
   loggedUser: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  // signIn no longer needs a User param, we'll re-fetch from /internal/logged-user
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
-}
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -66,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider
       value={{
-        loggedUser: userData ?? null, // if undefined, treat as null
+        loggedUser: userData ?? null,
         isAuthenticated,
         isLoading,
         signIn,

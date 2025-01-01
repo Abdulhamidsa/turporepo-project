@@ -41,7 +41,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <div className="relative h-screen bg-background text-foreground">
       {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} userInfo={loggedUser} navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
+      <Sidebar isOpen={isSidebarOpen} userInfo={loggedUser || { username: "Guest", friendlyId: "guest" }} navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
 
       {/* Sidebar Toggle */}
       <SidebarToggle isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
