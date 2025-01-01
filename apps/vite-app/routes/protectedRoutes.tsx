@@ -1,10 +1,20 @@
+// src/routes/ProtectedRoute.tsx
 import React from "react";
-import { useAuth } from "../context/UserContext";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Loading from "@repo/ui/components/ui/Loading";
 
-const ProtectedRoute = () => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/guest" />;
-};
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-export default ProtectedRoute;
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+  return <>{children}</>;
+}

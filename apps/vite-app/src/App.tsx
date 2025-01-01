@@ -1,9 +1,12 @@
+// src/App.tsx
 import { useRoutes } from "react-router-dom";
-import { appRoutes } from "./routes";
-import AppLayout from "./layout/AppLayout";
+import { appRoutes } from "../routes/appRoutes";
+import { AuthProvider } from "../context/AuthContext";
 
-export default function App() {
+function App() {
   const routing = useRoutes(appRoutes);
 
-  return <AppLayout>{routing}</AppLayout>;
+  return <AuthProvider>{routing}</AuthProvider>;
 }
+
+export default App;
