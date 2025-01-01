@@ -10,13 +10,14 @@ import { motion } from "framer-motion";
 import { Tooltip, TooltipProvider } from "@repo/ui/components/ui/tooltip";
 import { useUserProfile } from "../hooks/use.user.profile";
 import PageTransition from "../../../layout/animation/PageTransition";
+import { useAuth } from "../../../../context/AuthContext";
 // import { useUserData } from "../../../../context/UserContext";
 
 export default function ProfilePage({ params }: { params: { friendlyId: string } }) {
   const [isPublicView, setIsPublicView] = useState(false);
-  const userInfo = "ss";
+  const { loggedUser } = useAuth();
 
-  const { userProfile, isLoading, error } = useUserProfile(userInfo);
+  const { userProfile, isLoading, error } = useUserProfile();
   const defaultProfile = {
     name: "Unknown User",
     coverImage: "/banner1.png",
@@ -77,7 +78,7 @@ export default function ProfilePage({ params }: { params: { friendlyId: string }
               <div className="flex-1 mt-6 md:mt-0">
                 <div className="text-center md:text-left">
                   <h1 className="text-3xl md:text-4xl font-bold">{user.name}</h1>
-                  <p className="text-lg md:text-xl text-muted-foreground">@{params.friendlyId}</p>
+                  <p className="text-lg md:text-xl text-muted-foreground">@{loggedUser?.friendlyId}</p>
                 </div>
 
                 <div className="mt-4 space-y-2">
