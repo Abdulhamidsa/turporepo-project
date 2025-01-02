@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import ProfilePage from "../src/features/user/[username]/page";
-import HomePage from "../src/index";
+// import HomePage from "../src/AddPostButton";
 import Profile from "../src/features/user/components/profile";
 import DashboardLayout from "../src/layout/DashboardLayout";
 import Project from "../src/features/projects";
@@ -22,10 +22,10 @@ export const appRoutes: RouteObject[] = [
       </ProtectedRoute>
     ),
     children: [
-      {
-        path: "/",
-        element: <HomePage />,
-      },
+      // {
+      //   path: "/",
+      //   element: <HomePage />,
+      // },
       {
         path: "users/:friendlyId",
         element: (
