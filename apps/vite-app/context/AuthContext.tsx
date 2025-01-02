@@ -5,6 +5,7 @@ import { request } from "../api/request";
 type User = {
   friendlyId: string;
   username: string;
+  profilePicture: string;
 };
 
 type AuthContextType = {
