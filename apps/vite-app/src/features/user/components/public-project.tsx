@@ -8,7 +8,7 @@ interface PublicProjectProps {
     id: number;
     title: string;
     description: string;
-    image: string;
+    media: string;
   };
 }
 
