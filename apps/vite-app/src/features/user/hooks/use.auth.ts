@@ -1,7 +1,7 @@
 import useSWRMutation from "swr/mutation";
 import { request } from "../../../../api/request";
 import { getErrorMessage } from "../../../../api/errors"; // Adjust path as needed
-import { useAuth } from "../../../../context/AuthContext";
+import { createContext, useContext } from "react";
 
 type SignupResponse = {
   id: string;
@@ -14,6 +14,29 @@ type SignupPayload = {
 };
 
 const signupEndpoint = "/public/signup";
+type AuthContextType = {
+  loggedUser: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  signIn: () => Promise<void>;
+  signOut: () => Promise<void>;
+};
+type User = {
+  friendlyId: string;
+  username: string;
+  profilePicture: string;
+};
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Expose the hook
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
 export const useSignup = () => {
   const mutationFetcher = async (url: string, { arg }: { arg: SignupPayload }) => {
