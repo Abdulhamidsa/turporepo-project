@@ -29,7 +29,7 @@ export const ToastProvider = () => {
   );
 };
 
-export const showToast = (message: string, type: "success" | "error") => {
+export const showToast = (message: string, type: "success" | "error" = "success") => {
   if (type === "success") {
     toast.success(message);
   } else if (type === "error") {
