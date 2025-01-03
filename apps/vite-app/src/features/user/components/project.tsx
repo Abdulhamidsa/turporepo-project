@@ -12,7 +12,7 @@ interface ProjectProps {
     id: number;
     title: string;
     description: string;
-    image: string;
+    media: string;
   };
   isPublicView: boolean;
 }
