@@ -8,7 +8,7 @@ interface ApiResponse<T> {
   message?: string;
 }
 
-export async function request<T>(method: "GET" | "POST" | "PUT" | "DELETE", url: string, data?: unknown, schema?: ZodSchema<T>): Promise<T> {
+export async function request<T>(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH", url: string, data?: unknown, schema?: ZodSchema<T>): Promise<T> {
   const response = await axiosInstance.request<ApiResponse<T>>({ method, url, data });
   const { success, data: responseData, message } = response.data;
 
