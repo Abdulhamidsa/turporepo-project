@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter } from "@repo/ui/components/ui/card";
 import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 interface PostProps {
   post: {
     id: number;
-    content: string;
+    content?: string;
     timestamp: string;
   };
   isPublicView: boolean;
@@ -18,14 +18,18 @@ interface PostProps {
 
 export function Post({ post, isPublicView }: PostProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState(post.content);
+  const [content, setContent] = useState(post?.content || "");
 
   const handleSave = () => {
     // Here you would typically send the updated post to your backend
     console.log("Updated post:", { id: post.id, content });
     setIsEditing(false);
   };
-
+  useEffect(() => {
+    if (post) {
+      setContent(post.content);
+    }
+  }, [post]);
   const handleDelete = () => {
     // Here you would typically send a delete request to your backend
     console.log("Deleting post:", post.id);
