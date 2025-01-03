@@ -17,6 +17,7 @@
     "@repo/zod": "workspace:*",
     "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
+    "flag-icon-css": "^4.1.7",
     "framer-motion": "^11.15.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
@@ -26,6 +27,7 @@
     "react-hook-form": "catalog:react18",
     "react-router-dom": "catalog:react18",
     "react-select": "catalog:react18",
+    "react-world-flags": "^1.6.0",
     "swr": "^2.3.0"
   },
   "devDependencies": {
