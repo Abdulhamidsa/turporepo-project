@@ -1,19 +1,36 @@
 import useSWR from "swr";
 import { swrFetcher } from "../../../../api/swrFetcher";
 import { userProfileSchema } from "@repo/zod/validation/user";
-import { ProfileType } from "@repo/data/types/user";
-import { request } from "../../../../api/request";
+import { ProfileType as OriginalProfileType } from "@repo/data/types/user";
 
-const defaultUserProfile: ProfileType = {
+type ProfileType = Omit<OriginalProfileType, "profilePicture"> & {
+  profilePicture: string | null;
+};
+import { request } from "../../../../api/request";
+import z from "zod";
+
+export const defaultUserProfile: ProfileType = {
   bio: "",
   username: "",
-  birthYear: null,
-  country: "",
+  age: null,
+  countryOrigin: "",
   profession: "",
-  profilePicture: "",
-  coverImage: "",
-  createdAt: new Date().toISOString(),
+  profilePicture: null,
+  coverImage: null,
 };
+const projectSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  url: z.string().url(),
+  media: z.array(z.object({ url: z.string().url() })),
+  thumbnail: z.string().url(),
+  tags: z.array(z.object({ id: z.string(), name: z.string() })),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export type ProjectType = z.infer<typeof projectSchema>;
 
 // Fetch hook for getting user data
 export const useUserProfile = () => {
@@ -39,4 +56,18 @@ export const useUpdateUserProfile = () => {
   };
 
   return { updateProfile };
+};
+
+// Hook for shwoing user projects
+export const useUserProjects = () => {
+  const urlFetch = `http://localhost:4000/api/internal/projects`;
+
+  const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, z.array(projectSchema)));
+  console.log(data);
+  return {
+    projects: data || [], // Default to an empty array if no data
+    error,
+    isLoading,
+    mutate,
+  };
 };
