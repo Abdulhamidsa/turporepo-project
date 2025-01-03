@@ -27,7 +27,7 @@ export function useProfileEdit(friendlyId: string) {
       username: "",
       age: 0,
       bio: "",
-      profilePicture: "https://example.com",
+      profilePicture: "",
       coverImage: "/placeholder.svg?height=200&width=800",
       country: "",
       profession: "",
