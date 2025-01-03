@@ -1,17 +1,12 @@
-"use client";
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
 import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Pencil } from "lucide-react";
 
-interface AboutMeProps {
-  isPublicView: boolean;
-}
-
-export function AboutMe({ isPublicView }: AboutMeProps) {
+export function AboutMe() {
   const [isEditing, setIsEditing] = useState(false);
+  const [isPublicView] = useState(false);
   const [about, setAbout] = useState(`With over 5 years of experience in web development, I specialize in creating robust and scalable web applications. 
 My expertise includes React, Node.js, and cloud technologies. I'm passionate about clean code, user experience, 
 and staying up-to-date with the latest industry trends.
