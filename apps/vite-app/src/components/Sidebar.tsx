@@ -6,6 +6,7 @@ interface SidebarProps {
   isOpen: boolean;
   navigationItems: NavigationItemProps[];
   sidebarOnlyItems: NavigationItemProps[];
+  onClose: () => void; // Add onClose prop
 }
 
 export interface NavigationItemProps {
@@ -15,13 +16,13 @@ export interface NavigationItemProps {
   action?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigationItems, sidebarOnlyItems }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigationItems, sidebarOnlyItems, onClose }) => {
   const location = useLocation();
 
   const renderNavItem = (item: NavigationItemProps, showText = true) => {
     const isActive = item.link ? location.pathname === item.link : false;
 
-    return <NavigationItem key={item.name} item={item} isActive={isActive} showText={showText} />;
+    return <NavigationItem key={item.name} item={item} isActive={isActive} showText={showText} onClick={onClose} />;
   };
 
   return (
@@ -31,6 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigationItems, sidebarOnlyI
         <div className={`flex-1 overflow-y-auto transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
           <nav className="px-4 mt-4 space-y-2">{navigationItems.map((item) => renderNavItem(item))}</nav>
         </div>
+
         {/* Sidebar Only Items */}
         <div className={`space-y-2 px-4 mb-4 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>{sidebarOnlyItems.map((item) => renderNavItem(item))}</div>
       </div>
