@@ -4,13 +4,13 @@ export const userProfileSchema = z.object({
   username: z.string().nullable().optional(),
   profileComplete: z.boolean().optional(),
   bio: z.string().nullable().optional(),
-  birthYear: z.number().nullable().optional(),
-  country: z.string().nullable().optional(),
-  profession: z.string().optional(),
-  profilePicture: z.string().optional(),
-  coverImage: z.string().optional(),
-  createdAt: z.string().optional(),
+  age: z.number().nullable().optional(),
+  countryOrigin: z.string().nullable().optional(),
+  profession: z.string().nullable().optional(),
+  profilePicture: z.string().nullable().optional(),
+  coverImage: z.string().nullable().optional(),
 });
+
 export type UserProfile = z.infer<typeof userProfileSchema>;
 // Parse the default profile
 export const defaultUserProfile: UserProfile = userProfileSchema.parse({});
