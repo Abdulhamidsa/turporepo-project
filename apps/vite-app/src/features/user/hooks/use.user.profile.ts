@@ -49,7 +49,7 @@ export const useUpdateUserProfile = () => {
 // Hook for shwoing user projects
 
 export const useUserProjects = () => {
-  const urlFetch = `http://localhost:4000/api/internal/projects`;
+  const urlFetch = `https://cre8ify-backend-production.up.railway.app/api/internal/projects`;
 
   const { data, mutate, error } = useSWR<FetchedProjectType[]>(urlFetch, (endpoint: string) => swrFetcher(endpoint, fetchedProjectSchema.array()));
 
