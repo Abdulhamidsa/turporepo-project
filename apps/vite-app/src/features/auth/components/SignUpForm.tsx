@@ -1,13 +1,13 @@
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { useSignup } from "../../user/hooks/use.auth";
 import { SignUpFormData } from "@repo/data/types";
 import { getErrorMessage } from "../../../../api/errors";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 
-export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boolean) => void }) {
+export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boolean, prefill?: { email?: string }) => void }) {
   const {
     register,
     handleSubmit,
@@ -21,6 +21,7 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
     try {
       await signup(data);
       showToast("You have successfully signed up.", "success");
+      setIsSignIn(true, { email: data.email });
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       showToast(errorMessage, "error");
@@ -41,47 +42,42 @@ export default function SignupForm({ setIsSignIn }: { setIsSignIn: (value: boole
         </p>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <Input className="border-border" type="email" placeholder="Email" {...register("email", { required: "Email is required" })} />
-          {errors.email && (
-            <p className="text-sm text-destructive-foreground mt-1" role="alert">
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <Input className="border-border" type="text" placeholder="Username" {...register("username", { required: "Username is required" })} />
-          {errors.username && (
-            <p className="text-sm text-destructive-foreground mt-1" role="alert">
-              {errors.username.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <Input className="border-border" type="password" placeholder="Password" {...register("password", { required: "Password is required" })} />
-          {errors.password && (
-            <p className="text-sm text-destructive-foreground mt-1" role="alert">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <Input
-            className="border-border"
-            type="password"
-            placeholder="Repeat Password"
-            {...register("confirmPassword", {
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {[
+          { name: "email", type: "email", label: "Email", validation: { required: "Email is required" } },
+          { name: "username", type: "text", label: "Username", validation: { required: "Username is required" } },
+          { name: "password", type: "password", label: "Password", validation: { required: "Password is required" } },
+          {
+            name: "confirmPassword",
+            type: "password",
+            label: "Repeat Password",
+            validation: {
               required: "Repeat Password is required",
-              validate: (value) => value === password || "Passwords do not match",
-            })}
-          />
-          {errors.confirmPassword && (
-            <p className="text-sm text-destructive-foreground mt-1" role="alert">
-              {errors.confirmPassword.message}
-            </p>
-          )}
-        </div>
+              validate: (value: string) => value === password || "Passwords do not match",
+            },
+          },
+        ].map((field) => (
+          <div key={field.name} className="relative">
+            <Input
+              id={field.name}
+              type={field.type}
+              {...register(field.name as keyof SignUpFormData, field.validation)}
+              className="peer w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              placeholder=" " // Placeholder is empty to trigger label movement
+            />
+            <label
+              htmlFor={field.name}
+              className={`absolute left-3 px-1 transition-all text-md text-muted-foreground top-[-20px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-muted-foreground peer-placeholder-shown:text-md peer-focus:top-[-20px] peer-focus:text-md peer-focus:text-primary peer-focus:bg-card`}
+            >
+              {field.label}
+            </label>
+            {errors[field.name as keyof FieldErrors<SignUpFormData>] && (
+              <p className="text-sm text-destructive-foreground mt-1" role="alert">
+                {errors[field.name as keyof FieldErrors<SignUpFormData>]?.message}
+              </p>
+            )}
+          </div>
+        ))}
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Creating Account..." : "Sign Up"}
         </Button>
