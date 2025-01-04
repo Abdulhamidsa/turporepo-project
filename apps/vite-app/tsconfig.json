@@ -10,10 +10,11 @@
     "exactOptionalPropertyTypes": true,
     "noEmit": true,
     "paths": {
-      "@repo/ui/*": ["../../packages/ui/src/*"]
+      "@repo/ui/*": ["../../packages/ui/src/*"],
+      "@pages/*": ["src/pages/*"]
     }
   },
 
-  "include": ["src/**/*", "../../packages/ui/src/components/about-me.tsx", "../../packages/ui/src/components/ui/toast.tsx", "../../packages/ui/src/components/toast.tsx", "utils"],
+  "include": ["src/**/*", "../../packages/**/*", "utils/**/*"],
   "exclude": ["node_modules"]
 }
