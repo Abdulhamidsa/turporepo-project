@@ -5,3 +5,6 @@ export const createZodResolver = <T extends z.ZodTypeAny>(schema: T) => zodResol
 
 import { signInSchema } from "./validation/auth";
 export const signInResolver = createZodResolver(signInSchema);
+
+import { projectSchema } from "./validation/user";
+export const projectResolver = createZodResolver(projectSchema);
