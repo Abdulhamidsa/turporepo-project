@@ -1,87 +1,51 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, Moon, Sun } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { LogOut, Settings } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
+import { Button } from "@repo/ui/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import { useAuth } from "../features/user/hooks/use.auth";
+import { useUserProfile } from "../features/user/hooks/use.user.profile";
+import { DarkModeToggle } from "./DarkModeToggle";
 
 export function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
-
-  // Handle Dark Mode Toggle
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
-
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+  const { userProfile } = useUserProfile();
 
   return (
-    <header className="bg-background border-b border-border shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        {/* Logo */}
+    <header className="bg-muted border-b border-border shadow-sm sticky top-0 z-40">
+      <div className="mx-auto ml-16 mr-8 flex items-center justify-between h-full p-2">
         <Link to="/" className="text-xl font-bold text-primary hover:text-primary-foreground">
-          MyApp
+          ProFolio
         </Link>
-
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6">
-          <Link to="/" className="text-foreground hover:text-primary transition-colors">
-            Home
-          </Link>
-          <Link to="/about" className="text-foreground hover:text-primary transition-colors">
-            About
-          </Link>
-          <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
-            Contact
-          </Link>
-        </nav>
-
-        {/* Dark Mode Toggle */}
-        <button onClick={toggleDarkMode} className="p-2 rounded-full bg-muted hover:bg-muted-foreground transition-colors">
-          <span className="sr-only">Toggle Dark Mode</span>
-          {isDarkMode ? <Moon className="h-5 w-5 text-primary" /> : <Sun className="h-5 w-5 text-primary" />}
-        </button>
-
-        {/* Mobile Menu Toggle */}
-        <button className="md:hidden p-2 rounded bg-muted hover:bg-muted-foreground transition-colors" onClick={toggleMenu}>
-          <span className="sr-only">Toggle Menu</span>
-          {isMenuOpen ? <X className="h-6 w-6 text-foreground" /> : <Menu className="h-6 w-6 text-foreground" />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <>
-            {/* Overlay */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.5 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="fixed inset-0 bg-black/50 z-40" onClick={toggleMenu}></motion.div>
-
-            {/* Sliding Menu */}
-            <motion.nav initial={{ x: "-10%" }} animate={{ x: 0 }} exit={{ x: "-10%" }} transition={{ type: "spring", stiffness: 300, damping: 30 }} className="fixed top-0 left-0 z-50 w-3/4 max-w-sm h-full bg-background border-r border-border shadow-lg">
-              <div className="flex flex-col space-y-4 p-6">
-                <button className="flex items-center justify-end" onClick={toggleMenu}>
-                  <X className="w-6 h-6 text-foreground" />
-                </button>
-                <Link to="/" className="text-lg text-foreground hover:text-primary transition-colors" onClick={toggleMenu}>
-                  Home
-                </Link>
-                <Link to="/about" className="text-lg text-foreground hover:text-primary transition-colors" onClick={toggleMenu}>
-                  About
-                </Link>
-                <Link to="/contact" className="text-lg text-foreground hover:text-primary transition-colors" onClick={toggleMenu}>
-                  Contact
-                </Link>
+        <div className="flex items-center space-x-4">
+          <div className="hidden md:block text-right">
+            <p className="text-sm text-muted-foreground">Welcome back,</p>
+            <p className="text-lg font-semibold text-primary">{userProfile.username || "User"}!</p>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center space-x-2 rounded-full hover:bg-muted p-2 transition focus-visible:ring">
+                <Avatar>{userProfile.profilePicture ? <AvatarImage src={userProfile.profilePicture} alt={userProfile.username || "User avatar"} /> : <AvatarFallback>{userProfile.profilePicture?.charAt(0) || "U".charAt(0)}</AvatarFallback>}</Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48 bg-card text-card-foreground rounded-lg shadow-lg">
+              <DropdownMenuLabel className="text-muted-foreground">Account</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => navigate("/settings")} className="flex items-center space-x-2 hover:bg-accent hover:text-accent-foreground rounded-md p-2">
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={signOut} className="flex items-center space-x-2 hover:bg-accent hover:text-accent-foreground rounded-md p-2">
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+              <div className="flex justify-center py-2">
+                <DarkModeToggle />
               </div>
-            </motion.nav>
-          </>
-        )}
-      </AnimatePresence>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
     </header>
   );
 }

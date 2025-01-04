@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigationItems, sidebarOnlyI
   };
 
   return (
-    <aside className={`fixed h-dvh top-0 left-0 z-30 bg-card border-r border-border transition-transform duration-300 ${isOpen ? "translate-x-0 w-64" : "-translate-x-full"}`}>
+    <aside className={`fixed h-dvh top-0 left-0 z-50 bg-card border-r border-border transition-transform duration-300 ${isOpen ? "translate-x-0 w-64" : "-translate-x-full"}`}>
       <div className="flex flex-col h-full">
         {/* Navigation Items */}
         <div className={`flex-1 overflow-y-auto transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>

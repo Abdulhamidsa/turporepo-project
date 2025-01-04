@@ -7,7 +7,7 @@ interface NavigationItemComponentProps {
   item: NavigationItemProps;
   isActive: boolean;
   showText: boolean;
-  onClick?: () => void; // Add onClick prop
+  onClick?: () => void;
 }
 
 const NavigationItem: React.FC<NavigationItemComponentProps> = ({ item, isActive, showText, onClick }) => {
