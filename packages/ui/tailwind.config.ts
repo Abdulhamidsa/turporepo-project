@@ -1,10 +1,12 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   darkMode: "class",
   content: [
     "./src/**/*.{ts,tsx}", // Matches files in the local `src` directory
-    "../../apps/*/src/**/*.{ts,tsx}", // Restrict to only one level of subdirectories in `apps`
+    "../../apps/*/src/**/*.{ts,tsx}", // Matches files in the `apps` directories
+    "../../packages/**/*.{ts,tsx}", // Matches files in the `packages` directories
   ],
   theme: {
     extend: {
@@ -58,7 +60,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 };
 
 export default config;
