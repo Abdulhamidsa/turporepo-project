@@ -7,7 +7,7 @@ import { useAuth } from "../features/user/hooks/use.auth";
 import { useUserProfile } from "../features/user/hooks/use.user.profile";
 import { DarkModeToggle } from "./DarkModeToggle";
 
-export function Navbar() {
+export function NavbarApp() {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const { userProfile } = useUserProfile();

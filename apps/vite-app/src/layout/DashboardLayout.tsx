@@ -6,8 +6,8 @@ import Overlay from "../components/OverlayComponent";
 import BottomNavigation from "../components/BottomNavigation";
 import { Briefcase, Home, Settings, User } from "lucide-react";
 import { useUserProfile } from "../features/user/hooks/use.user.profile";
-import { Navbar } from "./Navbar";
 import { routesConfig } from "../../routes/routesConfig";
+import { NavbarApp } from "./NavbarApp";
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,7 +42,7 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <div className="relative h-screen bg-background text-foreground overflow-y-scroll">
-      <Navbar />
+      <NavbarApp />
       <SidebarToggle isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Sidebar isOpen={isSidebarOpen} navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} onClose={toggleSidebar} />
       <Overlay isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
