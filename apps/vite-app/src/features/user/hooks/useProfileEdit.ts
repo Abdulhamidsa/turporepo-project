@@ -10,6 +10,7 @@ import { getErrorMessage } from "../../../../api/errors";
 type UserProfile = {
   username: string;
   age: number;
+  friendlyId: string;
   bio: string;
   profilePicture: string;
   coverImage: string;
@@ -27,8 +28,9 @@ export function useProfileEdit(friendlyId: string) {
       username: "",
       age: 0,
       bio: "",
+      friendlyId: "",
       profilePicture: "",
-      coverImage: "/placeholder.svg?height=200&width=800",
+      coverImage: "",
       country: "",
       profession: "",
     },

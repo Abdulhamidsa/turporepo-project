@@ -1,36 +1,21 @@
 import useSWR from "swr";
 import { swrFetcher } from "../../../../api/swrFetcher";
-import { userProfileSchema } from "@repo/zod/validation/user";
-import { ProfileType as OriginalProfileType } from "@repo/data/types/user";
+import { UserProfile, userProfileSchema } from "@repo/zod/validation/user";
+import { EditableProfileType } from "@repo/data/types/user";
 
-type ProfileType = Omit<OriginalProfileType, "profilePicture"> & {
-  profilePicture: string | null;
-};
 import { request } from "../../../../api/request";
-import z from "zod";
+import { fetchedProjectSchema, FetchedProjectType } from "@repo/zod/validation";
 
-export const defaultUserProfile: ProfileType = {
+export const defaultUserProfile: UserProfile = {
   bio: "",
   username: "",
   age: null,
   countryOrigin: "",
   profession: "",
-  profilePicture: null,
-  coverImage: null,
+  friendlyId: "",
+  profilePicture: "",
+  coverImage: "",
 };
-const projectSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-  url: z.string().url(),
-  media: z.array(z.object({ url: z.string().url() })),
-  thumbnail: z.string().url(),
-  tags: z.array(z.object({ id: z.string(), name: z.string() })),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-});
-
-export type ProjectType = z.infer<typeof projectSchema>;
 
 // Fetch hook for getting user data
 export const useUserProfile = () => {
@@ -49,25 +34,28 @@ export const useUserProfile = () => {
 // Hook for updating user profile
 export const useUpdateUserProfile = () => {
   const urlEdit = `/internal/profile/`;
+  const { mutate, isLoading } = useUserProfile();
 
-  const updateProfile = async (profile: ProfileType) => {
-    const updatedProfile = await request<ProfileType>("PUT", urlEdit, profile);
+  const updateProfile = async (profile: EditableProfileType) => {
+    const updatedProfile = await request<EditableProfileType>("PUT", urlEdit, profile);
+    // Revalidate the user profile data after updating
+    mutate();
     return updatedProfile;
   };
 
-  return { updateProfile };
+  return { updateProfile, isLoading };
 };
 
 // Hook for shwoing user projects
+
 export const useUserProjects = () => {
   const urlFetch = `http://localhost:4000/api/internal/projects`;
 
-  const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, z.array(projectSchema)));
-  console.log(data);
+  const { data, mutate, error } = useSWR<FetchedProjectType[]>(urlFetch, (endpoint: string) => swrFetcher(endpoint, fetchedProjectSchema.array()));
+
   return {
-    projects: data || [], // Default to an empty array if no data
-    error,
-    isLoading,
+    projects: data || [],
     mutate,
+    error,
   };
 };
