@@ -13,6 +13,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "clean": "turbo run clean"
   },
+  "dependencies": {
+    "rimraf": "^6.0.1",
+    "zod": "catalog:zod"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript": "workspace:*",
@@ -21,9 +25,5 @@
     "turbo": "^2.3.3",
     "typescript": "catalog:typescript"
   },
-  "packageManager": "pnpm@9.12.0",
-  "dependencies": {
-    "rimraf": "^6.0.1",
-    "zod": "catalog:zod"
-  }
+  "packageManager": "pnpm@9.12.0"
 }
