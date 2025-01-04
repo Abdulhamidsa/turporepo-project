@@ -1,56 +1,42 @@
 import { RouteObject } from "react-router-dom";
-import ProfilePage from "../src/features/user/[username]/page";
-// import HomePage from "../src/AddPostButton";
-import Profile from "../src/features/user/components/profile";
+import ProfilePage from "../src/pages/[username]/profile";
+import ProfileInfo from "../src/pages/profileInfo";
 import DashboardLayout from "../src/layout/DashboardLayout";
-import Project from "../src/features/projects";
-import Settings from "../src/features/user/components/Settings";
+import Settings from "../src/pages/settings";
 import { ProtectedRoute } from "./protectedRoutes";
-import NotFound from "@repo/ui/components/ui/NotFound";
+import NotFound from "@repo/ui/components/NotFound";
 import { AuthOrRedirect } from "../utils/AuthRedirect";
+import HomePage from "../src/pages/homePage";
+import { routesConfig } from "./routesConfig";
 
 export const appRoutes: RouteObject[] = [
   {
-    path: "/auth",
-    element: <AuthOrRedirect />, // Public
+    path: routesConfig.auth,
+    element: <AuthOrRedirect />,
   },
   {
-    path: "/", // Apply protection here
     element: (
       <ProtectedRoute>
         <DashboardLayout />
       </ProtectedRoute>
     ),
     children: [
-      // {
-      //   path: "/",
-      //   element: <HomePage />,
-      // },
       {
-        path: "users/:friendlyId",
-        element: (
-          <ProfilePage
-            params={{
-              friendlyId: "",
-            }}
-          />
-        ),
+        path: routesConfig.home,
+        element: <HomePage />,
       },
       {
-        path: "profile",
-        element: <Profile />,
+        path: routesConfig.userPortfolio(":friendlyId"),
+        element: <ProfilePage />,
       },
       {
-        path: "projects",
-        element: <Project />,
+        path: routesConfig.profile,
+        element: <ProfileInfo />,
       },
+
       {
-        path: "settings",
+        path: routesConfig.settings,
         element: <Settings />,
-      },
-      {
-        path: "*",
-        element: <NotFound />, // Catch-all 404 for protected children
       },
     ],
   },
