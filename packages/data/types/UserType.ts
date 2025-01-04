@@ -6,19 +6,19 @@ type ILink = {
   name: keyof typeof Links;
   url: string;
 };
-export type IUserProfile = {
-  userInfo: IUser;
-  userCredential: IUserCredential;
-};
-export type IUserCredential = {
-  email: string;
-  password: string;
-  role: string;
-  createdAt: Date;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-};
+// export type IUserProfile = {
+//   userInfo: IUser;
+//   userCredential: IUserCredential;
+// };
+// export type IUserCredential = {
+//   email: string;
+//   password: string;
+//   role: string;
+//   createdAt: Date;
+//   firstName: string;
+//   lastName: string;
+//   dateOfBirth: Date;
+// };
 export type IPersonalInfo = {
   firstName: string;
   lastName: string;
@@ -27,7 +27,7 @@ export type IPersonalInfo = {
   bio: string;
   profession?: typeof Professions;
   country: string;
-  dateOfBirth: Date;
+  // dateOfBirth: Date;
   links: ILink[];
 };
 
