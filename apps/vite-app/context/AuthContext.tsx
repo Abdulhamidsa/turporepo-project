@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       revalidateOnFocus: true,
     }
   );
-
+  console.log(userData);
   const isAuthenticated = Boolean(userData && !error);
 
   const signIn = async () => {
