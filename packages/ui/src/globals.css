@@ -20,7 +20,7 @@
     --accent: #2a9d8f; /* Matches primary */
     --accent-foreground: #ffffff;
     --destructive: #e76f51; /* Red for destructive actions */
-    --destructive-foreground: #ffffff;
+    --destructive-foreground: #e25555;
     --border: #d1d5db; /* Subtle gray for borders */
     --input: #d1d5db; /* Match borders */
     --ring: #2a9d8f; /* Matches accent for focus outlines */
@@ -44,11 +44,58 @@
     --accent: #2a9d8f; /* Matches primary */
     --accent-foreground: #ffffff;
     --destructive: #e76f51; /* Red for destructive actions */
-    --destructive-foreground: #ffffff;
+    --destructive-foreground: #e25555;
     --border: #3f3f3f; /* Dark gray for borders */
     --input: #3f3f3f; /* Match borders */
     --ring: #2a9d8f; /* Matches accent for focus outlines */
     --radius: 0.4rem;
+  }
+
+  /* Scrollbar Styles */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--muted);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 3px solid var(--muted);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--secondary);
+  }
+
+  /* Hover Effects */
+  .hover\:text-primary:hover {
+    color: var(--primary);
+  }
+
+  .hover\:text-secondary:hover {
+    color: var(--secondary);
+  }
+
+  .hover\:text-accent:hover {
+    color: var(--accent);
+  }
+
+  .hover\:text-destructive:hover {
+    color: var(--destructive);
+  }
+
+  /* Highlighted Text */
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .dark ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
   }
 }
 
