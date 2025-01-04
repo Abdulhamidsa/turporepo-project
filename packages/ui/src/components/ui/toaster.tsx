@@ -6,15 +6,17 @@ export const ToastProvider = () => {
       position="bottom-right"
       toastOptions={{
         style: {
-          maxWidth: "60%",
-          minHeight: "10vh",
+          maxWidth: "80%",
+          width: "auto",
+          minHeight: "8vh",
           fontSize: "0.875rem",
-          padding: "8px 16px",
+          padding: "0.5rem 2.7rem 0.5rem 1rem",
           borderRadius: "8px",
+          textAlign: "left",
         },
         success: {
           style: {
-            background: "#d1e7dd",
+            background: "text-primary",
             color: "#0f5132",
           },
         },
