@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Camera, Loader } from "lucide-react";
 import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
 import { useUserProfile, useUpdateUserProfile } from "../../user/hooks/use.user.profile";
@@ -14,27 +14,20 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
   const { userProfile, mutate } = useUserProfile();
   const { updateProfile } = useUpdateUserProfile();
   const [isUploading, setIsUploading] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const imageSrc = useMemo(() => userProfile[field] || "/placeholder.png", [userProfile, field]);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
     try {
       const [uploadedUrl] = await uploadToCloudinary([file]);
-
-      const updatedProfile = {
-        profilePicture: uploadedUrl,
-        username: userProfile.username,
-        age: userProfile.age,
-      };
-
-      await updateProfile(updatedProfile);
+      await updateProfile({ [field]: uploadedUrl });
       await mutate();
 
-      // Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -48,20 +41,13 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
     }
   };
 
-  const handleImageRemove = async () => {
+  const handleRemoveImage = async () => {
     if (!userProfile[field]) return;
 
     setIsUploading(true);
     try {
-      const updatedProfile = {
-        [field]: null,
-        username: userProfile.username,
-        age: userProfile.age,
-      };
-
-      await updateProfile(updatedProfile);
+      await updateProfile({ [field]: "" });
       await mutate();
-
       showToast(`${label} removed successfully!`);
     } catch (error) {
       console.error("Failed to remove image:", error);
@@ -73,7 +59,7 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
 
   return (
     <div className="relative flex items-center justify-center">
-      <img src={userProfile[field] || "/placeholder.png"} alt={label} className="w-full h-48 object-cover rounded-lg border border-border shadow-md" />
+      <img src={imageSrc} alt={label} className="w-full h-48 object-cover rounded-lg border border-border shadow-md" />
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center bg-muted bg-opacity-75 rounded-lg">
           <Loader className="h-10 w-10 text-primary animate-spin" />
@@ -81,7 +67,7 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
       )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="absolute bottom-2 right-2 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg">
+          <button className="absolute bottom-2 right-2 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg" disabled={isUploading}>
             <Camera className="h-5 w-5" />
           </button>
         </DropdownMenuTrigger>
@@ -89,12 +75,12 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
           <DropdownMenuItem onClick={() => fileInputRef.current?.click()} className="hover:bg-accent hover:text-accent-foreground rounded-md p-2">
             Upload
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleImageRemove} className="hover:bg-destructive hover:text-destructive-foreground rounded-md p-2">
+          <DropdownMenuItem onClick={handleRemoveImage} className="hover:bg-destructive hover:text-destructive-foreground rounded-md p-2">
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <input id={`${field}-upload`} type="file" className="hidden" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" disabled={isUploading} />
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" disabled={isUploading} />
     </div>
   );
 }
