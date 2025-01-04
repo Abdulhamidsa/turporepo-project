@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
-import { Switch } from "@repo/ui/components/ui/switch";
 import { Moon, Sun } from "lucide-react";
 
 export function DarkModeToggle() {
   const [isDarkMode, setIsDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    const classList = document.documentElement.classList;
+    const theme = isDarkMode ? "dark" : "light";
+    classList.toggle("dark", isDarkMode);
+    localStorage.setItem("theme", theme);
   }, [isDarkMode]);
 
+  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+
   return (
-    <div className="flex items-center space-x-2">
-      <Sun className={`h-5 w-5 transition-colors ${isDarkMode ? "text-muted-foreground" : "text-primary"}`} />
-      <Switch checked={isDarkMode} onCheckedChange={setIsDarkMode} className="bg-muted hover:bg-muted-foreground transition-colors" />
-      <Moon className={`h-5 w-5 transition-colors ${isDarkMode ? "text-primary" : "text-muted-foreground"}`} />
-    </div>
+    <button onClick={toggleDarkMode} className="p-2 rounded-full bg-muted hover:bg-muted-foreground transition-colors">
+      <span className="sr-only">Toggle Dark Mode</span>
+      {isDarkMode ? <Moon className="h-5 w-5 text-primary" /> : <Sun className="h-5 w-5 text-primary" />}
+    </button>
   );
 }
