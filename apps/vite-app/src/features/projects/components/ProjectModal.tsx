@@ -1,24 +1,21 @@
 import { useState } from "react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Badge } from "@repo/ui/components/ui/badge";
-import { Avatar } from "@repo/ui/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
 import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import CustomModal from "./CustomModal";
+import CustomModal from "@repo/ui/components/CustomModal";
+import { FetchedProjectType } from "@repo/zod/validation";
+import { useUserProfile } from "../../user/hooks/use.user.profile";
 
 interface ProjectModalProps {
-  project: {
-    title: string;
-    description: string;
-    url: string;
-    media: { url: string }[];
-    tags: { id: string; name: string }[];
-    thumbnail: string;
-  };
+  project: FetchedProjectType;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
+  const { userProfile } = useUserProfile();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
@@ -34,7 +31,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
   }
 
   return (
-    <CustomModal size="lg" isOpen={isOpen} onClose={onClose}>
+    <CustomModal size="md" isOpen={isOpen} onClose={onClose}>
       {/* Image Section */}
       <div className="relative h-72 rounded-t-lg overflow-hidden shadow-md">
         <img src={project.media[currentImageIndex].url} alt={`Project image ${currentImageIndex + 1}`} className="w-full h-full object-cover" />
@@ -58,10 +55,10 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
             <h2 className="text-2xl font-bold text-primary leading-tight">{project.title}</h2>
             <div className="flex items-center mt-2 space-x-2">
               <Avatar className="w-10 h-10 border border-border">
-                {/* <AvatarImage src={project.user.avatar} alt={project.user.name} /> */}
-                {/* <AvatarFallback>{project.user.name.charAt(0)}</AvatarFallback> */}
+                <AvatarImage src={userProfile.profilePicture ?? ""} alt={userProfile.profilePicture ?? "Profile picture"} />
+                <AvatarFallback>{userProfile.username?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
-              {/* <span className="text-sm font-medium text-muted-foreground">{project.user.name}</span> */}
+              <span className="text-sm font-medium text-muted-foreground">{userProfile.username}</span>
             </div>
           </div>
         </div>
