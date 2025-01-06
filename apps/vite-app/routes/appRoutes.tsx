@@ -6,8 +6,9 @@ import Settings from "../src/pages/settings";
 import { ProtectedRoute } from "./protectedRoutes";
 import NotFound from "@repo/ui/components/NotFound";
 import { AuthOrRedirect } from "../utils/AuthRedirect";
-import HomePage from "../src/pages/homePage";
+// import HomePage from "../src/pages/feesds";
 import { routesConfig } from "./routesConfig";
+import Feed from "../src/pages/feed";
 
 export const appRoutes: RouteObject[] = [
   {
@@ -23,8 +24,13 @@ export const appRoutes: RouteObject[] = [
     children: [
       {
         path: routesConfig.home,
-        element: <HomePage />,
+        element: <Feed />,
       },
+      {
+        path: routesConfig.feed,
+        element: <Feed />,
+      },
+
       {
         path: routesConfig.userPortfolio(":friendlyId"),
         element: <ProfilePage />,

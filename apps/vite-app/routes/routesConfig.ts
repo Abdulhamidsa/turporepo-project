@@ -4,5 +4,6 @@ export const routesConfig = {
   userPortfolio: (friendlyId: string) => `/user/${friendlyId}`,
   profile: "/profile/edit",
   settings: "/settings",
+  feed: "/feed",
   notFound: "*",
 };
