@@ -1,18 +1,18 @@
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
-import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
+import { useForm, SubmitHandler, FieldErrors, Controller } from "react-hook-form";
 import { useSignin } from "../../user/hooks/use.auth";
-import { signInResolver } from "@repo/zod";
-import { SignInFormData } from "@repo/data/types";
 import { getErrorMessage } from "../../../../api/errors";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { AuthFormWrapper } from "./AuthFormWrapper";
+import { SignInFormData } from "@repo/data/types";
+import { signInResolver } from "@repo/zod/resolver";
 
 export default function SigninForm({ setIsSignIn, prefillValues = undefined }: { setIsSignIn: (value: boolean) => void; prefillValues?: { email?: string } | undefined }) {
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({
     resolver: signInResolver,
     defaultValues: {
@@ -20,7 +20,7 @@ export default function SigninForm({ setIsSignIn, prefillValues = undefined }: {
     },
   });
 
-  const { signin, isSubmitting } = useSignin();
+  const { signin } = useSignin();
 
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
@@ -44,18 +44,28 @@ export default function SigninForm({ setIsSignIn, prefillValues = undefined }: {
         </p>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {[
-          { name: "email", type: "email", label: "Email", validation: { required: "Email is required" } },
-          { name: "password", type: "password", label: "Password", validation: { required: "Password is required" } },
+          { name: "email", type: "email", label: "Email", value: "a@ab.com" },
+          { name: "password", type: "password", label: "Password", value: "123456" },
         ].map((field) => (
           <div key={field.name} className="relative">
-            <Input
-              id={field.name}
-              type={field.type}
-              {...register(field.name as keyof SignInFormData, field.validation)}
-              className="peer w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-              placeholder=" " // Empty placeholder to activate label movement
+            <Controller
+              name={field.name as keyof SignInFormData}
+              control={control}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  ref={ref}
+                  className="peer w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  placeholder=" " // Empty placeholder to activate label movement
+                />
+              )}
             />
             <label
               htmlFor={field.name}
