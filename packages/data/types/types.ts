@@ -15,6 +15,30 @@ export type ProjectType = {
     name: string;
   }[];
 };
+
+export type MediaType = {
+  url: string;
+  _id: string;
+};
+
+export type AllProjectType = {
+  _id: string;
+  userId: string;
+  title: string;
+  description: string;
+  url: string;
+  media: MediaType[]; // Array of media objects
+  thumbnail: string;
+  tags: string[]; // Array of tag IDs (as strings)
+  createdAt: string; // ISO string for date
+  updatedAt: string; // ISO string for date
+};
+
+export type GetAllProjectsResponse = {
+  success: boolean;
+  data: ProjectType[];
+};
+
 export interface ProjectCardProps {
   project: {
     id: string;
@@ -54,12 +78,15 @@ export type TagInputProps = {
   error?: string;
 };
 
-export type ImageUploaderProps = {
-  images: string[];
-  setImages: (images: string[]) => void;
+// types.ts
+
+export interface ImageUploaderProps {
+  images: (File | string)[];
+  setImages: (images: (File | string)[]) => void;
   isThumbnail?: boolean;
   error?: string;
-};
+}
+
 // src/data/types/types.ts
 // src/data/types/types.ts
 // export interface AddProject {
@@ -107,4 +134,28 @@ export interface Project {
   tags: Tag[];
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+export interface Media {
+  url: string;
+}
+
+export interface Post {
+  id: string;
+  userId: User; // Change from string to User
+  content: string;
+  image: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface User {
+  _id: string;
+  username: string;
+  profilePicture: string;
 }
