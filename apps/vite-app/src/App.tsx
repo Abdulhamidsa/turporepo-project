@@ -2,11 +2,25 @@
 import { useRoutes } from "react-router-dom";
 import { appRoutes } from "../routes/appRoutes";
 import { AuthProvider } from "../context/AuthContext";
+import { SWRConfig } from "swr";
+import { swrFetcher } from "../utils/swrFetcher";
 
 function App() {
   const routing = useRoutes(appRoutes);
 
-  return <AuthProvider>{routing}</AuthProvider>;
+  return (
+    <SWRConfig
+      value={{
+        fetcher: swrFetcher,
+        revalidateOnFocus: false, // Disable revalidation on focus
+        dedupingInterval: Infinity, // Cache data for 1 minute
+        revalidateIfStale: false, // Do not re-fetch stale data
+        shouldRetryOnError: false, // Optional: Disable retries on error
+      }}
+    >
+      <AuthProvider>{routing}</AuthProvider>
+    </SWRConfig>
+  );
 }
 
 export default App;
