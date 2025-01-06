@@ -1,6 +1,7 @@
 // src/api/request.ts
 import { ZodSchema } from "zod";
 import axiosInstance from "./axiosClient";
+import { getErrorMessage } from "./errors";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -18,7 +19,7 @@ export async function request<T>(method: "GET" | "POST" | "PUT" | "DELETE" | "PA
 
   if (schema) {
     const parseResult = schema.safeParse(responseData);
-    console.log(parseResult);
+    getErrorMessage(parseResult);
     if (!parseResult.success) {
       console.error("Zod Validation Error:", parseResult.error);
       throw new Error("API response validation failed");
