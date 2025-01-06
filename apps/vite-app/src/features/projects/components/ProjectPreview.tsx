@@ -1,52 +1,49 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import { Card, CardContent } from "@repo/ui/components/ui/card";
 import { Badge } from "@repo/ui/components/ui/badge";
-import { ExternalLink } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
-import { useUserProfile } from "../../user/hooks/use.user.profile";
 import { AddProjectInput } from "@repo/zod/validation";
 
 interface ProjectPreviewProps {
   project: AddProjectInput;
+  pendingThumbnail: File | null;
+  pendingMedia: File[];
 }
 
-const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
-  const { userProfile } = useUserProfile();
+const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project, pendingThumbnail, pendingMedia }) => {
+  const thumbnailUrl = pendingThumbnail ? URL.createObjectURL(pendingThumbnail) : project.thumbnail || "/placeholder.png";
+
+  const mediaUrls = pendingMedia.length > 0 ? pendingMedia.map((file) => URL.createObjectURL(file)) : project.media.map((media) => media.url);
 
   return (
-    <div className="p-6 rounded-l-lg overflow-y-auto">
-      <h3 className="text-xl font-bold text-foreground mb-12">Live Preview</h3>
-      <div className="mb-4">
-        <img src={project.thumbnail || "/placeholder.png"} alt="Project Thumbnail" className="w-full h-48 object-cover rounded-lg" />
-      </div>
-      <div className="flex items-center gap-2 mb-4">
-        <Avatar className="w-10 h-10">
-          <AvatarImage src={userProfile.profilePicture ?? "/default-profile.png"} alt={userProfile.username || "User"} />
-          <AvatarFallback>{userProfile.username?.charAt(0) || "U"}</AvatarFallback>
-        </Avatar>
-        <span className="font-medium text-foreground">{userProfile.username}</span>
-      </div>
-      <h2 className="text-2xl font-bold mb-2 text-foreground">{project.title}</h2>
-      <p className="text-muted-foreground mb-4">{project.description}</p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.tags.map((tag) => (
-          <Badge key={tag} variant="secondary" className="bg-secondary text-secondary-foreground">
-            {tag}
-          </Badge>
-        ))}
-      </div>
-      {project.media.length > 0 && (
-        <div className="mb-4 grid grid-cols-2 gap-2">
-          {project.media.map((image, index) => (
-            <img key={index} src={image.url} alt={`Project image ${index + 1}`} className="w-full h-24 object-cover rounded-lg" />
-          ))}
+    <Card className="w-full bg-card text-card-foreground overflow-hidden hover:shadow-xl">
+      <CardContent className="p-0 relative">
+        {/* Thumbnail */}
+        <img src={thumbnailUrl} alt={project.title} className="w-full h-64 object-cover" />
+        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 ease-in-out"></div>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+          {/* Title and Description */}
+          <h3 className="text-xl font-bold mb-2">{project.title || "Untitled Project"}</h3>
+          <p className="text-sm text-muted-foreground mb-4">{project.description || "No description provided."}</p>
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-2">
+            {project.tags.slice(0, 3).map((tag) => (
+              <Badge key={tag} variant="secondary" className="bg-secondary text-secondary-foreground text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </div>
+      </CardContent>
+      {mediaUrls.length > 0 && (
+        <CardContent className="p-4">
+          <h4 className="text-lg font-semibold mb-2">Gallery</h4>
+          <div className="grid grid-cols-2 gap-2">
+            {mediaUrls.map((url, index) => (
+              <img key={index} src={url} alt={`Project image ${index + 1}`} className="w-full h-32 object-cover rounded-md" />
+            ))}
+          </div>
+        </CardContent>
       )}
-      <Button asChild className="w-full bg-primary hover:bg-primary-foreground text-primary-foreground">
-        <a href={project.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-          <ExternalLink className="mr-2" /> Visit Project
-        </a>
-      </Button>
-    </div>
+    </Card>
   );
 };
 

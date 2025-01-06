@@ -9,13 +9,15 @@ import { addProjectSchema, AddProjectInput } from "@repo/zod/validation"; // Use
 import { useCreateProject } from "../../../hooks/useCreateProject"; // Adjust the import path
 import { ZodError } from "zod";
 import { AddProjectModalProps } from "@repo/data/types/types";
+import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
+import { useUserProjects } from "../../user/hooks/use.user.profile";
 
 const initialProject: AddProjectInput = {
   title: "",
   description: "",
   url: "",
   media: [],
-  thumbnail: "/placeholder.png",
+  thumbnail: "",
   tags: [],
 };
 
@@ -23,6 +25,7 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
   const [project, setProject] = useState<AddProjectInput>(initialProject);
   const [loading, setLoading] = useState(false);
   const { createProject } = useCreateProject();
+  const { mutate: mutateProjects } = useUserProjects();
   const [errors, setErrors] = useState<Record<keyof AddProjectInput, string>>({
     title: "",
     description: "",
@@ -32,6 +35,10 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
     media: "",
   });
 
+  // States for pending files
+  const [pendingThumbnail, setPendingThumbnail] = useState<File | null>(null);
+  const [pendingMedia, setPendingMedia] = useState<File[]>([]);
+
   /**
    * Handles the save project action
    */
@@ -40,16 +47,42 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
 
     setLoading(true);
     try {
-      // Validate the project with Zod
-      const validatedProject = addProjectSchema.parse(project);
+      // Step 1: Upload thumbnail if pending
+      let thumbnailUrl = project.thumbnail;
+      if (pendingThumbnail) {
+        const [uploadedThumbnail] = await uploadToCloudinary([pendingThumbnail]);
+        thumbnailUrl = uploadedThumbnail;
+      }
 
-      // Call the create project function
+      // Step 2: Upload media if any pending
+      let mediaUrls = project.media.map((m) => m.url);
+      if (pendingMedia.length > 0) {
+        const uploadedMedia = await uploadToCloudinary(pendingMedia);
+        mediaUrls = [...mediaUrls, ...uploadedMedia];
+      }
+
+      // Step 3: Prepare the final project data with uploaded URLs
+      const finalProject: AddProjectInput = {
+        ...project,
+        thumbnail: thumbnailUrl,
+        media: mediaUrls.map((url) => ({ url })),
+      };
+
+      // Step 4: Validate the final project with Zod
+      const validatedProject = addProjectSchema.parse(finalProject);
+
+      // Step 5: Call the create project mutation
       await createProject(validatedProject);
+
+      // Step 6: Update the projects list by calling mutate
+      mutateProjects(); // This will revalidate the projects list
 
       showToast("Project uploaded successfully!", "success");
 
       // Reset the form and close the modal
       setProject(initialProject);
+      setPendingThumbnail(null);
+      setPendingMedia([]);
       setErrors({
         title: "",
         description: "",
@@ -82,10 +115,11 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
   };
 
   return (
-    <CustomModal size="3xl" height="90%" isOpen={isOpen} onClose={onClose}>
-      <div className="grid md:grid-cols-2 gap-4 h-[500px]">
-        <ProjectPreview project={project} />
-        <ProjectForm project={project} setProject={setProject} errors={errors} setErrors={setErrors} />
+    <CustomModal size="xl" isOpen={isOpen} onClose={onClose}>
+      <div className="grid md:grid-cols-2 gap-4 h-[550px] w-fit">
+        {/* Pass pending thumbnail and media to ProjectPreview */}
+        <ProjectPreview project={project} pendingThumbnail={pendingThumbnail} pendingMedia={pendingMedia} />
+        <ProjectForm project={project} setProject={setProject} errors={errors} setErrors={setErrors} pendingThumbnail={pendingThumbnail} setPendingThumbnail={setPendingThumbnail} pendingMedia={pendingMedia} setPendingMedia={setPendingMedia} />
         <div className="md:col-span-2 p-6">
           <SaveButton onClick={saveProject} loading={loading} />
         </div>

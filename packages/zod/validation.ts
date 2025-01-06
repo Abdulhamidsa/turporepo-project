@@ -33,7 +33,7 @@ export const addProjectSchema = z.object({
 export type AddProjectInput = z.infer<typeof addProjectSchema>;
 
 export const fetchedProjectSchema = z.object({
-  id: z.string().optional(),
+  _id: z.string().optional(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
   url: z.string().url("Invalid URL format."),

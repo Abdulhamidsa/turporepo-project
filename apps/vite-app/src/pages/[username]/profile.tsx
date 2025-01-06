@@ -26,7 +26,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-background">
         {/* Cover Section */}
         <div className="relative h-64 md:h-80 overflow-hidden">
-          <img src={userProfile.coverImage || "/default-cover.jpg"} alt="Cover" className="object-cover w-full h-full" />
+          <img src={userProfile.coverImage || "/placeholder.png"} alt="Cover" className="object-cover w-full h-full" />
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
 
@@ -95,7 +95,7 @@ export default function ProfilePage() {
               {projects.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {projects.map((project) => (
-                    <ProjectCard key={project.id ?? "default-id"} project={{ ...project, id: project.id ?? "default-id", tags: project.tags ?? [] }} onClick={() => setSelectedProject({ ...project, tags: project.tags ?? [] })} />
+                    <ProjectCard key={project._id ?? "default-id"} project={{ ...project, id: project._id ?? "default-id", tags: project.tags ?? [] }} onClick={() => setSelectedProject({ ...project, tags: project.tags ?? [] })} />
                   ))}
                 </div>
               ) : (

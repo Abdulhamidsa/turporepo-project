@@ -28,18 +28,6 @@ export type UserAuth = z.infer<typeof userAuthSchema>;
 // Parse the default user auth
 export const defaultUserAuth: UserAuth = userAuthSchema.parse({});
 
-// export const UserProfileSchema = z.object({
-//   username: z.string().min(3).optional(),
-//   age: z.number().optional(),
-//   bio: z.string().optional(),
-//   profilePicture: z.string().optional(),
-//   coverImage: z.string().optional(),
-//   country: z.string().optional(),
-//   profession: z.string().optional(),
-// });
-
-// schemas.ts
-
 // Define the schema for a Project
 export const projectSchema = z.object({
   id: z.string(),
@@ -53,3 +41,10 @@ export const projectSchema = z.object({
 
 // Infer the TypeScript type from the schema
 export type ProjectFormData = z.infer<typeof projectSchema>;
+
+const PostSchema = z.object({
+  content: z.string().optional(),
+  image: z.string().optional(), // Image URL
+});
+
+export type PostData = z.infer<typeof PostSchema>;

@@ -14,7 +14,7 @@ export function NavbarApp() {
 
   return (
     <header className="bg-muted border-b border-border shadow-sm sticky top-0 z-40">
-      <div className="mx-auto ml-16 mr-8 flex items-center justify-between h-full p-2">
+      <div className="mx-auto md:ml-16 md:mr-8 flex items-center justify-between h-full p-4">
         <Link to="/" className="text-xl font-bold text-primary hover:text-primary-foreground">
           ProFolio
         </Link>

@@ -4,6 +4,7 @@ import Auth from "../src/pages/auth";
 
 export function AuthOrRedirect() {
   const { isAuthenticated } = useAuth();
+  console.log("isAuthenticatedsdsdsdsd", isAuthenticated);
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;

@@ -29,7 +29,6 @@ type User = {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Expose the hook
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {

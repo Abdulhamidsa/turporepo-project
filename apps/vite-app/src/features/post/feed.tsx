@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ui/tabs";
 import { PostList } from "./components/PostList";
-import { ProjectList } from "./components/ProjectList";
 
 export default function Feed() {
   return (
@@ -21,9 +20,7 @@ export default function Feed() {
           <TabsContent value="posts">
             <PostList />
           </TabsContent>
-          <TabsContent value="projects">
-            <ProjectList />
-          </TabsContent>
+          <TabsContent value="projects">{/* <ProjectList /> */}</TabsContent>
         </Tabs>
       </div>
     </div>

@@ -1,8 +1,9 @@
+// export default UploadPost;
 import { useState } from "react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Plus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
-import { PostForm } from "./post-form";
+import { PostForm } from "./PostForm";
 import AddProjectModal from "../../projects/components/addProjectModal";
 import CustomModal from "../../../../../../packages/ui/src/components/CustomModal";
 
@@ -28,10 +29,7 @@ export function AddContentButton() {
         </DropdownMenuContent>
       </DropdownMenu>
       <CustomModal isOpen={isPostDialogOpen} onClose={() => setIsPostDialogOpen(false)} size="lg">
-        <div>
-          <h2 className="text-xl font-bold mb-4">Create a New Post</h2>
-          <PostForm onPost={() => setIsPostDialogOpen(false)} />
-        </div>
+        <PostForm onClose={() => setIsPostDialogOpen(false)} />
       </CustomModal>
       <AddProjectModal isOpen={isProjectDialogOpen} onClose={() => setIsProjectDialogOpen(false)} />
     </>

@@ -27,6 +27,7 @@
     "react-hook-form": "catalog:react18",
     "react-router-dom": "catalog:react18",
     "react-select": "catalog:react18",
+    "react-query": "catalog:react18",
     "react-world-flags": "^1.6.0",
     "swr": "^2.3.0"
   },

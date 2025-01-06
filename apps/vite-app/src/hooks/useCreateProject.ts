@@ -1,5 +1,6 @@
-import { addProjectSchema, AddProjectInput } from "@repo/zod/validation"; // Adjust path as needed
-import { request } from "../../api/request"; // Assuming request.ts is in the api folder
+// hooks/useCreateProject.ts
+import { addProjectSchema, AddProjectInput } from "@repo/zod/validation";
+import { request } from "../../api/request";
 
 export const useCreateProject = () => {
   const urlCreate = "/internal/project";

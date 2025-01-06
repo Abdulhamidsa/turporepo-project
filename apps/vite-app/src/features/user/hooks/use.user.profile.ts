@@ -1,4 +1,5 @@
 import useSWR from "swr";
+
 import { swrFetcher } from "../../../../api/swrFetcher";
 import { UserProfile, userProfileSchema } from "@repo/zod/validation/user";
 import { EditableProfileType } from "@repo/data/types/user";
@@ -21,7 +22,9 @@ export const defaultUserProfile: UserProfile = {
 export const useUserProfile = () => {
   const urlFetch = `/internal/profile/:userid`;
 
-  const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile), { revalidateOnFocus: true });
+  const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile), {
+    dedupingInterval: Infinity, // Avoid duplicate fetches
+  });
 
   return {
     userProfile: data || defaultUserProfile,
@@ -49,7 +52,7 @@ export const useUpdateUserProfile = () => {
 // Hook for shwoing user projects
 
 export const useUserProjects = () => {
-  const urlFetch = `https://cre8ify-backend-production.up.railway.app/api/internal/projects`;
+  const urlFetch = `http://localhost:4000/api/internal/projects`;
 
   const { data, mutate, error } = useSWR<FetchedProjectType[]>(urlFetch, (endpoint: string) => swrFetcher(endpoint, fetchedProjectSchema.array()));
 

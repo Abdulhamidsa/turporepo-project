@@ -11,9 +11,13 @@ interface ProjectFormProps {
   setProject: React.Dispatch<React.SetStateAction<AddProjectInput>>;
   errors: Record<keyof AddProjectInput, string>;
   setErrors: React.Dispatch<React.SetStateAction<Record<keyof AddProjectInput, string>>>;
+  pendingThumbnail: File | null;
+  setPendingThumbnail: React.Dispatch<React.SetStateAction<File | null>>;
+  pendingMedia: File[];
+  setPendingMedia: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const ProjectForm: React.FC<ProjectFormProps> = ({ project, setProject, errors, setErrors }) => {
+const ProjectForm: React.FC<ProjectFormProps> = ({ project, setProject, errors, setErrors, pendingThumbnail, setPendingThumbnail, pendingMedia, setPendingMedia }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -23,16 +27,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, setProject, errors, 
   const handleTagsChange = (tags: string[]) => {
     setErrors((prev) => ({ ...prev, tags: "" }));
     setProject((prev) => ({ ...prev, tags }));
-  };
-
-  const handleMediaChange = (media: string[]) => {
-    setErrors((prev) => ({ ...prev, media: "" }));
-    setProject((prev) => ({ ...prev, media: media.map((url) => ({ url })) }));
-  };
-
-  const handleThumbnailChange = (thumbnail: string[]) => {
-    setErrors((prev) => ({ ...prev, thumbnail: "" }));
-    setProject((prev) => ({ ...prev, thumbnail: thumbnail.length > 0 ? thumbnail[0] : undefined }));
   };
 
   return (
@@ -64,11 +58,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, setProject, errors, 
         </div>
 
         <div>
-          <ImageUploader images={project.thumbnail ? [project.thumbnail] : []} setImages={handleThumbnailChange} isThumbnail error={errors.thumbnail} />
+          <ImageUploader images={pendingThumbnail ? [pendingThumbnail] : project.thumbnail ? [project.thumbnail] : []} setImages={(files) => setPendingThumbnail(files.length > 0 && files[0] instanceof File ? (files[0] as File) : null)} isThumbnail error={errors.thumbnail} />
         </div>
 
         <div>
-          <ImageUploader images={project.media?.map((media) => media.url) || []} setImages={handleMediaChange} error={errors.media} />
+          <ImageUploader images={pendingMedia.length > 0 ? pendingMedia : project.media.map((m) => m.url)} setImages={(files) => setPendingMedia(files.filter((file): file is File => file instanceof File))} error={errors.media} />
         </div>
 
         <div>
