@@ -22,10 +22,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return user;
     },
     {
-      revalidateOnFocus: true,
+      refreshInterval: 300000, // 5 minutes in milliseconds
     }
   );
-  console.log(userData);
   const isAuthenticated = Boolean(userData && !error);
 
   const signIn = async () => {
