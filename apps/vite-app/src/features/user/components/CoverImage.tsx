@@ -67,8 +67,8 @@ export default function CoverImageEdit({ label, field }: CoverImageEditProps) {
       )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="absolute bottom-4 right-4 flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg" disabled={isUploading}>
-            <Camera className="h-6 w-6" />
+          <button className="absolute top-4 right-4 flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg" disabled={isUploading}>
+            <Camera className="h-6 w-6 z-40" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-36 bg-card text-card-foreground rounded-lg shadow-lg">
