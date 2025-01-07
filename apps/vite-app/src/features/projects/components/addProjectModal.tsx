@@ -115,12 +115,14 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
   };
 
   return (
-    <CustomModal size="xl" isOpen={isOpen} onClose={onClose}>
-      <div className="grid md:grid-cols-2 gap-4 h-[550px] w-fit">
+    <CustomModal size="3xl" width="800px" isOpen={isOpen} onClose={onClose}>
+      <div className="grid md:grid-cols-2 gap-4 h-[450px] m-auto">
         {/* Pass pending thumbnail and media to ProjectPreview */}
-        <ProjectPreview project={project} pendingThumbnail={pendingThumbnail} pendingMedia={pendingMedia} />
+        <div className="hidden md:block">
+          <ProjectPreview project={project} pendingThumbnail={pendingThumbnail} pendingMedia={pendingMedia} />
+        </div>{" "}
         <ProjectForm project={project} setProject={setProject} errors={errors} setErrors={setErrors} pendingThumbnail={pendingThumbnail} setPendingThumbnail={setPendingThumbnail} pendingMedia={pendingMedia} setPendingMedia={setPendingMedia} />
-        <div className="md:col-span-2 p-6">
+        <div className="">
           <SaveButton onClick={saveProject} loading={loading} />
         </div>
       </div>

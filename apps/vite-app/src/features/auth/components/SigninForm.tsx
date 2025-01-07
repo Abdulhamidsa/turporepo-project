@@ -46,8 +46,8 @@ export default function SigninForm({ setIsSignIn, prefillValues = undefined }: {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {[
-          { name: "email", type: "email", label: "Email", value: "a@ab.com" },
-          { name: "password", type: "password", label: "Password", value: "123456" },
+          { name: "email", type: "email", label: "Email" },
+          { name: "password", type: "password", label: "Password" },
         ].map((field) => (
           <div key={field.name} className="relative">
             <Controller

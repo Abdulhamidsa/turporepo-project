@@ -20,7 +20,12 @@ const DashboardLayout: React.FC = () => {
       icon: Briefcase,
       link: userProfile?.username ? routesConfig.userPortfolio(userProfile.username) : routesConfig.home,
     },
-    { name: "Profile", icon: User, link: routesConfig.profile },
+    {
+      name: "Profile",
+      icon: User,
+      link: routesConfig.profile,
+      attention: userProfile && !userProfile.completedProfile, // Check if profile needs attention
+    },
   ];
 
   const sidebarOnlyItems = [{ name: "Settings", icon: Settings, link: routesConfig.settings }];

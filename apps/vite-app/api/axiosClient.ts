@@ -1,5 +1,5 @@
 import axios from "axios";
-const IGNORED_ENDPOINTS = ["/internal/logged-user"];
+const IGNORED_ENDPOINTS = ["/logged-user"];
 
 // Create Axios instance
 const axiosInstance = axios.create({

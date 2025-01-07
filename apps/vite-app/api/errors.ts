@@ -3,7 +3,7 @@ import axios from "axios";
 export class AppError extends Error {
   constructor(
     public message: string,
-    public code?: number
+    public code?: string | number
   ) {
     super(message);
     this.name = "AppError";

@@ -16,7 +16,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isLoading,
     mutate,
   } = useSWR<User | null>(
-    "/internal/logged-user",
+    "/logged-user",
     async (url) => {
       const user = await request<User>("GET", url);
       return user;
@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
-      await request("POST", "/internal/signout");
+      await request("POST", "/signout");
     } catch (err) {
       console.error("signOut error:", err);
     }

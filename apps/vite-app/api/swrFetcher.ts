@@ -1,6 +1,7 @@
 import { ZodSchema } from "zod";
 import { request } from "./request";
 import { AppError } from "./errors";
+// import { AppError } from "./errors";
 
 export async function swrFetcher<T>(url: string, schema?: ZodSchema<T>, defaultValue?: T): Promise<T> {
   try {
@@ -17,7 +18,7 @@ export async function swrFetcher<T>(url: string, schema?: ZodSchema<T>, defaultV
 
     return response;
   } catch (error) {
-    console.error("SWR fetch error:", (error as AppError).message);
+    console.log("SWR fetch error:", (error as AppError).message);
     // Return the default value if available
     return defaultValue || ({} as T);
   }

@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ui/tabs";
-import { PostList } from "./components/PostList";
+import PostList from "./components/PostList";
 
 export default function Feed() {
   return (

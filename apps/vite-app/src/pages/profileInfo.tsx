@@ -5,7 +5,7 @@ import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@repo/ui/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
-import { Pen, Check, Loader } from "lucide-react";
+import { Pen, Check, Loader, AlertCircle } from "lucide-react";
 import { useUserProfile, useUpdateUserProfile } from "../features/user/hooks/use.user.profile";
 import { Countries } from "@repo/data/constants/countries";
 import { Professions } from "@repo/data/constants/professions";
@@ -13,6 +13,8 @@ import AgePicker from "../components/AgePicker";
 import { EditableProfileType, ProfileType } from "@repo/data/types/user";
 import { defaultUserProfile } from "@repo/zod/validation/user";
 import { showToast } from "@repo/ui/components/ui/toaster";
+import CredentialsPage from "../features/user/components/CredentialsPage";
+import { getErrorMessage } from "../../api/errors";
 
 export default function ProfileInfo() {
   const { userProfile, mutate } = useUserProfile();
@@ -59,14 +61,14 @@ export default function ProfileInfo() {
         showToast("No changes to save.");
       }
     } catch (err) {
-      console.error("Error updating profile:", err);
-      showToast("Failed to save changes.");
+      const errorMessage = getErrorMessage(err); // Extract detailed error message
+      console.error("Error updating profile:", errorMessage);
+      showToast(`Failed to save changes: ${errorMessage}`, "error");
     } finally {
       setIsSaving(false);
       setEditingField(null);
     }
   };
-
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       setEditingField(null);
@@ -74,8 +76,14 @@ export default function ProfileInfo() {
   };
 
   return (
-    <div className="w-screen p-2 sm:p-0 md:p-6">
-      <Card className="max-w-4xl mx-auto bg-card text-card-foreground">
+    <div className="container mx-auto p-2 sm:p-4 md:p-6">
+      {!userProfile.completedProfile && (
+        <div className="bg-red-500 text-white p-4 rounded-lg mb-4 flex items-center">
+          <AlertCircle className="h-6 w-6 mr-2" />
+          <span>Your profile is incomplete. Please complete your profile to make it viewable to the public.</span>
+        </div>
+      )}
+      <Card className="w-full max-w-4xl mx-auto bg-card text-card-foreground">
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold">Edit Profile</CardTitle>
         </CardHeader>
@@ -92,7 +100,7 @@ export default function ProfileInfo() {
             <CardContent>
               <div className="space-y-4 sm:space-y-6">
                 {Object.entries(profileData).map(([key, value]) => {
-                  if (["profilePicture", "coverImage", "createdAt", "profileComplete", "email", "password", "friendlyId"].includes(key)) return null;
+                  if (["profilePicture", "coverImage", "createdAt", "completedProfile", "email", "password", "friendlyId"].includes(key)) return null;
 
                   return (
                     <div key={key} className="relative flex flex-col bg-muted text-muted-foreground rounded-lg p-3 sm:p-4">
@@ -144,17 +152,27 @@ export default function ProfileInfo() {
                   );
                 })}
               </div>
+              {isDirty && (
+                <div className="mt-4 block md:hidden">
+                  <Button onClick={handleSave} className="bg-primary hover:bg-accent text-primary-foreground w-full" disabled={isSaving}>
+                    {isSaving ? <Loader className="animate-spin h-5 w-5" /> : "Save Changes"}
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </TabsContent>
+          <TabsContent value="credentials" className="px-2 sm:px-4 md:px-6">
+            <CredentialsPage />
+          </TabsContent>
         </Tabs>
-        {isDirty && (
-          <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4">
-            <Button onClick={handleSave} className="bg-primary hover:bg-accent text-primary-foreground" disabled={isSaving}>
-              {isSaving ? <Loader className="animate-spin h-5 w-5" /> : "Save Changes"}
-            </Button>
-          </div>
-        )}
       </Card>
+      {isDirty && (
+        <div className="hidden md:block fixed bottom-4 right-4">
+          <Button onClick={handleSave} className="bg-primary hover:bg-accent text-primary-foreground" disabled={isSaving}>
+            {isSaving ? <Loader className="animate-spin h-5 w-5" /> : "Save Changes"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

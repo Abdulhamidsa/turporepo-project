@@ -24,15 +24,24 @@ export async function request<T>(method: "GET" | "POST" | "PUT" | "DELETE" | "PA
     if (schema) {
       const parseResult = schema.safeParse(responseData);
       if (!parseResult.success) {
-        console.error("Validation Error:", parseResult.error);
+        console.error(parseResult.error);
         throw new Error("API response validation failed");
       }
       return parseResult.data;
     }
 
     return responseData;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    // Extract error message from Axios response if available
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    // Log the error and rethrow for debugging purposes
     console.error("Request Error:", error);
-    throw error; // Let the interceptor or caller handle it
+
+    // Rethrow generic error if no specific message is found
+    throw error;
   }
 }
