@@ -6,6 +6,7 @@ import { NavigationItemProps } from "./Sidebar";
 
 interface NavigationItemComponentProps {
   item: NavigationItemProps;
+  attention: undefined;
   isActive: boolean;
   showText: boolean;
   onClick?: () => void;

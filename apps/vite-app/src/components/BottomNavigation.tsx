@@ -16,7 +16,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ navigationItems, si
     <nav className="fixed bottom-0 left-0 w-full bg-card border-t border-border flex justify-between items-center md:hidden">
       <div className="flex justify-center gap-10 flex-grow">
         {navigationItems.map((item) => (
-          <NavigationItem key={item.name} item={item} isActive={false} showText={false} />
+          <NavigationItem key={item.name} item={item} isActive={false} showText={false} attention={undefined} />
         ))}
       </div>
       <Popover>
@@ -27,7 +27,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ navigationItems, si
         </PopoverTrigger>
         <PopoverContent className="w-48 p-2 bg-card border border-border rounded-lg shadow-md">
           {sidebarOnlyItems.map((item) => (
-            <NavigationItem key={item.name} item={item} isActive={false} showText={true} />
+            <NavigationItem key={item.name} item={item} isActive={false} showText={true} attention={undefined} />
           ))}
         </PopoverContent>
       </Popover>
