@@ -12,10 +12,10 @@ function App() {
     <SWRConfig
       value={{
         fetcher: swrFetcher,
-        revalidateOnFocus: false, // Disable revalidation on focus
-        dedupingInterval: Infinity, // Cache data for 1 minute
-        revalidateIfStale: false, // Do not re-fetch stale data
-        shouldRetryOnError: false, // Optional: Disable retries on error
+        revalidateOnFocus: true,
+        // dedupingInterval: Infinity, // Cache data for 1 minute
+        // revalidateIfStale: false, // Do not re-fetch stale data
+        // shouldRetryOnError: false, // Optional: Disable retries on error
       }}
     >
       <AuthProvider>{routing}</AuthProvider>
