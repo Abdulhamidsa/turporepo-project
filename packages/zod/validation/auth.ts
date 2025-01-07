@@ -21,3 +21,10 @@ export const signUpSchema = z
     message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
+
+export const updateCredentialsSchema = z.object({
+  email: z.string().email("Invalid email format").optional(),
+  password: z.string().min(8, "Password must be at least 8 characters long").optional(),
+});
+
+export type UpdateCredentialsPayload = z.infer<typeof updateCredentialsSchema>;

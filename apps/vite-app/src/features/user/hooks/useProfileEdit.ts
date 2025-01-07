@@ -23,7 +23,7 @@ export function useProfileEdit(friendlyId: string) {
     data: userProfile,
     error,
     mutate,
-  } = useSWR<UserProfile>(`/internal/profile/${friendlyId}`, swrFetcher, {
+  } = useSWR<UserProfile>(`/profile/${friendlyId}`, swrFetcher, {
     fallbackData: {
       username: "",
       age: 0,
@@ -43,7 +43,7 @@ export function useProfileEdit(friendlyId: string) {
     setIsSaving(true);
     setSaveError(null);
     try {
-      await request<UserProfile>("PUT", `/internal/profile/${friendlyId}`, profileData);
+      await request<UserProfile>("PUT", `/profile/${friendlyId}`, profileData);
       await mutate(); // Revalidate the SWR cache
     } catch (err) {
       const errorMessage = getErrorMessage(err);

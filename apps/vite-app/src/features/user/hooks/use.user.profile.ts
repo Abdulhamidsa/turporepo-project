@@ -10,6 +10,7 @@ import { fetchedProjectSchema, FetchedProjectType } from "@repo/zod/validation";
 export const defaultUserProfile: UserProfile = {
   bio: "",
   username: "",
+  completedProfile: false,
   age: null,
   countryOrigin: "",
   profession: "",
@@ -20,7 +21,7 @@ export const defaultUserProfile: UserProfile = {
 
 // Fetch hook for getting user data
 export const useUserProfile = () => {
-  const urlFetch = `/internal/profile/:userid`;
+  const urlFetch = `/profile/:userid`;
 
   const { data, error, isLoading, mutate } = useSWR(urlFetch, (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile), {
     dedupingInterval: Infinity, // Avoid duplicate fetches
@@ -36,7 +37,7 @@ export const useUserProfile = () => {
 
 // Hook for updating user profile
 export const useUpdateUserProfile = () => {
-  const urlEdit = `/internal/profile/`;
+  const urlEdit = `/profile/`;
   const { mutate, isLoading } = useUserProfile();
 
   const updateProfile = async (profile: EditableProfileType) => {
@@ -52,7 +53,7 @@ export const useUpdateUserProfile = () => {
 // Hook for shwoing user projects
 
 export const useUserProjects = () => {
-  const urlFetch = `http://localhost:4000/api/internal/projects`;
+  const urlFetch = `http://localhost:4000/api/projects`;
 
   const { data, mutate, error } = useSWR<FetchedProjectType[]>(urlFetch, (endpoint: string) => swrFetcher(endpoint, fetchedProjectSchema.array()));
 

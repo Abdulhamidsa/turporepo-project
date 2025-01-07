@@ -20,7 +20,7 @@ export const usePostSubmit = () => {
     return response;
   };
 
-  const { trigger, isMutating, error } = useSWRMutation<PostData, Error, string, PostPayload>("/internal/post", mutationFetcher);
+  const { trigger, isMutating, error } = useSWRMutation<PostData, Error, string, PostPayload>("/post", mutationFetcher);
 
   return { trigger, isMutating, error };
 };

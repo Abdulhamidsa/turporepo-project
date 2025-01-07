@@ -1,7 +1,9 @@
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { request } from "../../../../api/request";
 import { getErrorMessage } from "../../../../api/errors"; // Adjust path as needed
 import { createContext, useContext } from "react";
+import { updateCredentialsSchema } from "@repo/zod/validation/auth";
 
 type SignupResponse = {
   id: string;
@@ -13,7 +15,7 @@ type SignupPayload = {
   password: string;
 };
 
-const signupEndpoint = "/public/signup";
+const signupEndpoint = "/auth/signup";
 type AuthContextType = {
   loggedUser: User | null;
   isAuthenticated: boolean;
@@ -54,6 +56,7 @@ export const useSignup = () => {
     error: error ? getErrorMessage(error) : null,
   };
 };
+
 // signin hook
 
 type SigninPayload = {
@@ -68,7 +71,7 @@ type SigninResponse = {
   };
 };
 
-const signinEndpoint = "/public/signin";
+const signinEndpoint = "/auth/signin";
 
 // src/hooks/useSignin.ts
 
@@ -83,7 +86,7 @@ export const useSignin = () => {
     return response;
   };
 
-  // SWR mutation to POST /public/signin
+  // SWR mutation to POST /auth/signin
   const { trigger, isMutating, error } = useSWRMutation<
     SigninResponse, // data shape
     Error, // error shape
@@ -102,6 +105,59 @@ export const useSignin = () => {
 
   return {
     signin,
+    isSubmitting: isMutating,
+    error: error ? getErrorMessage(error) : null,
+  };
+};
+
+// Fetch credentials hook
+
+// Define the type for credentials
+export type CredentialsType = {
+  email: string;
+  password: string;
+};
+
+// Hook to fetch credentials
+export const useFetchCredentials = () => {
+  const { data, error, mutate } = useSWR<CredentialsType | null>("/credentials", async (url: string) => {
+    const response = await request<CredentialsType>("GET", url);
+    if (!response) {
+      throw new Error("No response received");
+    }
+    return response;
+  });
+
+  return {
+    credentials: data || null, // Ensure data is null if undefined
+    isLoading: !error && !data,
+    error: error ? getErrorMessage(error) : null,
+    mutate,
+  };
+};
+
+// Update credentials hook
+export type UpdateCredentialsPayload = {
+  email?: string | undefined;
+  password?: string | undefined;
+};
+
+export const useUpdateCredentials = () => {
+  const mutationFetcher = async (url: string, { arg }: { arg: UpdateCredentialsPayload }) => {
+    // Validate the payload before sending it to the API
+    const validatedPayload = updateCredentialsSchema.parse(arg);
+
+    const response = await request("PUT", url, validatedPayload);
+    if (!response) {
+      throw new Error("No response received");
+    }
+    return response;
+  };
+
+  const { trigger, isMutating, error } = useSWRMutation("/credentials", mutationFetcher);
+
+  return {
+    updateCredentials: trigger,
     isSubmitting: isMutating,
     error: error ? getErrorMessage(error) : null,
   };

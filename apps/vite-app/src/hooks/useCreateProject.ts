@@ -3,7 +3,7 @@ import { addProjectSchema, AddProjectInput } from "@repo/zod/validation";
 import { request } from "../../api/request";
 
 export const useCreateProject = () => {
-  const urlCreate = "/internal/project";
+  const urlCreate = "/project";
 
   /**
    * Creates a new project and validates the response
