@@ -9,6 +9,7 @@ export const userProfileSchema = z.object({
   friendlyId: z.string().nullable().default(""),
   profilePicture: z.string().nullable().default(""),
   coverImage: z.string().nullable().default(""),
+  completedProfile: z.boolean().default(false),
 });
 
 export type UserProfile = z.infer<typeof userProfileSchema>;
@@ -36,7 +37,8 @@ export const projectSchema = z.object({
   url: z.string().url("Invalid URL format."),
   media: z.array(z.object({ url: z.string().url("Invalid URL format") })),
   thumbnail: z.string().url("Thumbnail is required."),
-  tags: z.array(z.string()), // Now expects array of strings
+  tags: z.array(z.string()),
+  completedProfile: z.boolean().optional(),
 });
 
 // Infer the TypeScript type from the schema
