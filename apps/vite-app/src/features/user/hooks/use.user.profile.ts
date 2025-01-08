@@ -53,7 +53,7 @@ export const useUpdateUserProfile = () => {
 // Hook for shwoing user projects
 
 export const useUserProjects = (friendlyId?: string) => {
-  const urlFetch = friendlyId ? `http://localhost:4000/api/projects/${friendlyId}` : `http://localhost:4000/api/projects/user`;
+  const urlFetch = friendlyId ? `https://cre8ify-backend-production.up.railway.app/api/projects/${friendlyId}` : `https://cre8ify-backend-production.up.railway.app/api/projects/user`;
 
   const { data, mutate, error } = useSWR<FetchedProjectType[]>(urlFetch, (endpoint: string) => swrFetcher(endpoint, fetchedProjectSchema.array()));
 

@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Create Axios instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "https://cre8ify-backend-production.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
