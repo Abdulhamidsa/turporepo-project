@@ -15,44 +15,55 @@ export type UpdateCredentialsPayload = {
 };
 
 export default function CredentialsPage() {
-  const { credentials, isLoading, error, mutate } = useFetchCredentials();
+  const { credentials, mutate } = useFetchCredentials();
   const { updateCredentials } = useUpdateCredentials();
 
+  // local editing states
   const [editableCredentials, setEditableCredentials] = useState<Partial<EditableCredentialsType>>({});
   const [editingField, setEditingField] = useState<keyof EditableCredentialsType | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
 
+  // Whenever editableCredentials or credentials changes, check if there's a difference
   useEffect(() => {
-    setIsDirty(editableCredentials.email !== credentials?.email || (editableCredentials.password !== undefined && editableCredentials.password !== ""));
+    const emailChanged = editableCredentials.email !== credentials?.email;
+    const passwordChanged = editableCredentials.password !== undefined && editableCredentials.password !== "";
+    setIsDirty(emailChanged || passwordChanged);
   }, [editableCredentials, credentials]);
 
+  // Start editing a field
   const handleEdit = (field: keyof EditableCredentialsType) => {
-    setEditingField(field); // Mark this field as being edited
+    setEditingField(field);
     setEditableCredentials((prev) => ({
       ...prev,
-      [field]: field === "password" ? "" : (credentials?.[field] ?? ""), // Initialize with current credentials, password always empty
+      [field]: field === "password" ? "" : (credentials?.[field] ?? ""),
     }));
   };
 
+  // Track changes
   const handleChange = (field: keyof EditableCredentialsType, value: string) => {
     setEditableCredentials((prev) => ({
       ...prev,
-      [field]: value, // Update editable credentials state
+      [field]: value,
     }));
   };
 
+  // Save changes
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      // Only send changed fields
       const modifiedFields: UpdateCredentialsPayload = {
         email: editableCredentials.email !== credentials?.email ? editableCredentials.email : undefined,
         password: editableCredentials.password !== "" ? editableCredentials.password : undefined,
       };
 
-      if (Object.keys(modifiedFields).some((key) => modifiedFields[key as keyof UpdateCredentialsPayload] !== undefined)) {
+      const hasChanges = Object.values(modifiedFields).some((val) => val !== undefined);
+
+      if (hasChanges) {
         await updateCredentials(modifiedFields);
-        await mutate(); // Refresh the credentials
+        // revalidate the data
+        await mutate();
         showToast("Credentials updated successfully!");
       } else {
         showToast("No changes to save.");
@@ -67,51 +78,48 @@ export default function CredentialsPage() {
   };
 
   return (
-    <div className="relative">
-      {isLoading ? (
-        <p>Loading credentials...</p>
-      ) : error ? (
-        <p>Error loading credentials: {error}</p>
-      ) : (
-        <div className="space-y-4 sm:space-y-6">
-          {["email", "password"].map((field) => (
-            <div key={field} className="relative flex flex-col bg-muted text-muted-foreground rounded-lg p-3 sm:p-4">
-              <div className="w-full">
-                <label className="block text-sm font-medium text-muted-foreground mb-1">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                {editingField === field ? (
-                  <Input
-                    type={field === "password" ? "password" : "text"}
-                    value={editableCredentials[field as keyof EditableCredentialsType] || ""}
-                    onChange={(e) => handleChange(field as keyof EditableCredentialsType, e.target.value)}
-                    className="mt-1 w-full bg-card text-card-foreground border border-border rounded-lg text-sm p-2 sm:p-3"
-                  />
-                ) : (
-                  <p className="mt-1 text-sm">{field === "password" ? "********" : (editableCredentials[field as keyof EditableCredentialsType] ?? credentials?.[field as keyof EditableCredentialsType])}</p>
-                )}
-              </div>
-              {editingField !== field ? (
-                <Button variant="ghost" size="icon" onClick={() => handleEdit(field as keyof EditableCredentialsType)} className="absolute top-1 right-1">
-                  <Pen />
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setEditingField(null)} // Exit edit mode without saving
-                  className="absolute top-1 right-1"
-                >
-                  <Check />
-                </Button>
-              )}
-            </div>
-          ))}
-          {isDirty && (
-            <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4">
-              <Button onClick={handleSave} disabled={isSaving} className="bg-primary hover:bg-accent text-primary-foreground">
-                {isSaving ? <Loader className="animate-spin h-5 w-5" /> : "Save Changes"}
+    <div className="px-2 sm:px-4 md:px-6">
+      {/* Fields */}
+      {(["email", "password"] as (keyof EditableCredentialsType)[]).map((field) => {
+        const label = field === "password" ? "Password" : "Email";
+        const currentValue = editableCredentials[field] ?? credentials?.[field] ?? (field === "password" ? "" : "");
+
+        return (
+          <div key={field} className="relative flex flex-col bg-muted text-muted-foreground rounded-lg p-3 sm:p-4 mb-6">
+            <label className="block text-sm font-medium text-muted-foreground mb-1">{label}</label>
+
+            {/* Edit or Display */}
+            {editingField === field ? (
+              <Input type={field === "password" ? "password" : "text"} value={currentValue} onChange={(e) => handleChange(field, e.target.value)} className="mt-1 w-full bg-card text-card-foreground border border-border rounded-lg text-sm p-2 sm:p-3" />
+            ) : (
+              <p className="mt-1 text-sm">{field === "password" ? "********" : currentValue}</p>
+            )}
+
+            {/* Edit / Save icons */}
+            {editingField !== field ? (
+              <Button variant="ghost" size="icon" onClick={() => handleEdit(field)} className="absolute top-1 right-1 text-muted-foreground hover:text-foreground flex items-center">
+                <Pen className="h-3 w-3" />
               </Button>
-            </div>
-          )}
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setEditingField(null)} // discard changes for that field
+                className="absolute top-1 right-1 text-primary hover:text-primary-foreground flex items-center"
+              >
+                <Check className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Single Save button */}
+      {isDirty && (
+        <div className="mt-8">
+          <Button onClick={handleSave} disabled={isSaving} className="bg-primary hover:bg-accent text-primary-foreground mb-4">
+            {isSaving ? <Loader className="animate-spin h-5 w-5" /> : "Save Changes"}
+          </Button>
         </div>
       )}
     </div>

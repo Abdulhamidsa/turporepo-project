@@ -1,5 +1,5 @@
 import React from "react";
-import { useFetchPosts } from "../../user/hooks/useFetchPosts";
+import { useFetchPosts } from "../../user/hooks/useFetchPosts"; // your custom hook
 import { Post } from "./Post";
 
 const PostList: React.FC = () => {
@@ -10,7 +10,7 @@ const PostList: React.FC = () => {
   }
 
   if (error) {
-    return <div className="text-destructive">Error loading posts: {error}</div>;
+    return <div className="text-destructive">Error loading posts: {String(error)}</div>;
   }
 
   if (!posts || posts.length === 0) {
@@ -19,24 +19,26 @@ const PostList: React.FC = () => {
 
   return (
     <div className="space-y-14">
-      {Array.isArray(posts) &&
-        posts.length > 0 &&
-        posts.map((post) => (
-          <Post
-            key={post.id}
-            post={{
-              _id: post.id,
-              content: post.content,
-              image: post.image,
-              createdAt: post.createdAt,
-            }}
-            user={{
-              _id: post.userId._id,
-              username: post.userId.username,
-              profilePicture: post.userId.profilePicture,
-            }}
-          />
-        ))}
+      {posts.map((post) => (
+        <Post
+          key={post._id}
+          post={{
+            _id: post._id || "",
+            content: post.content,
+            image: post.image ?? null,
+            createdAt: post.createdAt || "",
+            likedByUser: post.likedByUser ?? false,
+            likesCount: post.likesCount ?? 0,
+            // If your schema includes comments:
+            comments: post.comments || [],
+          }}
+          user={{
+            _id: post.userId._id,
+            username: post.userId.username,
+            profilePicture: post.userId.profilePicture || "",
+          }}
+        />
+      ))}
     </div>
   );
 };

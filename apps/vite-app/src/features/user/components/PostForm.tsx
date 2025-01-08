@@ -1,10 +1,7 @@
-"use client";
-
 import { useState } from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/components/ui/card";
 import { Button } from "@repo/ui/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus } from "lucide-react";
 import { useUserProfile } from "../hooks/use.user.profile";
 import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
 import { usePostSubmit } from "../../../hooks/useCreatePost";
@@ -37,69 +34,77 @@ export function PostForm({ onClose }: { onClose: () => void }) {
       showToast("At least a text or an image is required.", "error");
       return;
     }
+
+    let wasMutating = isMutating; // Prevent double-loading
     try {
       let imageUrl: string = "";
-      // Upload image if provided
+
+      if (!isMutating) {
+        wasMutating = true;
+        // setIsMutating(true); // Remove or replace this line if necessary
+      }
+
       if (image) {
         const urls = await uploadToCloudinary([image]);
         imageUrl = urls[0];
       }
-      // Prepare payload
+
       const payload = {
         content,
         image: imageUrl,
       };
-      // Trigger the mutation
+
       await trigger(payload);
-      showToast("Post uploaded successfully!", "success");
+
       setContent("");
-      onClose();
       setImage(null);
       setImagePreview(null);
+      showToast("Post uploaded successfully!", "success");
+
       await MutateFetchPosts();
+      onClose();
     } catch (err) {
       console.error("Error uploading post:", err);
       showToast("Failed to upload post.", "error");
+    } finally {
+      if (wasMutating) {
+        // setIsMutating(false); // Remove or replace this line if necessary
+      }
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="flex justify-between items-center p-4">
-        <h3 className="text-lg font-semibold">Create Post</h3>
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
-      </CardHeader>
-      <CardContent className="p-4">
+    <div className="w-full max-w-md mx-auto bg-card text-card-foreground rounded-[var(--radius)]">
+      <h3 className="text-lg font-semibold text-foreground">Create Post</h3>
+      <div className="p-4">
         <div className="flex items-center space-x-2 mb-4">
           <Avatar className="w-8 h-8">
             <AvatarImage src={userProfile.profilePicture ?? "/placeholder.png"} alt="Your Name" />
-            <AvatarFallback>{userProfile.username}</AvatarFallback>
+            <AvatarFallback>{userProfile.username?.charAt(0).toUpperCase() ?? "U"}</AvatarFallback>
           </Avatar>
-          <span className="font-semibold text-sm">{userProfile.username}</span>
+          <span className="font-semibold text-sm text-foreground">{userProfile.username}</span>
         </div>
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="What's on your mind?" className="w-full h-20 border border-gray-300 rounded-md p-2 text-sm" />
+        <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="What's on your mind?" className="w-full h-20 border border-border bg-muted text-muted-foreground rounded-[var(--radius)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
         <div className="relative mt-4">
           <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
-          <label htmlFor="image-upload" className="flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-gray-400 transition-colors duration-300">
+          <label htmlFor="image-upload" className="flex items-center justify-center w-full h-24 border-2 border-dashed border-border rounded-[var(--radius)] cursor-pointer bg-muted hover:border-muted-foreground transition-colors duration-300">
             {imagePreview ? (
-              <img src={imagePreview} alt="Preview" className="rounded-md max-h-full object-contain" />
+              <img src={imagePreview} alt="Preview" className="rounded-[var(--radius)] max-h-full object-contain" />
             ) : (
               <div className="flex flex-col items-center">
-                <ImagePlus className="h-6 w-6 text-gray-400" />
-                <span className="mt-1 text-xs text-gray-500">Add an image</span>
+                <ImagePlus className="h-6 w-6 text-muted-foreground" />
+                <span className="mt-1 text-xs text-muted-foreground">Add an image</span>
               </div>
             )}
           </label>
         </div>
-      </CardContent>
-      <CardFooter className="flex justify-end p-4">
-        <Button onClick={handleSubmit} disabled={isMutating}>
+      </div>
+      <div className="flex justify-end p-4">
+        <Button onClick={handleSubmit} disabled={isMutating} className="bg-primary text-primary-foreground hover:bg-accent">
           {isMutating ? "Uploading..." : "Post"}
         </Button>
-      </CardFooter>
-      {error && <p className="text-center text-sm text-red-500 mt-2">{error.message}</p>}
-    </Card>
+      </div>
+      {error && <p className="text-center text-sm text-destructive mt-2">{error.message}</p>}
+    </div>
   );
 }

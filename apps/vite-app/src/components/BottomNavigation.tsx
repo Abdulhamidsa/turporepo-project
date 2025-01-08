@@ -1,5 +1,5 @@
-// src/components/Dashboard/BottomNavigation.tsx
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/ui/popover";
 import { Button } from "@repo/ui/components/ui/button";
 import { MoreVertical } from "lucide-react";
@@ -12,11 +12,21 @@ interface BottomNavigationProps {
 }
 
 const BottomNavigation: React.FC<BottomNavigationProps> = ({ navigationItems, sidebarOnlyItems }) => {
+  const location = useLocation();
+
+  // Check if an item is active
+  const isActive = (link?: string) => location.pathname === link;
+
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-card border-t border-border flex justify-between items-center md:hidden">
+    <nav className="fixed bottom-0 w-full bg-card border-t border-border flex justify-between items-center md:hidden">
       <div className="flex justify-center gap-10 flex-grow">
         {navigationItems.map((item) => (
-          <NavigationItem key={item.name} item={item} isActive={false} showText={false} />
+          <NavigationItem
+            key={item.name}
+            item={item}
+            isActive={isActive(item.link)} // Determine if the item is active
+            showText={false}
+          />
         ))}
       </div>
       <Popover>
@@ -27,7 +37,12 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ navigationItems, si
         </PopoverTrigger>
         <PopoverContent className="w-48 p-2 bg-card border border-border rounded-lg shadow-md">
           {sidebarOnlyItems.map((item) => (
-            <NavigationItem key={item.name} item={item} isActive={false} showText={true} />
+            <NavigationItem
+              key={item.name}
+              item={item}
+              isActive={isActive(item.link)} // Determine if the item is active
+              showText={true}
+            />
           ))}
         </PopoverContent>
       </Popover>

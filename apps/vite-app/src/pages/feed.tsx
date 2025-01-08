@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ui/tabs";
-import { AddContentButton } from "../features/user/components/AddContentButton";
 import PostList from "../features/post/components/PostList";
-
+import { ProjectsAll } from "../features/projects/components/ProjectAll";
 export default function Feed() {
   const [, setActiveTab] = useState<"posts" | "projects">("posts");
 
@@ -24,11 +23,10 @@ export default function Feed() {
           <TabsContent value="posts" className="mt-6">
             <PostList />
           </TabsContent>
-          <TabsContent value="projects" className="mt-6"></TabsContent>
+          <TabsContent value="projects" className="mt-6">
+            <ProjectsAll />
+          </TabsContent>
         </Tabs>
-      </div>
-      <div className="fixed bottom-16 right-8 z-50">
-        <AddContentButton />
       </div>
     </div>
   );
