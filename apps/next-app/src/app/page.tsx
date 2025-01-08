@@ -1,48 +1,95 @@
-"use client";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@repo/ui/components/ui/alert-dialog";
-import { Button } from "@repo/ui/components/ui/button";
-import { Calendar } from "@repo/ui/components/ui/calendar";
+import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import { Card, CardContent } from "@repo/ui/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import { Badge } from "@repo/ui/components/ui/badge";
+import { Button } from "@repo/ui/components/ui/button";
+// import { getFeaturedProjects, getFeaturedUsers } from "../lib/api";
+import { Project, User } from "../types";
 
-export default function Home() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+export default async function Home() {
+  // const [users, projects] = await Promise.all([getFeaturedUsers(), getFeaturedProjects()]);
 
   return (
-    <div className="">
-      <Button variant="outline">Click me</Button>
+    <main>
+      <section className="bg-gradient-to-r from-purple-700 to-pink-600 text-white py-20">
+        <div className="container mx-auto text-center px-4">
+          <h1 className="text-5xl font-bold mb-6">Discover Amazing Talent</h1>
+          <p className="text-xl mb-8">Connect with skilled professionals and explore their innovative projects</p>
+          <div className="flex justify-center space-x-4">
+            <Link href="/users">
+              <Button size="lg" variant="secondary">
+                Explore Professionals
+              </Button>
+            </Link>
+            <Link href="/projects">
+              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-purple-700">
+                View Projects
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-md border" />
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="outline">Show Dialog</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start"></main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a className="flex items-center gap-2 hover:underline hover:underline-offset-4" href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
-          <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
-          Learn
-        </a>
-        <a className="flex items-center gap-2 hover:underline hover:underline-offset-4" href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
-          <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
-          Examples
-        </a>
-        <a className="flex items-center gap-2 hover:underline hover:underline-offset-4" href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
-          <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <section className="container mx-auto py-16 px-4">
+        <h2 className="text-3xl font-bold mb-8 text-center">Featured Professionals</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* {users.map((user: User) => (
+            <Link href={`/user/${user.friendlyId}`} key={user.id}>
+              <Card className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <div className="h-32 bg-cover bg-center" style={{ backgroundImage: `url(${user.coverImage})` }}></div>
+                <CardContent className="pt-0">
+                  <div className="flex justify-center -mt-12 mb-4">
+                    <Avatar className="h-24 w-24 ring-4 ring-background">
+                      <AvatarImage src={user.profilePicture} alt={user.username} />
+                      <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <h3 className="font-semibold text-xl text-center mb-2">{user.username}</h3>
+                  <p className="text-muted-foreground text-center mb-4">{user.profession}</p>
+                  <div className="flex flex-wrap justify-center gap-2 mb-4">
+                    {user.skills.slice(0, 3).map((skill, index) => (
+                      <Badge key={index} variant="secondary">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                  <p className="text-sm text-center line-clamp-2">{user.bio}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          ))} */}
+        </div>
+      </section>
+
+      <section className="bg-muted py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-8 text-center">Featured Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* {projects.map((project: Project) => (
+              <Card key={project.id} className="overflow-hidden">
+                <Image src={project.thumbnail} alt={project.title} width={400} height={300} className="w-full h-48 object-cover" />
+                <CardContent className="p-4">
+                  <h3 className="font-semibold text-lg mb-2">{project.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag) => (
+                      <Badge key={tag.id} variant="outline">
+                        {tag.name}
+                      </Badge>
+                    ))}
+                  </div>
+                  <Link href={`/projects/${project.id}`}>
+                    <Button variant="outline" className="w-full">
+                      View Project
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))} */}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -5,7 +5,7 @@ import axios from "axios";
 import { PostType } from "@repo/zod/validation/post";
 
 export const useFetchPosts = () => {
-  const { data, error, isLoading, mutate } = useSWR<PostType[]>("http://localhost:4000/api/post", swrFetcher);
+  const { data, error, isLoading, mutate } = useSWR<PostType[]>("https://cre8ify-backend-production.up.railway.app/api/post", swrFetcher);
 
   const toggleLike = async (postId: string) => {
     try {
@@ -20,7 +20,7 @@ export const useFetchPosts = () => {
       );
 
       // Call the API to toggle like
-      await axios.post("http://localhost:4000/api/post/like", { postId });
+      await axios.post("https://cre8ify-backend-production.up.railway.app/api/post/like", { postId });
 
       // Revalidate to ensure accuracy
       mutate();
