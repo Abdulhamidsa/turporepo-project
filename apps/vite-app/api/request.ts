@@ -1,5 +1,5 @@
-import { ZodSchema } from "zod";
 import axiosInstance from "./axiosClient";
+import { ZodSchema } from "zod";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -33,15 +33,10 @@ export async function request<T>(method: "GET" | "POST" | "PUT" | "DELETE" | "PA
     return responseData;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    // Extract error message from Axios response if available
-    if (error.response && error.response.data && error.response.data.message) {
+    if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
-
-    // Log the error and rethrow for debugging purposes
-    console.error("Request Error:", error);
-
-    // Rethrow generic error if no specific message is found
+    // console.error("Request Error:", error);
     throw error;
   }
 }

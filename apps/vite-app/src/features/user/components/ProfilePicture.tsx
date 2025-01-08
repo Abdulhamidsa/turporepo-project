@@ -1,13 +1,13 @@
 import { useRef, useState, useMemo } from "react";
 import { Camera, Loader } from "lucide-react";
-import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
-import { useUserProfile, useUpdateUserProfile } from "../../user/hooks/use.user.profile";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@repo/ui/components/ui/dropdown-menu";
+import { useUpdateUserProfile, useUserProfile } from "../hooks/use.user.profile";
+import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
 
 interface ProfilePictureEditProps {
   label: string;
-  field: "profilePicture" | "coverImage";
+  field: "profilePicture";
 }
 
 export default function ProfilePictureEdit({ label, field }: ProfilePictureEditProps) {
@@ -59,22 +59,36 @@ export default function ProfilePictureEdit({ label, field }: ProfilePictureEditP
 
   return (
     <div className="relative flex items-center justify-center">
-      <img src={imageSrc} alt={label} className="w-full h-48 object-cover rounded-lg border border-border shadow-md" />
+      <img src={imageSrc} alt={label} className="w-32 h-32 md:w-52 md:h-52 object-cover rounded-full border border-border shadow-md" />
       {isUploading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted bg-opacity-75 rounded-lg">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted bg-opacity-75 rounded-full">
           <Loader className="h-10 w-10 text-primary animate-spin" />
         </div>
       )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="absolute bottom-2 right-2 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg" disabled={isUploading}>
-            <Camera className="h-5 w-5" />
+          <button className="absolute bottom-4 right-4 flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg" disabled={isUploading}>
+            <Camera className="h-6 w-6" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-36 bg-card text-card-foreground rounded-lg shadow-lg">
+          {/* Upload Option */}
           <DropdownMenuItem onClick={() => fileInputRef.current?.click()} className="hover:bg-accent hover:text-accent-foreground rounded-md p-2">
             Upload
           </DropdownMenuItem>
+          {/* Capture Option */}
+          <DropdownMenuItem
+            onClick={() => {
+              if (fileInputRef.current) {
+                fileInputRef.current.setAttribute("capture", "environment"); // Rear camera
+                fileInputRef.current.click();
+              }
+            }}
+            className="hover:bg-accent hover:text-accent-foreground rounded-md p-2"
+          >
+            Take Picture
+          </DropdownMenuItem>
+          {/* Remove Image Option */}
           <DropdownMenuItem onClick={handleRemoveImage} className="hover:bg-destructive hover:text-destructive-foreground rounded-md p-2">
             Delete
           </DropdownMenuItem>
