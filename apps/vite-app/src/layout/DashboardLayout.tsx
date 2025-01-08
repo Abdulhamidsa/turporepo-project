@@ -54,7 +54,9 @@ const DashboardLayout: React.FC = () => {
       <main className="flex-1 max-w-screen-lg m-auto p-4 md:p-8 overflow-auto">
         <Outlet />
       </main>
-      <BottomNavigation navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
+      <footer className="mb-16">
+        <BottomNavigation navigationItems={navigationItems} sidebarOnlyItems={sidebarOnlyItems} />
+      </footer>
     </div>
   );
 };

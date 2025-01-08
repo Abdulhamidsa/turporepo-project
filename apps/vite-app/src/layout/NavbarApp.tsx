@@ -25,7 +25,7 @@ export function NavbarApp() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center space-x-2 rounded-full hover:bg-muted p-2 transition focus-visible:ring">
+              <Button variant="ghost" className="flex border items-center w-12 h-12 space-x-2 rounded-full hover:bg-muted p-2 transition focus-visible:ring">
                 <Avatar>{userProfile.profilePicture ? <AvatarImage src={userProfile.profilePicture} alt={userProfile.username || "User avatar"} /> : <AvatarFallback>{userProfile.profilePicture?.charAt(0) || "U".charAt(0)}</AvatarFallback>}</Avatar>
               </Button>
             </DropdownMenuTrigger>
