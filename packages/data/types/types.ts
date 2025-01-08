@@ -145,17 +145,34 @@ export interface Media {
   url: string;
 }
 
-export interface Post {
-  id: string;
-  userId: User; // Change from string to User
-  content: string;
-  image: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface User {
   _id: string;
   username: string;
   profilePicture: string;
+}
+
+// types.ts (or wherever you keep your shared types)
+
+export interface UserType {
+  _id: string;
+  username: string;
+  profilePicture: string | null;
+}
+
+export interface CommentType {
+  // _id?: string; // if Mongo creates it
+  userId: UserType;
+  text: string;
+  createdAt: string;
+}
+
+export interface PostType {
+  id: string;
+  content: string;
+  image: string | null;
+  createdAt: string;
+  likedByUser: boolean;
+  likesCount: number;
+  comments: CommentType[];
+  userId: UserType;
 }

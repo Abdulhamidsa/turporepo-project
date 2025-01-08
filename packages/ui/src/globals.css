@@ -11,19 +11,19 @@
     --card-foreground: #1a1a1a; /* Match foreground */
     --popover: #ffffff; /* Matches card */
     --popover-foreground: #1a1a1a;
-    --primary: #d4af37; /* Gold for an elegant accent */
+    --primary: #2a9d8f; /* Deep emerald green for an elegant accent */
     --primary-foreground: #ffffff; /* White text on primary */
     --secondary: #e9c46a; /* Gold for secondary highlights */
     --secondary-foreground: #1a1a1a;
     --muted: #e5e7eb; /* Light gray for muted elements */
     --muted-foreground: #6b7280; /* Medium gray for muted text */
-    --accent: #d4af37; /* Matches primary */
+    --accent: #2a9d8f; /* Matches primary */
     --accent-foreground: #ffffff;
     --destructive: #e76f51; /* Red for destructive actions */
     --destructive-foreground: #e25555;
     --border: #d1d5db; /* Subtle gray for borders */
     --input: #d1d5db; /* Match borders */
-    --ring: #d4af37; /* Matches accent for focus outlines */
+    --ring: #2a9d8f; /* Matches accent for focus outlines */
     --radius: 0.4rem; /* Slightly rounded corners */
   }
 
@@ -35,19 +35,19 @@
     --card-foreground: #e0e0e0;
     --popover: #1a1a1a;
     --popover-foreground: #e0e0e0;
-    --primary: #d4af37; /* Gold for an elegant accent */
+    --primary: #2a9d8f; /* Deep emerald green for an elegant accent */
     --primary-foreground: #ffffff; /* White text on primary */
     --secondary: #e9c46a; /* Gold for secondary elements */
     --secondary-foreground: #e0e0e0;
     --muted: #2d2d2d; /* Dark gray for muted elements */
     --muted-foreground: #cacacb; /* Softer muted text */
-    --accent: #d4af37; /* Matches primary */
+    --accent: #2a9d8f; /* Matches primary */
     --accent-foreground: #ffffff;
     --destructive: #e76f51; /* Red for destructive actions */
     --destructive-foreground: #e25555;
     --border: #3f3f3f; /* Dark gray for borders */
     --input: #3f3f3f; /* Match borders */
-    --ring: #d4af37; /* Matches accent for focus outlines */
+    --ring: #2a9d8f; /* Matches accent for focus outlines */
     --radius: 0.4rem;
   }
 

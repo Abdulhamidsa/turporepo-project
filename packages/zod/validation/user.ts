@@ -6,7 +6,7 @@ export const userProfileSchema = z.object({
   age: z.number().nullable().optional(),
   countryOrigin: z.string().nullable().default(""),
   profession: z.string().nullable().default(""),
-  friendlyId: z.string().nullable().default(""),
+  friendlyId: z.string().default(""),
   profilePicture: z.string().nullable().default(""),
   coverImage: z.string().nullable().default(""),
   completedProfile: z.boolean().default(false),
