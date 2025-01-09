@@ -13,7 +13,7 @@ export const useFetchPosts = () => {
     totalPages: number;
     currentPage: number;
   }>(
-    (pageIndex) => `http://localhost:4000/api/post?limit=${limit}&page=${pageIndex + 1}`, // Fetch the next page
+    (pageIndex) => `https://cre8ify-backend-production.up.railway.app/api/post?limit=${limit}&page=${pageIndex + 1}`, // Fetch the next page
     swrFetcher,
     {
       revalidateOnFocus: false, // Avoid refetching when the user refocuses the tab
@@ -44,7 +44,7 @@ export const useFetchPosts = () => {
             : currentData,
         false // Don't revalidate yet
       );
-      await axios.post("http://localhost:4000/api/post/like", { postId });
+      await axios.post("https://cre8ify-backend-production.up.railway.app/api/post/like", { postId });
       mutate();
     } catch (error) {
       console.error("Error toggling like:", error);

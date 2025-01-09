@@ -85,7 +85,7 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: ProjectType; isOp
 export const ProjectsAll = () => {
   const [page, setPage] = useState(1);
   const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
-  const { data, error, isLoading } = useSWR<{ projects: ProjectType[]; pagination: { page: number; limit: number; total: number } }>(`http://localhost:4000/api/projects?limit=6&page=${page}`, fetcher);
+  const { data, error, isLoading } = useSWR<{ projects: ProjectType[]; pagination: { page: number; limit: number; total: number } }>(`https://cre8ify-backend-production.up.railway.app/api/projects?limit=6&page=${page}`, fetcher);
 
   if (error) {
     return <p className="text-red-500 text-center mt-6">Failed to load projects. Please try again later.</p>;

@@ -1,6 +1,6 @@
 import "server-only";
 
-const BASE_URL = "http://localhost:4000/api";
+const BASE_URL = "https://cre8ify-backend-production.up.railway.app/api";
 
 export async function getProjects(page = 1, limit = 12) {
   try {
