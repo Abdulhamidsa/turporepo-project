@@ -15,6 +15,7 @@
     "@repo/hooks": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/zod": "workspace:*",
+    "@repo/utils": "workspace:*",
     "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
     "flag-icon-css": "^4.1.7",

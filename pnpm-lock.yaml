@@ -173,6 +173,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@repo/zod':
         specifier: workspace:*
         version: link:../../packages/zod
@@ -450,6 +453,8 @@ importers:
       typescript:
         specifier: catalog:typescript
         version: 5.7.2
+
+  packages/utils: {}
 
   packages/zod:
     dependencies:
