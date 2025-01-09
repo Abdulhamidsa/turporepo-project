@@ -1,25 +1,36 @@
-// src/hooks/useComments.ts
-
-import { PostType } from "@repo/zod/validation/post";
-import { usePosts } from "./usePosts";
+import { useState } from "react";
 import { request } from "../../api/request";
+import { frontendCommentSchema } from "@repo/zod/validation/post";
+import { z } from "zod";
+export const useAddComment = (postId: string) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export const useAddComment = () => {
-  const { mutate } = usePosts(); // optional if you want to re-fetch all posts
+  const submitComment = async (text: string) => {
+    if (!text.trim()) return;
 
-  const addComment = async (postId: string, text: string) => {
-    // This calls POST /posts/comment
-    // The server presumably returns the updated Post object
-    const updatedPost = await request<PostType>(
-      "POST",
-      "/posts/comment",
-      { postId, text }
-      // postSchema or something
-    );
-    // Revalidate
-    mutate();
-    return updatedPost;
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const response = (await request("POST", "/post/comment", { postId, text })) as { post?: { comments: unknown } };
+      console.log("Raw API Response:", response);
+
+      // Validate the comments array using the frontend schema
+      const commentsValidation = z.array(frontendCommentSchema).safeParse(response.post?.comments);
+      if (!commentsValidation.success) {
+        console.error("Validation Errors:", commentsValidation.error.errors);
+        throw new Error("Invalid API response structure for comments");
+      }
+
+      return commentsValidation.data; // Return the updated comments
+    } catch (err) {
+      console.error("Error adding comment:", err);
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return { addComment };
+  return { submitComment, isLoading, error };
 };
