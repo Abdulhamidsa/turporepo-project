@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from "react";
-import { addComment } from "../../../../services/postService";
-import { CommentType } from "@repo/zod/validation/post";
+import { CommentType } from "@repo/data/types/types";
+import { useAddComment } from "../../../hooks/useComments";
+import { Send } from "lucide-react"; // Import send icon
 
 type CommentBoxProps = {
   postId: string;
@@ -9,60 +10,35 @@ type CommentBoxProps = {
 
 export const CommentBox: React.FC<CommentBoxProps> = ({ postId, onCommentAdded }) => {
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const maxLength = 250; // Max comment length
+  const { submitComment, isLoading, error } = useAddComment(postId);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!text.trim()) {
-      setError("Comment cannot be empty.");
-      return;
+    if (!text.trim()) return; // Prevent empty submissions
+
+    const updatedComments = (await submitComment(text)) as CommentType[];
+    if (updatedComments && onCommentAdded) {
+      onCommentAdded(updatedComments); // Notify the parent component
     }
 
-    if (text.length > maxLength) {
-      setError(`Comment exceeds the ${maxLength} character limit.`);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await addComment(postId, text);
-      const updatedPost = res.data.post; // typed as PostType
-      const updatedComments = updatedPost.comments; // typed as CommentType[]
-
-      // Clear the input
-      setText("");
-
-      // Notify parent of the new comments
-      if (onCommentAdded) {
-        onCommentAdded(updatedComments);
-      }
-    } catch (error) {
-      console.error("Error adding comment:", error);
-      setError("Failed to add your comment. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    setText(""); // Clear the input
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2">
-      <div className="flex items-center space-x-2">
-        <input className="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Add a comment..." value={text} onChange={(e) => setText(e.target.value)} maxLength={maxLength} />
-        <button type="submit" className={`px-4 py-2 rounded-lg text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`} disabled={loading}>
-          {loading ? "Posting..." : "Comment"}
-        </button>
-      </div>
-
-      <div className="text-sm text-gray-500">
-        {text.length}/{maxLength}
-      </div>
-
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+    <form onSubmit={handleSubmit} className="relative w-full">
+      <input
+        type="text"
+        placeholder="Add a comment..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        disabled={isLoading}
+        className="w-full border border-gray-300 rounded-full py-2 pl-4 pr-10 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
+      />
+      <button type="submit" disabled={isLoading || !text.trim()} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary hover:text-accent disabled:text-muted-foreground">
+        <Send className="w-5 h-5" />
+      </button>
+      {error && <p className="text-sm text-destructive mt-2">{error}</p>}
     </form>
   );
 };
