@@ -6,9 +6,11 @@ export const ENDPOINTS = {
     fetch: `${PRODUCTION_URL}/posts`,
     like: `${PRODUCTION_URL}/post/like`,
     addComment: `${PRODUCTION_URL}/post/comment`,
+    post: `${PRODUCTION_URL}/post`,
   },
   users: {
     updateProfile: `${PRODUCTION_URL}/user/update`,
+    fetchProfile: `${PRODUCTION_URL}/profile/:userid`,
   },
   profile: {
     fetch: `${PRODUCTION_URL}/profile`,
@@ -18,6 +20,7 @@ export const ENDPOINTS = {
     fetchByFriendlyId: `${PRODUCTION_URL}/projects`,
     fetchUserProjects: `${PRODUCTION_URL}/projects/user`,
     delete: `${PRODUCTION_URL}/project`,
+    create: `${PRODUCTION_URL}/project`,
     fetchAll: `${PRODUCTION_URL}/projects`,
   },
   auth: {

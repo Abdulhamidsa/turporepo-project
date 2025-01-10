@@ -67,8 +67,9 @@
 import useSWR from "swr";
 import { swrFetcher } from "../../../../api/swrFetcher";
 import { userProfileSchema, defaultUserProfile } from "@repo/zod/validation/user";
+import { ENDPOINTS } from "@repo/api/endpoints";
 export const useUserProfile = () => {
-  const { data, error, isLoading, mutate } = useSWR("/profile/:userid", (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile), {
+  const { data, error, isLoading, mutate } = useSWR(ENDPOINTS.users.fetchProfile, (endpoint) => swrFetcher(endpoint, userProfileSchema, defaultUserProfile), {
     dedupingInterval: Infinity, // Avoid redundant requests
   });
 

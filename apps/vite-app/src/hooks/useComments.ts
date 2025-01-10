@@ -3,6 +3,7 @@ import { request } from "../../api/request";
 import { frontendCommentSchema } from "@repo/zod/validation/post";
 import { z } from "zod";
 import { useFetchPosts } from "../features/user/hooks/useFetchPosts";
+import { ENDPOINTS } from "@repo/api/endpoints";
 export const useAddComment = (postId: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +15,7 @@ export const useAddComment = (postId: string) => {
       setIsLoading(true);
       setError(null);
 
-      const response = (await request("POST", "/post/comment", { postId, text })) as { post?: { comments: unknown } };
+      const response = (await request("POST", ENDPOINTS.posts.addComment, { postId, text })) as { post?: { comments: unknown } };
       console.log("Raw API Response:", response);
 
       // Validate the comments array using the frontend schema

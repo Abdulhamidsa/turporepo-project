@@ -31,7 +31,6 @@ type ProjectType = {
   likesCount: number;
 };
 
-// ✅ SWR Fetcher
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const ProjectsAll = () => {

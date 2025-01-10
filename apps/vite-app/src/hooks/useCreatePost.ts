@@ -1,6 +1,7 @@
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
 import { request } from "../../api/request";
+import { ENDPOINTS } from "@repo/api/endpoints";
 
 export const PostSchema = z.object({
   content: z.string().optional(),
@@ -20,7 +21,7 @@ export const usePostSubmit = () => {
     return response;
   };
 
-  const { trigger, isMutating, error } = useSWRMutation<PostData, Error, string, PostPayload>("/post", mutationFetcher);
+  const { trigger, isMutating, error } = useSWRMutation<PostData, Error, string, PostPayload>(ENDPOINTS.posts.post, mutationFetcher);
 
   return { trigger, isMutating, error };
 };

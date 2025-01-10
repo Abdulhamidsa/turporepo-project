@@ -1,9 +1,10 @@
 // hooks/useCreateProject.ts
 import { addProjectSchema, AddProjectInput } from "@repo/zod/validation";
 import { request } from "../../api/request";
+import { ENDPOINTS } from "@repo/api/endpoints";
 
 export const useCreateProject = () => {
-  const urlCreate = "/project";
+  const urlCreate = ENDPOINTS.projects.create;
 
   /**
    * Creates a new project and validates the response
