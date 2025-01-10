@@ -3,32 +3,32 @@ export const PRODUCTION_URL = "https://cre8ify-backend-production.up.railway.app
 
 export const ENDPOINTS = {
   posts: {
-    fetch: `${BASE_URL}/posts`,
-    like: `${BASE_URL}/post/like`,
-    addComment: `${BASE_URL}/post/comment`,
+    fetch: `${PRODUCTION_URL}/posts`,
+    like: `${PRODUCTION_URL}/post/like`,
+    addComment: `${PRODUCTION_URL}/post/comment`,
   },
   users: {
-    updateProfile: `${BASE_URL}/user/update`,
+    updateProfile: `${PRODUCTION_URL}/user/update`,
   },
   profile: {
-    fetch: `${BASE_URL}/profile`,
-    update: `${BASE_URL}/profile`,
+    fetch: `${PRODUCTION_URL}/profile`,
+    update: `${PRODUCTION_URL}/profile`,
   },
   projects: {
-    fetchByFriendlyId: `${BASE_URL}/projects`,
-    fetchUserProjects: `${BASE_URL}/projects/user`,
-    delete: `${BASE_URL}/project`,
-    fetchAll: `${BASE_URL}/projects`,
+    fetchByFriendlyId: `${PRODUCTION_URL}/projects`,
+    fetchUserProjects: `${PRODUCTION_URL}/projects/user`,
+    delete: `${PRODUCTION_URL}/project`,
+    fetchAll: `${PRODUCTION_URL}/projects`,
   },
   auth: {
-    signin: `${BASE_URL}/auth/signin`,
-    signup: `${BASE_URL}/auth/signup`,
-    credentials: `${BASE_URL}/credentials`,
-    logout: `${BASE_URL}/auth/logout`,
-    refreshToken: `${BASE_URL}/auth/refresh-token`,
+    signin: `${PRODUCTION_URL}/auth/signin`,
+    signup: `${PRODUCTION_URL}/auth/signup`,
+    credentials: `${PRODUCTION_URL}/credentials`,
+    logout: `${PRODUCTION_URL}/auth/logout`,
+    refreshToken: `${PRODUCTION_URL}/auth/refresh-token`,
   },
   comments: {},
   notifications: {
-    getAll: `${BASE_URL}/notifications`,
+    getAll: `${PRODUCTION_URL}/notifications`,
   },
 };
