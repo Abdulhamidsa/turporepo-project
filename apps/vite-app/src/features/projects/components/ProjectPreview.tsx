@@ -11,7 +11,7 @@ interface ProjectPreviewProps {
 const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project, pendingThumbnail, pendingMedia }) => {
   const thumbnailUrl = pendingThumbnail ? URL.createObjectURL(pendingThumbnail) : project.thumbnail || "/placeholder.png";
 
-  const mediaUrls = pendingMedia.length > 0 ? pendingMedia.map((file) => URL.createObjectURL(file)) : project.media.map((media) => media.url);
+  const mediaUrls = pendingMedia.length > 0 ? pendingMedia.map((file) => URL.createObjectURL(file)) : (project.media ?? []).map((media) => media.url);
 
   return (
     <Card className="w-full bg-card text-card-foreground overflow-hidden hover:shadow-xl">

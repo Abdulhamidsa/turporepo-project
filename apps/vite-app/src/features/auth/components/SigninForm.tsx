@@ -2,11 +2,11 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { useForm, SubmitHandler, FieldErrors, Controller } from "react-hook-form";
 import { useSignin } from "../../user/hooks/use.auth";
-import { getErrorMessage } from "../../../../api/errors";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 import { SignInFormData } from "@repo/data/types";
 import { signInResolver } from "@repo/zod/resolver";
+import { getErrorMessage } from "../../../../utils/getErrorMessage";
 
 export default function SigninForm({ setIsSignIn, prefillValues = undefined }: { setIsSignIn: (value: boolean) => void; prefillValues?: { email?: string } | undefined }) {
   const {

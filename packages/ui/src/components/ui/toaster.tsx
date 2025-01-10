@@ -6,7 +6,7 @@ export const ToastProvider = () => {
       position="bottom-right"
       toastOptions={{
         style: {
-          maxWidth: "80%",
+          maxWidth: "100%",
           width: "auto",
           minHeight: "8vh",
           fontSize: "0.875rem",

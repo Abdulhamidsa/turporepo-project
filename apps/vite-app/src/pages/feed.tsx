@@ -30,7 +30,9 @@ export default function Feed() {
           </TabsContent>
         </Tabs>
       </div>
-      <AddContentButton />
+      <div className=" fixed bottom-24 right-24">
+        <AddContentButton />
+      </div>
     </div>
   );
 }

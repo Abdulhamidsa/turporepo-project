@@ -1,14 +1,16 @@
 import axios from "axios";
-// const IGNORED_ENDPOINTS = ["/logged-user"];
+import { BASE_URL } from "@repo/api/endpoints";
 
 // Create Axios instance
 const axiosInstance = axios.create({
-  baseURL: "https://cre8ify-backend-production.up.railway.app/api",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Include cookies with requests
+  withCredentials: true, // to include cookies with requests
 });
+// const IGNORED_ENDPOINTS = ["/logged-user"];
+export default axiosInstance;
 // axiosInstance.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
@@ -22,5 +24,3 @@ const axiosInstance = axios.create({
 //     return Promise.reject(error);
 //   }
 // );
-
-export default axiosInstance;

@@ -2,10 +2,11 @@ import { useState } from "react";
 import { request } from "../../api/request";
 import { frontendCommentSchema } from "@repo/zod/validation/post";
 import { z } from "zod";
+import { useFetchPosts } from "../features/user/hooks/useFetchPosts";
 export const useAddComment = (postId: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const { mutate } = useFetchPosts();
   const submitComment = async (text: string) => {
     if (!text.trim()) return;
 
@@ -22,7 +23,7 @@ export const useAddComment = (postId: string) => {
         console.error("Validation Errors:", commentsValidation.error.errors);
         throw new Error("Invalid API response structure for comments");
       }
-
+      mutate();
       return commentsValidation.data; // Return the updated comments
     } catch (err) {
       console.error("Error adding comment:", err);

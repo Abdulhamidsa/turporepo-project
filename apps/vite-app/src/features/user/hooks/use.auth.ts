@@ -1,9 +1,10 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { request } from "../../../../api/request";
-import { getErrorMessage } from "../../../../api/errors"; // Adjust path as needed
 import { createContext, useContext } from "react";
 import { updateCredentialsSchema } from "@repo/zod/validation/auth";
+import { getErrorMessage } from "../../../../utils/getErrorMessage";
+import { ENDPOINTS } from "@repo/api/endpoints";
 
 type SignupResponse = {
   id: string;
@@ -15,7 +16,6 @@ type SignupPayload = {
   password: string;
 };
 
-const signupEndpoint = "/auth/signup";
 type AuthContextType = {
   loggedUser: User | null;
   isAuthenticated: boolean;
@@ -42,13 +42,10 @@ export const useAuth = (): AuthContextType => {
 export const useSignup = () => {
   const mutationFetcher = async (url: string, { arg }: { arg: SignupPayload }) => {
     const response = await request<SignupResponse>("POST", url, arg);
-    if (!response) {
-      throw new Error("No response received");
-    }
     return response;
   };
 
-  const { trigger, isMutating, error } = useSWRMutation<SignupResponse, Error, string, SignupPayload>(signupEndpoint, mutationFetcher);
+  const { trigger, isMutating, error } = useSWRMutation<SignupResponse, Error, string, SignupPayload>(ENDPOINTS.auth.signup, mutationFetcher);
 
   return {
     signup: trigger,
@@ -71,8 +68,6 @@ type SigninResponse = {
   };
 };
 
-const signinEndpoint = "/auth/signin";
-
 // src/hooks/useSignin.ts
 
 export const useSignin = () => {
@@ -80,9 +75,6 @@ export const useSignin = () => {
 
   const mutationFetcher = async (url: string, { arg }: { arg: SigninPayload }) => {
     const response = await request<SigninResponse>("POST", url, arg);
-    if (!response) {
-      throw new Error("No response received");
-    }
     return response;
   };
 
@@ -92,7 +84,7 @@ export const useSignin = () => {
     Error, // error shape
     string, // key type
     SigninPayload // argument type
-  >(signinEndpoint, mutationFetcher);
+  >(ENDPOINTS.auth.signin, mutationFetcher);
 
   const signin = async (payload: SigninPayload) => {
     // 1) Call the sign-in endpoint
@@ -110,8 +102,6 @@ export const useSignin = () => {
   };
 };
 
-// Fetch credentials hook
-
 // Define the type for credentials
 export type CredentialsType = {
   email: string;
@@ -120,16 +110,13 @@ export type CredentialsType = {
 
 // Hook to fetch credentials
 export const useFetchCredentials = () => {
-  const { data, error, mutate } = useSWR<CredentialsType | null>("/credentials", async (url: string) => {
+  const { data, error, mutate } = useSWR<CredentialsType | null>(ENDPOINTS.auth.credentials, async (url: string) => {
     const response = await request<CredentialsType>("GET", url);
-    if (!response) {
-      throw new Error("No response received");
-    }
     return response;
   });
 
   return {
-    credentials: data || null, // Ensure data is null if undefined
+    credentials: data || null,
     isLoading: !error && !data,
     error: error ? getErrorMessage(error) : null,
     mutate,
@@ -146,16 +133,10 @@ export const useUpdateCredentials = () => {
   const mutationFetcher = async (url: string, { arg }: { arg: UpdateCredentialsPayload }) => {
     // Validate the payload before sending it to the API
     const validatedPayload = updateCredentialsSchema.parse(arg);
-
     const response = await request("PUT", url, validatedPayload);
-    if (!response) {
-      throw new Error("No response received");
-    }
     return response;
   };
-
-  const { trigger, isMutating, error } = useSWRMutation("/credentials", mutationFetcher);
-
+  const { trigger, isMutating, error } = useSWRMutation(ENDPOINTS.auth.credentials, mutationFetcher);
   return {
     updateCredentials: trigger,
     isSubmitting: isMutating,

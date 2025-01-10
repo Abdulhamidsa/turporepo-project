@@ -53,7 +53,7 @@ export function PostFeed({ post, user }: PostProps) {
   };
 
   return (
-    <Card className="space-y-4 w-full max-w-[400px] min-h-[200px] m-auto bg-card text-card-foreground p-4 rounded-[var(--radius)] shadow-md">
+    <Card className="space-y-4 w-full max-w-100% min-h-[200px] m-auto bg-card text-card-foreground p-4 rounded-[var(--radius)] shadow-md">
       {/* Post Header */}
       <CardHeader className="flex items-start flex-row space-x-4">
         <Avatar className="flex-shrink-0">
@@ -68,7 +68,7 @@ export function PostFeed({ post, user }: PostProps) {
 
       {/* Post Content */}
       <CardContent className="space-y-4 border-b border-muted pb-4">
-        <p className="text-foreground">{post.content}</p>
+        <p className="text-foreground">{post.content}s</p>
         {post.image && (
           <div className="rounded-[var(--radius)] overflow-hidden">
             <img src={post.image} alt="Post" className="w-full" />
@@ -104,7 +104,7 @@ export function PostFeed({ post, user }: PostProps) {
               >
                 <div className="flex items-center space-x-3 mb-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={cmt.userId?.profilePicture || "/placeholder.png"} />
+                    <AvatarImage src={cmt.userId.profilePicture || "/placeholder.png"} />
                     <AvatarFallback>{cmt.userId?.username.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">

@@ -41,6 +41,7 @@ export type GetAllProjectsResponse = {
 
 export interface ProjectCardProps {
   project: {
+    // _id: string;
     id: string;
     title: string;
     description: string;

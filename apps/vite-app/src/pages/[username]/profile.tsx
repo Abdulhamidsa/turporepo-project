@@ -1,21 +1,20 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ui/tabs";
 import { Button } from "@repo/ui/components/ui/button";
-import { Briefcase, CakeIcon, FileText, Globe, LucideHome, Maximize2 } from "lucide-react";
+import { Briefcase, CakeIcon, LucideHome, Maximize2 } from "lucide-react";
 import { motion } from "framer-motion";
 import "flag-icon-css/css/flag-icons.min.css";
 import { Dialog, DialogContent } from "@repo/ui/components/ui/dialog";
-import { AboutMe } from "../../features/user/components/AboutMe";
+// import { AboutMe } from "../../features/user/components/AboutMe";
 import PageTransition from "../../layout/animation/PageTransition";
-import { useUserProfile, useUserProjects } from "../../features/user/hooks/use.user.profile";
+import { useUserProfile } from "../../features/user/hooks/use.user.profile";
 import ProjectCard from "../../features/projects/components/ProjectCard";
 import ProjectModal from "../../features/projects/components/ProjectModal";
 import ProfilePictureEdit from "../../features/user/components/ProfilePicture";
 import { getCountryFlagIcon } from "../../../utils/generateCountryFlag";
 import { FetchedProjectType } from "@repo/zod/validation";
 import CoverImageEdit from "../../features/user/components/CoverImage";
+import { useUserProjects } from "../../features/user/hooks/useUserProjects";
 
 export default function ProfilePage() {
   const [selectedProject, setSelectedProject] = useState<FetchedProjectType | null>(null);
@@ -34,6 +33,7 @@ export default function ProfilePage() {
       tabsContentRef.current.style.minHeight = `${maxHeight}px`;
     }
   }, [projects, userProfile]);
+  console.log("User Profile:", projects);
 
   if (error) {
     return <p className="text-center text-red-500 mt-8">Failed to load projects. Please try again later.</p>;
@@ -94,7 +94,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Links */}
-              <div className="flex flex-col items-center sm:items-end mt-6 sm:mt-0 space-y-4">
+              {/* <div className="flex flex-col items-center sm:items-end mt-6 sm:mt-0 space-y-4">
                 <div className="flex flex-wrap justify-center sm:justify-end space-x-4">
                   <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shadow-lg">
                     <FileText className="h-5 w-5" />
@@ -103,17 +103,17 @@ export default function ProfilePage() {
                     <Globe className="h-5 w-5" />
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </motion.div>
 
           {/* Tabs */}
           <div ref={tabsContentRef}>
             <Tabs defaultValue="posts" className="mt-8">
-              <TabsList className="grid w-full grid-cols-3 bg-muted border border-border rounded-lg overflow-hidden">
+              <TabsList className="grid w-full grid-cols-2 bg-muted border border-border rounded-lg overflow-hidden">
                 <TabsTrigger value="posts">Posts</TabsTrigger>
                 <TabsTrigger value="projects">Projects</TabsTrigger>
-                <TabsTrigger value="about">About</TabsTrigger>
+                {/* <TabsTrigger value="about">About</TabsTrigger> */}
               </TabsList>
               <TabsContent value="posts" className="mt-6">
                 <p className="text-muted-foreground">No posts available.</p>
@@ -122,7 +122,19 @@ export default function ProfilePage() {
                 {projects.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project) => (
-                      <ProjectCard key={project._id ?? "default-id"} project={{ ...project, id: project._id ?? "default-id", tags: project.tags ?? [] }} onClick={() => setSelectedProject({ ...project, tags: project.tags ?? [] })} />
+                      <ProjectCard
+                        key={project.id}
+                        project={{
+                          id: project.id,
+                          title: project.title,
+                          description: project.description,
+                          url: project.url ?? "",
+                          thumbnail: project.thumbnail,
+                          tags: project.tags ?? [],
+                          media: project.media ?? [],
+                        }}
+                        onClick={() => setSelectedProject(project)}
+                      />
                     ))}
                   </div>
                 ) : (
@@ -130,9 +142,9 @@ export default function ProfilePage() {
                 )}
               </TabsContent>
               {selectedProject && <ProjectModal project={selectedProject} isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} />}
-              <TabsContent value="about" className="mt-6">
+              {/* <TabsContent value="about" className="mt-6">
                 <AboutMe />
-              </TabsContent>
+              </TabsContent> */}
             </Tabs>
           </div>
         </div>

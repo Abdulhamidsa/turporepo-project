@@ -15,28 +15,34 @@
 
 import { z } from "zod";
 
+// Define tag schema to match backend response
+// const tagSchema = z.object({
+//   id: z.string(),
+//   name: z.string(),
+// });
+
 export const addProjectSchema = z.object({
   title: z.string().min(1, "Title is required."), // Required title
   description: z.string().min(1, "Description is required."), // Required description
-  url: z.string().url("Invalid URL format."), // Valid URL
-  thumbnail: z.string().url("Invalid thumbnail URL.").optional(), // Optional thumbnail URL
+  url: z.union([z.string().url("Invalid URL format."), z.literal("")]).optional(),
+  thumbnail: z.string().url("Invalid thumbnail URL."), // Now required
   media: z
     .array(
       z.object({
         url: z.string().url("Invalid media URL."), // Each media must have a valid URL
       })
     )
-    .min(1, "At least one image is required."), // At least one media required
-  tags: z.array(z.string()),
+    .optional(), // Media is now optional
+  tags: z.array(z.string()), // Array of Tag IDs as strings
 });
 
 export type AddProjectInput = z.infer<typeof addProjectSchema>;
 
 export const fetchedProjectSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
-  url: z.string().url("Invalid URL format."),
+  url: z.union([z.string().url("Invalid URL format."), z.literal("")]).optional(),
   media: z
     .array(
       z.object({

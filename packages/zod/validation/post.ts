@@ -17,10 +17,22 @@ export const commentSchema = z.object({
 });
 
 // Post schema
+
 export const postSchema = z.object({
   _id: z.string(), // Post ID
+
   content: z.string().optional().default(""), // Optional content with default
-  image: z.string().nullable().optional(), // Nullable/optional image
+
+  image: z
+    .union([
+      z.string().url("."), // Valid URL
+      z.literal(""), // Accept empty string
+      z.null(), // Accept null
+      z.undefined(), // Accept undefined
+    ])
+    .optional()
+    .transform((val) => (val === "" ? null : val)), // Convert empty string to null
+
   createdAt: z.string().optional(), // Optional creation timestamp
   updatedAt: z.string().optional(), // Optional updated timestamp
   likedByUser: z.boolean().optional(), // Optional boolean

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+// userProfileSchema.ts
+
 export const userProfileSchema = z.object({
   bio: z.string().nullable().default(""),
   username: z.string().nullable().default(""),
@@ -12,9 +14,10 @@ export const userProfileSchema = z.object({
   completedProfile: z.boolean().default(false),
 });
 
+// Infer TypeScript type
 export type UserProfile = z.infer<typeof userProfileSchema>;
 
-// Parse the default profile
+// Parse the default profile from the schema to ensure type safety
 export const defaultUserProfile: UserProfile = userProfileSchema.parse({});
 
 /////////////////////////////7
@@ -34,7 +37,7 @@ export const projectSchema = z.object({
   id: z.string(),
   title: z.string().min(1, "Title is required."),
   description: z.string().min(1, "Description is required."),
-  url: z.string().url("Invalid URL format."),
+  url: z.string().url("Invalid URL format.").optional(),
   media: z.array(z.object({ url: z.string().url("Invalid URL format") })),
   thumbnail: z.string().url("Thumbnail is required."),
   tags: z.array(z.string()),

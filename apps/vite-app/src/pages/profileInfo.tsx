@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
 import { Pen, Check, Loader, AlertCircle } from "lucide-react";
 
-import { useUserProfile, useUpdateUserProfile } from "../features/user/hooks/use.user.profile";
+import { useUserProfile } from "../features/user/hooks/use.user.profile";
 import { Countries } from "@repo/data/constants/countries";
 import { Professions } from "@repo/data/constants/professions";
 import AgePicker from "../components/AgePicker";
@@ -15,7 +15,8 @@ import { EditableProfileType, ProfileType } from "@repo/data/types/user";
 import { defaultUserProfile } from "@repo/zod/validation/user";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import CredentialsPage from "../features/user/components/CredentialsPage";
-import { getErrorMessage } from "../../api/errors";
+import { useUpdateUserProfile } from "../features/user/hooks/useUpdateUserProfile";
+import { getErrorMessage } from "../../utils/getErrorMessage";
 
 export default function ProfileInfo() {
   const { userProfile, mutate } = useUserProfile();

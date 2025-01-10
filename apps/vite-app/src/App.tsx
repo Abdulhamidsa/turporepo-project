@@ -3,7 +3,7 @@ import { useRoutes } from "react-router-dom";
 import { appRoutes } from "../routes/appRoutes";
 import { AuthProvider } from "../context/AuthContext";
 import { SWRConfig } from "swr";
-import { swrFetcher } from "../utils/swrFetcher";
+import { swrFetcher } from "../api/swrFetcher";
 
 function App() {
   const routing = useRoutes(appRoutes);

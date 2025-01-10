@@ -62,7 +62,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, setProject, errors, 
         </div>
 
         <div>
-          <ImageUploader images={pendingMedia.length > 0 ? pendingMedia : project.media.map((m) => m.url)} setImages={(files) => setPendingMedia(files.filter((file): file is File => file instanceof File))} error={errors.media} />
+          <ImageUploader images={pendingMedia.length > 0 ? pendingMedia : (project.media || []).map((m) => m.url)} setImages={(files) => setPendingMedia(files.filter((file): file is File => file instanceof File))} error={errors.media} />
         </div>
 
         <div>

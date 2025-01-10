@@ -1,7 +1,6 @@
 import { useState } from "react";
 import CustomModal from "../../../../../../packages/ui/src/components/CustomModal";
 import { showToast } from "@repo/ui/components/ui/toaster";
-import { getErrorMessage } from "../../../../api/errors";
 import ProjectPreview from "./ProjectPreview";
 import ProjectForm from "./ProjectForm";
 import SaveButton from "./SaveButton";
@@ -10,7 +9,8 @@ import { useCreateProject } from "../../../hooks/useCreateProject"; // Adjust th
 import { ZodError } from "zod";
 import { AddProjectModalProps } from "@repo/data/types/types";
 import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
-import { useUserProjects } from "../../user/hooks/use.user.profile";
+import { getErrorMessage } from "../../../../utils/getErrorMessage";
+import { useUserProjects } from "../../user/hooks/useUserProjects";
 
 const initialProject: AddProjectInput = {
   title: "",
@@ -55,7 +55,7 @@ export default function AddProjectModal({ isOpen, onClose }: AddProjectModalProp
       }
 
       // Step 2: Upload media if any pending
-      let mediaUrls = project.media.map((m) => m.url);
+      let mediaUrls = (project.media ?? []).map((m) => m.url);
       if (pendingMedia.length > 0) {
         const uploadedMedia = await uploadToCloudinary(pendingMedia);
         mediaUrls = [...mediaUrls, ...uploadedMedia];

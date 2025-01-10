@@ -1,9 +1,10 @@
 import { useRef, useState, useMemo } from "react";
 import { Camera, Loader } from "lucide-react";
 import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
-import { useUserProfile, useUpdateUserProfile } from "../../user/hooks/use.user.profile";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@repo/ui/components/ui/dropdown-menu";
+import { useUserProfile } from "../hooks/use.user.profile";
+import { useUpdateUserProfile } from "../hooks/useUpdateUserProfile";
 
 interface CoverImageEditProps {
   label: string;

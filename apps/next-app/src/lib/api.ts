@@ -16,7 +16,7 @@ export async function getProjects(page = 1, limit = 12) {
     return { projects, totalPages };
   } catch (error) {
     console.error(error);
-    return { projects: [], totalPages: 1 }; // Fallback in case of error
+    return { projects: [], totalPages: 1 };
   }
 }
 

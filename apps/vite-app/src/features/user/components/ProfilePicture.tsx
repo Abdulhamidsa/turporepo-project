@@ -2,8 +2,9 @@ import { useRef, useState, useMemo } from "react";
 import { Camera, Loader } from "lucide-react";
 import { showToast } from "@repo/ui/components/ui/toaster";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@repo/ui/components/ui/dropdown-menu";
-import { useUpdateUserProfile, useUserProfile } from "../hooks/use.user.profile";
+import { useUserProfile } from "../hooks/use.user.profile";
 import { uploadToCloudinary } from "../../../../utils/CloudinaryConfige";
+import { useUpdateUserProfile } from "../hooks/useUpdateUserProfile";
 
 interface ProfilePictureEditProps {
   label: string;

@@ -1,133 +1,189 @@
-import { Button } from "@repo/ui/components/ui/button";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import useSWR from "swr";
-import z from "zod";
+import { ENDPOINTS } from "@repo/api/endpoints";
+import { Button } from "@repo/ui/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import { ArrowUp, Heart } from "lucide-react";
+import { timeAgo } from "@repo/utils/timeCalculation";
 import CustomModal from "@repo/ui/components/CustomModal";
 
-const ProjectSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-  url: z.string().url(),
-  thumbnail: z.string().url(),
-  media: z.array(z.object({ url: z.string().url() })),
-  tags: z.array(z.object({ id: z.string(), name: z.string() })),
-  user: z.object({
-    username: z.string(),
-    profilePicture: z.string().nullable(),
-  }),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-});
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
-const FetchedProjectsSchema = z.object({
-  success: z.boolean(),
-  data: z.object({
-    projects: z.array(ProjectSchema),
-    pagination: z.object({
-      page: z.number(),
-      limit: z.number(),
-      total: z.number(),
-    }),
-  }),
-});
-
-type ProjectType = z.infer<typeof ProjectSchema>;
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch");
-  const data = await res.json();
-  const parsed = FetchedProjectsSchema.parse(data);
-  return parsed.data;
+// ✅ Project Type
+type ProjectType = {
+  id: string;
+  title: string;
+  description: string;
+  url?: string;
+  thumbnail?: string;
+  media: { url: string }[];
+  tags: { id: string; name: string }[];
+  user: { username: string; profilePicture?: string | null };
+  createdAt: string;
+  updatedAt?: string;
+  likedByUser: boolean;
+  likesCount: number;
 };
 
-const ProjectModal = ({ project, isOpen, onClose }: { project: ProjectType; isOpen: boolean; onClose: () => void }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+// ✅ SWR Fetcher
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-  if (!project) return null;
+export const ProjectsAll = () => {
+  const [page, setPage] = useState(1);
+  const [limit] = useState(6);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const { data, isLoading, error } = useSWR<{
+    success: boolean;
+    data: { projects: ProjectType[]; pagination: { page: number; total: number } };
+  }>(`${ENDPOINTS.projects.fetchAll}?limit=${limit}&page=${page}`, fetcher, {
+    revalidateOnFocus: false,
+    onSuccess: (newData) => {
+      if (newData?.success) {
+        setProjects((prevProjects) => [...prevProjects, ...newData.data.projects]);
+      }
+    },
+  });
+
+  const loadMore = useCallback(() => {
+    if (data && data.data.pagination.page < Math.ceil(data.data.pagination.total / limit)) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [data, limit]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) loadMore();
+    });
+
+    const currentLoader = loaderRef.current;
+    if (currentLoader) observer.observe(currentLoader);
+
+    return () => {
+      if (currentLoader) observer.unobserve(currentLoader);
+    };
+  }, [loadMore]);
+
+  // Show scroll-to-top button after scrolling 100px
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll to the top of the page
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (error) return <p className="text-destructive text-center">Error loading projects.</p>;
 
   return (
-    <CustomModal size="lg" isOpen={isOpen} onClose={onClose}>
-      <div className="relative h-72 rounded-t-lg overflow-hidden">
-        <img src={project.media[currentImageIndex]?.url || project.thumbnail} alt={project.title} className="w-full h-full object-cover" />
-        {project.media.length > 1 && (
-          <>
-            <Button variant="ghost" size="icon" className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white" onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? project.media.length - 1 : prev - 1))}>
-              {"<"}
-            </Button>
-            <Button variant="ghost" size="icon" className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white" onClick={() => setCurrentImageIndex((prev) => (prev === project.media.length - 1 ? 0 : prev + 1))}>
-              {">"}
-            </Button>
-          </>
-        )}
-      </div>
-      <div className="p-6 bg-card rounded-b-lg">
-        <h2 className="text-2xl font-bold mb-2">{project.title}</h2>
-        <p className="text-sm mb-4">{project.description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag) => (
-            <span key={tag.id} className="px-3 py-1 text-sm bg-primary text-white rounded-full">
-              {tag.name}
-            </span>
+    <div className="p-6">
+      {isLoading && projects.length === 0 ? (
+        <p className="text-center">Loading...</p>
+      ) : (
+        <div className="space-y-6">
+          {projects.map((project, index) => (
+            <ProjectCard key={`${project.id}-${index}`} project={project} onClick={() => setSelectedProject(project)} />
           ))}
         </div>
-        <Button asChild>
-          <a href={project.url} target="_blank" rel="noopener noreferrer">
+      )}
+
+      <div ref={loaderRef} className="h-10" />
+
+      {selectedProject && <ProjectModal project={selectedProject} isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} />}
+
+      {/* ✅ Scroll to Top Button */}
+      {showScrollTop && (
+        <button onClick={scrollToTop} className="fixed bg-red-600 w-dvw bottom-6 right-6 z-50 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-secondary hover:scale-110 transition-transform duration-300">
+          <ArrowUp className="w-6 h-6" />
+        </button>
+      )}
+    </div>
+  );
+};
+
+// ✅ Project Card
+const ProjectCard = ({ project, onClick }: { project: ProjectType; onClick: () => void }) => {
+  const [likedByUser, setLikedByUser] = useState(project.likedByUser);
+  const [likesCount, setLikesCount] = useState(project.likesCount);
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLikedByUser(!likedByUser);
+    setLikesCount((prev) => (likedByUser ? prev - 1 : prev + 1));
+  };
+
+  return (
+    <div className="space-y-4 w-full max-w-[600px] min-h-[250px] m-auto bg-card text-card-foreground p-4 rounded-lg shadow-md cursor-pointer" onClick={onClick}>
+      <div className="flex items-start space-x-4">
+        <Avatar>
+          <AvatarImage src={project.user.profilePicture || "/placeholder.png"} />
+          <AvatarFallback>{project.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+        </Avatar>
+        <div>
+          <h4 className="font-bold">{project.user.username}</h4>
+          <p className="text-sm text-muted-foreground">{timeAgo(project.createdAt)}</p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h2 className="font-bold text-lg">{project.title}</h2>
+        <p className="text-sm">{project.description}</p>
+        {project.thumbnail && <img src={project.thumbnail} alt={project.title} className="w-full object-cover rounded-lg" />}
+      </div>
+
+      <div className={`flex items-center space-x-2 cursor-pointer ${likedByUser ? "text-primary" : "text-muted-foreground"}`} onClick={handleLikeClick}>
+        <Heart />
+        <span>{likesCount}</span>
+      </div>
+    </div>
+  );
+};
+
+// ✅ Project Modal with Swiper Carousel
+const ProjectModal = ({ project, isOpen, onClose }: { project: ProjectType; isOpen: boolean; onClose: () => void }) => {
+  return (
+    <CustomModal size="2xl" isOpen={isOpen} onClose={onClose}>
+      <div className="p-6 space-y-6">
+        <h2 className="text-2xl font-bold">{project.title}</h2>
+        <p>{project.description}</p>
+
+        {project.media.length > 0 ? (
+          <Swiper modules={[Navigation, Pagination, EffectFade]} navigation pagination={{ clickable: true }} effect="fade" loop className="rounded-lg shadow-md w-full h-96">
+            {project.media.map((media, index) => (
+              <SwiperSlide key={`${media.url}-${index}`}>
+                <img src={media.url} alt={`Media ${index + 1}`} className="w-full h-96 object-cover rounded-lg" />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <p className="text-muted-foreground">No media available for this project.</p>
+        )}
+
+        <Button asChild className="mt-4">
+          <a href={project.url ?? "#"} target="_blank" rel="noopener noreferrer">
             Visit Project
           </a>
         </Button>
       </div>
     </CustomModal>
-  );
-};
-
-export const ProjectsAll = () => {
-  const [page, setPage] = useState(1);
-  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
-  const { data, error, isLoading } = useSWR<{ projects: ProjectType[]; pagination: { page: number; limit: number; total: number } }>(`https://cre8ify-backend-production.up.railway.app/api/projects?limit=6&page=${page}`, fetcher);
-
-  if (error) {
-    return <p className="text-red-500 text-center mt-6">Failed to load projects. Please try again later.</p>;
-  }
-
-  return (
-    <div className="p-4">
-      {isLoading ? (
-        <p className="text-center">Loading...</p>
-      ) : (data?.projects ?? []).length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-            {data?.projects.map((project) => (
-              <div key={project.id} className="cursor-pointer bg-card rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105" onClick={() => setSelectedProject(project)}>
-                <img src={project.thumbnail} alt={project.title} className="w-full h-40 object-cover" />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-2">{project.description}</p>
-                  <div className="flex items-center mt-4">
-                    <img src={project.user.profilePicture || "/placeholder.png"} alt={project.user.username} className="w-8 h-8 rounded-full" />
-                    <span className="text-sm text-gray-500 ml-2">@{project.user.username}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between items-center mt-6">
-            <Button disabled={page === 1} onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
-              Previous
-            </Button>
-            <span>
-              Page {data?.pagination.page} of {Math.ceil((data?.pagination.total ?? 1) / 6)}
-            </span>
-            <Button disabled={!data || data.pagination.page === Math.ceil(data.pagination.total / 6)} onClick={() => setPage((prev) => prev + 1)}>
-              Next
-            </Button>
-          </div>
-        </>
-      ) : (
-        <p className="text-center">No projects available.</p>
-      )}
-      {selectedProject && <ProjectModal project={selectedProject} isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} />}
-    </div>
   );
 };

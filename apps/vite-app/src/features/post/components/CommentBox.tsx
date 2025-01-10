@@ -1,7 +1,8 @@
 import React, { useState, FormEvent } from "react";
 import { CommentType } from "@repo/data/types/types";
 import { useAddComment } from "../../../hooks/useComments";
-import { Send } from "lucide-react"; // Import send icon
+import { Send } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 type CommentBoxProps = {
   postId: string;
@@ -15,14 +16,14 @@ export const CommentBox: React.FC<CommentBoxProps> = ({ postId, onCommentAdded }
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!text.trim()) return; // Prevent empty submissions
+    if (!text.trim()) return;
 
     const updatedComments = (await submitComment(text)) as CommentType[];
     if (updatedComments && onCommentAdded) {
-      onCommentAdded(updatedComments); // Notify the parent component
+      onCommentAdded(updatedComments);
     }
 
-    setText(""); // Clear the input
+    setText("");
   };
 
   return (
@@ -36,7 +37,11 @@ export const CommentBox: React.FC<CommentBoxProps> = ({ postId, onCommentAdded }
         className="w-full border border-gray-300 rounded-full py-2 pl-4 pr-10 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
       />
       <button type="submit" disabled={isLoading || !text.trim()} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary hover:text-accent disabled:text-muted-foreground">
-        <Send className="w-5 h-5" />
+        {isLoading ? (
+          <Loader2 className="w-5 h-5 animate-spin" /> // Spinner when loading
+        ) : (
+          <Send className="w-5 h-5" />
+        )}
       </button>
       {error && <p className="text-sm text-destructive mt-2">{error}</p>}
     </form>
