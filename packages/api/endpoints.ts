@@ -27,7 +27,7 @@ export const ENDPOINTS = {
     signin: `${PRODUCTION_URL}/auth/signin`,
     signup: `${PRODUCTION_URL}/auth/signup`,
     credentials: `${PRODUCTION_URL}/credentials`,
-    logout: `${PRODUCTION_URL}/auth/logout`,
+    signout: `${PRODUCTION_URL}/auth/signout`,
     refreshToken: `${PRODUCTION_URL}/auth/refresh-token`,
     loggedUser: `${PRODUCTION_URL}/logged-user`,
   },

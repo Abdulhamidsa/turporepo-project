@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
-      await request("POST", "/signout");
+      await request("POST", ENDPOINTS.auth.signout);
     } catch (err) {
       console.error("signOut error:", err);
     }
