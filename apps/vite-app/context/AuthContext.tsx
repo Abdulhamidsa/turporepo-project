@@ -2,6 +2,7 @@ import useSWR from "swr";
 import React from "react";
 import { request } from "../api/request";
 import { AuthContext } from "../src/features/user/hooks/use.auth";
+import { ENDPOINTS } from "@repo/api/endpoints";
 
 type User = {
   friendlyId: string;
@@ -16,7 +17,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isLoading,
     mutate,
   } = useSWR<User | null>(
-    "/logged-user",
+    ENDPOINTS.auth.loggedUser,
     async (url) => {
       const user = await request<User>("GET", url);
       return user;

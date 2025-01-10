@@ -26,6 +26,7 @@ export const ENDPOINTS = {
     credentials: `${PRODUCTION_URL}/credentials`,
     logout: `${PRODUCTION_URL}/auth/logout`,
     refreshToken: `${PRODUCTION_URL}/auth/refresh-token`,
+    loggedUser: `${PRODUCTION_URL}/logged-user`,
   },
   comments: {},
   notifications: {
